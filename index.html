@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hindi Garden">
+<meta name="theme-color" content="#aee9ff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Aria's Hindi Garden</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+  :root{
+    --sky1:#aee9ff; --sky2:#d7f7ff; --grass:#9be37d; --grass2:#7fd55f;
+    --sun:#ffd84d; --ink:#3a3320; --card:#ffffff; --pink:#ff8fb1; --purple:#b58cff;
+    --good:#52c878; --soft:#fff6e0; --shadow:rgba(60,50,20,.18);
+  }
+  html,body{margin:0;height:100%;font-family:-apple-system,"Segoe UI",system-ui,sans-serif;color:var(--ink);}
+  body{
+    background:linear-gradient(180deg,var(--sky1),var(--sky2) 45%,var(--grass2) 46%,var(--grass) 100%);
+    overflow:hidden;
+  }
+  #app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:900px;margin:0 auto;position:relative;}
+  .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 18px 40px;}
+  .hidden{display:none!important;}
+
+  /* Top bar */
+  .topbar{display:flex;align-items:center;gap:10px;padding:10px 16px;}
+  .pill{background:var(--card);border-radius:30px;padding:8px 16px;font-weight:800;
+    box-shadow:0 4px 0 var(--shadow);display:flex;align-items:center;gap:6px;font-size:18px;}
+  .pill .ico{font-size:22px;}
+  .spacer{flex:1;}
+  .iconbtn{background:var(--card);border:none;border-radius:50%;width:48px;height:48px;font-size:24px;
+    box-shadow:0 4px 0 var(--shadow);}
+
+  h1{font-size:30px;margin:6px 0 2px;text-align:center;letter-spacing:.5px;}
+  .sub{text-align:center;font-size:16px;opacity:.7;margin-bottom:10px;}
+
+  /* Garden */
+  #garden{background:linear-gradient(180deg,#bff0a0,#8fdc6e);border-radius:26px;padding:16px;
+    box-shadow:inset 0 6px 14px rgba(255,255,255,.4),0 8px 0 var(--shadow);margin-bottom:16px;min-height:170px;}
+  .gardenGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
+  .plot{font-size:30px;text-align:center;line-height:1.1;height:38px;display:flex;align-items:flex-end;justify-content:center;
+    transition:transform .3s;}
+  .plot.pop{animation:pop .5s;}
+  @keyframes pop{0%{transform:scale(0) translateY(10px);}60%{transform:scale(1.4);}100%{transform:scale(1);}}
+  .gardenNote{text-align:center;font-size:14px;opacity:.65;margin-top:8px;font-weight:700;}
+
+  /* Units */
+  .sectionTitle{font-size:20px;font-weight:900;margin:14px 4px 8px;}
+  .units{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+  .unit{background:var(--card);border:none;border-radius:22px;padding:16px 12px;text-align:center;
+    box-shadow:0 6px 0 var(--shadow);transition:transform .1s;cursor:pointer;}
+  .unit:active{transform:translateY(3px);box-shadow:0 3px 0 var(--shadow);}
+  .unit .emoji{font-size:44px;display:block;margin-bottom:6px;}
+  .unit .name{font-weight:900;font-size:17px;}
+  .unit .prog{font-size:13px;opacity:.6;margin-top:4px;font-weight:700;}
+  .unit .bar{height:8px;background:#eee;border-radius:6px;margin-top:8px;overflow:hidden;}
+  .unit .bar > i{display:block;height:100%;background:var(--good);width:0;border-radius:6px;transition:width .4s;}
+  .unit .crown{font-size:18px;}
+
+  /* Lesson menu */
+  .actBtn{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:none;border-radius:20px;
+    padding:16px;margin-bottom:12px;box-shadow:0 6px 0 var(--shadow);text-align:left;cursor:pointer;}
+  .actBtn:active{transform:translateY(3px);box-shadow:0 3px 0 var(--shadow);}
+  .actBtn .big{font-size:38px;}
+  .actBtn .t{font-weight:900;font-size:19px;}
+  .actBtn .d{font-size:14px;opacity:.65;font-weight:600;}
+
+  /* Cards / activities */
+  .card{background:var(--card);border-radius:26px;padding:22px;box-shadow:0 8px 0 var(--shadow);text-align:center;margin-bottom:16px;}
+  .bigEmoji{font-size:96px;line-height:1.1;margin:6px 0;}
+  .hindi{font-size:40px;font-weight:900;margin:4px 0;}
+  .roman{font-size:26px;color:var(--purple);font-weight:800;}
+  .english{font-size:20px;opacity:.7;margin-top:6px;font-weight:700;}
+  .speakBtn{background:var(--sun);border:none;border-radius:30px;padding:14px 26px;font-size:20px;font-weight:900;
+    box-shadow:0 5px 0 #d9b21f;margin-top:14px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;}
+  .speakBtn:active{transform:translateY(3px);box-shadow:0 2px 0 #d9b21f;}
+
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .opt{background:var(--card);border:3px solid transparent;border-radius:22px;padding:18px 10px;font-size:44px;
+    box-shadow:0 6px 0 var(--shadow);cursor:pointer;transition:transform .1s;}
+  .opt .lab{display:block;font-size:16px;font-weight:800;margin-top:6px;}
+  .opt:active{transform:translateY(3px);}
+  .opt.correct{border-color:var(--good);background:#e8fbef;}
+  .opt.wrong{border-color:#ffb3b3;background:#fff0f0;opacity:.7;}
+
+  .prompt{font-size:20px;font-weight:800;margin:6px 0 14px;text-align:center;}
+
+  /* progress dots */
+  .dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px;}
+  .dot{width:14px;height:14px;border-radius:50%;background:#ffffff88;}
+  .dot.done{background:var(--good);}
+  .dot.now{background:var(--sun);transform:scale(1.2);}
+
+  .backBtn{background:var(--card);border:none;border-radius:30px;padding:10px 18px;font-weight:800;font-size:16px;
+    box-shadow:0 4px 0 var(--shadow);display:inline-flex;align-items:center;gap:6px;}
+
+  .footerBtn{position:sticky;bottom:0;width:100%;background:var(--good);color:#fff;border:none;border-radius:22px;
+    padding:18px;font-size:20px;font-weight:900;box-shadow:0 6px 0 #3a9c5a;margin-top:6px;cursor:pointer;}
+  .footerBtn:active{transform:translateY(3px);box-shadow:0 3px 0 #3a9c5a;}
+  .footerBtn:disabled{background:#cfcfcf;box-shadow:0 6px 0 #b0b0b0;}
+
+  /* Reward overlay */
+  .overlay{position:fixed;inset:0;background:rgba(120,200,255,.35);backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;}
+  .rewardCard{background:#fff;border-radius:30px;padding:30px;text-align:center;max-width:380px;width:100%;
+    box-shadow:0 12px 0 var(--shadow);animation:pop .5s;}
+  .rewardCard .grow{font-size:90px;animation:bounce 1s infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+  .rewardCard h2{font-size:28px;margin:8px 0;}
+  .confetti{position:fixed;top:-10px;font-size:26px;z-index:60;pointer-events:none;animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);}}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#3a3320;color:#fff;
+    padding:12px 20px;border-radius:30px;font-weight:800;z-index:70;font-size:15px;opacity:0;transition:opacity .3s;}
+  .toast.show{opacity:1;}
+  .encourage{font-size:18px;font-weight:900;color:var(--good);min-height:24px;margin-top:8px;}
+
+  /* Word of the day */
+  .wotd{display:block;width:100%;text-align:left;border:none;cursor:pointer;
+    background:linear-gradient(120deg,#fff3c4,#ffe6f0);border-radius:22px;padding:14px 16px;margin-bottom:14px;
+    box-shadow:0 6px 0 var(--shadow);}
+  .wotd .tag{font-size:13px;font-weight:900;color:#c98a00;letter-spacing:.5px;}
+  .wotd .row{display:flex;align-items:center;gap:14px;margin-top:4px;}
+  .wotd .wic{font-size:46px;}
+  .wotd .whi{font-size:28px;font-weight:900;}
+  .wotd .wro{font-size:18px;color:var(--purple);font-weight:800;}
+  .wotd .wen{font-size:15px;opacity:.7;font-weight:700;}
+  .wotd .hear{margin-left:auto;font-size:26px;background:var(--sun);border-radius:50%;width:46px;height:46px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #d9b21f;flex:0 0 auto;}
+
+  /* Parent screen */
+  .pcard{background:var(--card);border-radius:22px;padding:18px;box-shadow:0 6px 0 var(--shadow);margin-bottom:14px;}
+  .statRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .stat{background:var(--soft);border-radius:18px;padding:14px;text-align:center;}
+  .stat .n{font-size:30px;font-weight:900;}
+  .stat .l{font-size:13px;font-weight:800;opacity:.65;}
+  .cal{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .cal .day{width:34px;text-align:center;}
+  .cal .box{height:30px;border-radius:8px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .cal .box.on{background:#cdeccd;}
+  .cal .dl{font-size:11px;opacity:.55;font-weight:700;margin-top:2px;}
+  .wordChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .chip{background:var(--soft);border-radius:16px;padding:6px 12px;font-size:14px;font-weight:700;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="pill"><span class="ico">🌻</span><span id="sunCount">0</span></div>
+    <div class="pill"><span class="ico">🌱</span><span id="plantCount">0</span></div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="parentBtn" title="grown-ups">👪</button>
+    <button class="iconbtn" id="muteBtn" title="sound">🔊</button>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen" id="homeScreen">
+    <h1>Aria's Hindi Garden 🌸</h1>
+    <div class="sub" id="welcomeLine">हर शब्द एक नया फूल! Every word grows a flower.</div>
+    <button id="wotd" class="wotd"></button>
+    <div id="garden">
+      <div class="gardenGrid" id="gardenGrid"></div>
+      <div class="gardenNote" id="gardenNote">Your garden is waiting for seeds — play a lesson to grow it! 🌿</div>
+    </div>
+    <div class="sectionTitle">Pick something fun 👇</div>
+    <div class="units" id="unitsWrap"></div>
+  </div>
+
+  <!-- LESSON MENU -->
+  <div class="screen hidden" id="menuScreen">
+    <button class="backBtn" onclick="goHome()">⬅️ Garden</button>
+    <h1 id="menuTitle" style="margin-top:10px;"></h1>
+    <div class="sub" id="menuSub"></div>
+    <div id="menuActs" style="margin-top:8px;"></div>
+  </div>
+
+  <!-- ACTIVITY -->
+  <div class="screen hidden" id="actScreen">
+    <button class="backBtn" onclick="openUnit(currentUnit)">⬅️ Back</button>
+    <div class="dots" id="dots" style="margin-top:14px;"></div>
+    <div id="actBody"></div>
+  </div>
+
+  <!-- PARENT -->
+  <div class="screen hidden" id="parentScreen">
+    <button class="backBtn" onclick="goHome()">⬅️ Garden</button>
+    <h1 style="margin-top:10px;">👪 Grown-Ups Corner</h1>
+    <div class="sub">Aria's Hindi progress — encouragement only, no pressure 🌷</div>
+    <div id="parentBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+/* ============ DATA ============ */
+const PLANT_STAGES = ["🌱","🌿","🌷","🌻","🌳","🌸","🪻","🌺"];
+const CONGRATS = ["शाबाश! Shabash!","बहुत अच्छा! Wonderful!","Amazing, Aria!","You're a star! ⭐","कमाल! Brilliant!","Keep going! 🌟"];
+
+/* ============ STATE ============ */
+const SAVE_KEY = "ariaHindiGarden_v1";
+let state = loadState();
+let muted = false;
+let currentUnit = null;
+
+function loadState(){
+  try{ const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if(s) return s; }catch(e){}
+  return { sun:0, plants:[], done:{}, log:{}, seen:{} }; // done: {unitId_activity: count}
+}
+function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ============ SPEECH ============ */
+let hiVoice = null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices();
+  hiVoice = vs.find(v=>v.lang==="hi-IN") || vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("hi")) || null;
+}
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(text){
+  if(muted || !('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "hi-IN"; if(hiVoice) u.voice = hiVoice; u.rate = .85; u.pitch = 1.05;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ============ HELPERS ============ */
+const $ = id => document.getElementById(id);
+function show(screen){ ["homeScreen","menuScreen","actScreen","parentScreen"].forEach(s=>$(s).classList.add("hidden")); $(screen).classList.remove("hidden"); $(screen).scrollTop=0; }
+function todayKey(d){ d=d||new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function logActivity(words){
+  const k=todayKey(); state.log=state.log||{}; state.log[k]=(state.log[k]||0)+1;
+  state.seen=state.seen||{}; (words||[]).forEach(w=>{ if(w&&w.ro) state.seen[w.ro]=w.en; });
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1600); }
+
+function addSun(n){
+  state.sun += n;
+  for(let i=0;i<n;i++){ if(state.sun % 5 === 0) growPlant(); } // a plant every 5 sunshine
+  saveState(); renderTop();
+}
+function growPlant(){
+  state.plants.push(PLANT_STAGES[Math.floor(Math.random()*PLANT_STAGES.length)]);
+  if(state.plants.length>40) state.plants.shift();
+}
+function renderTop(){ $("sunCount").textContent=state.sun; $("plantCount").textContent=state.plants.length; }
+
+/* ============ HOME / GARDEN ============ */
+function renderGarden(){
+  const grid=$("gardenGrid"); grid.innerHTML="";
+  const total=40;
+  for(let i=0;i<total;i++){
+    const d=document.createElement("div"); d.className="plot";
+    d.textContent = state.plants[i] || (i < state.plants.length+0 ? "" : (Math.random()<0.12?"🟫":""));
+    grid.appendChild(d);
+  }
+  // fill empties with soil dots subtly
+  [...grid.children].forEach((c,i)=>{ if(!state.plants[i] && !c.textContent) c.textContent="·"; if(!state.plants[i]) c.style.opacity=.35; });
+  $("gardenNote").textContent = state.plants.length===0
+    ? "Your garden is waiting for seeds — play a lesson to grow it! 🌿"
+    : `Your garden has ${state.plants.length} growing things! 🌼`;
+}
+function renderUnits(){
+  const wrap=$("unitsWrap"); wrap.innerHTML="";
+  UNITS.forEach(u=>{
+    const total=u.words.length*2; // learn + listen target
+    const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));
+    const pct=Math.round(done/total*100);
+    const b=document.createElement("button"); b.className="unit"; b.onclick=()=>openUnit(u.id);
+    b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>
+      ${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% grown</div>`}
+      <div class="bar"><i style="width:${pct}%"></i></div>`;
+    wrap.appendChild(b);
+  });
+  // conversations card group
+  const ct=document.createElement("div"); ct.style.gridColumn="1/-1"; ct.className="sectionTitle"; ct.textContent="🎭 Little Conversations";
+  wrap.appendChild(ct);
+  CONVOS.forEach(c=>{
+    const b=document.createElement("button"); b.className="unit"; b.onclick=()=>playConvo(c.id);
+    const done=state.done["convo_"+c.id]?'<div class="prog">⭐ Practiced</div>':'<div class="prog">Tap to act it out</div>';
+    b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span>${done}`;
+    wrap.appendChild(b);
+  });
+}
+function goHome(){ renderTop(); renderWOTD(); renderGarden(); renderUnits(); show("homeScreen"); }
+
+/* ============ WORD OF THE DAY ============ */
+const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]);
+function renderWOTD(){
+  // deterministic by calendar day, changes each morning, same all day
+  const epochDay = Math.floor((Date.now() - new Date().getTimezoneOffset()*60000)/86400000);
+  const w = ALL_WORDS[epochDay % ALL_WORDS.length];
+  const el=$("wotd");
+  el.innerHTML=`<div class="tag">🌅 WORD OF THE DAY</div>
+    <div class="row">
+      <span class="wic">${w.ic}</span>
+      <span><span class="whi">${w.hi}</span><br><span class="wro">${w.ro}</span> — <span class="wen">${w.en}</span></span>
+      <span class="hear">🔊</span>
+    </div>`;
+  el.onclick=()=>speak(w.hi);
+}
+
+/* ============ UNIT MENU ============ */
+function openUnit(id){
+  currentUnit=id; const u=UNITS.find(x=>x.id===id);
+  $("menuTitle").innerHTML=`${u.emoji} ${u.name}`;
+  $("menuSub").textContent=`${u.words.length} words to discover`;
+  const m=$("menuActs"); m.innerHTML="";
+  const acts=[
+    {k:"learn", big:"📖", t:"Learn the Words", d:"See, hear & say each word"},
+    {k:"listen", big:"👂", t:"Listen & Find", d:"Hear Hindi, tap the right picture"},
+    {k:"say", big:"🎤", t:"Say It!", d:"Hear it, then say it out loud"},
+  ];
+  acts.forEach(a=>{
+    const b=document.createElement("button"); b.className="actBtn"; b.onclick=()=>startActivity(id,a.k);
+    const seen = a.k==="listen" ? (state.done[id+"_listen"]?" ✓":"") : (state.done[id+"_"+a.k]?" ✓":"");
+    b.innerHTML=`<span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span>`;
+    m.appendChild(b);
+  });
+  show("menuScreen");
+}
+
+/* ============ ACTIVITIES ============ */
+let lesson = null;
+function startActivity(unitId, kind){
+  const u=UNITS.find(x=>x.id===unitId);
+  lesson={unitId, kind, words:shuffle(u.words), idx:0, correct:0};
+  renderDots();
+  if(kind==="learn") renderLearn();
+  else if(kind==="listen") renderListen();
+  else renderSay();
+  show("actScreen");
+}
+function renderDots(){
+  const d=$("dots"); d.innerHTML="";
+  lesson.words.forEach((_,i)=>{
+    const s=document.createElement("div"); s.className="dot"+(i<lesson.idx?" done":i===lesson.idx?" now":"");
+    d.appendChild(s);
+  });
+}
+function nextStep(){
+  lesson.idx++;
+  if(lesson.idx>=lesson.words.length){ finishActivity(); return; }
+  renderDots();
+  if(lesson.kind==="learn") renderLearn();
+  else if(lesson.kind==="listen") renderListen();
+  else renderSay();
+}
+
+function renderLearn(){
+  const w=lesson.words[lesson.idx];
+  $("actBody").innerHTML=`
+    <div class="card">
+      <div class="bigEmoji">${w.ic}</div>
+      <div class="hindi">${w.hi}</div>
+      <div class="roman">${w.ro}</div>
+      <div class="english">${w.en}</div>
+      <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it</button>
+    </div>
+    <button class="footerBtn" onclick="nextStep()">Got it! 🌱</button>`;
+  speak(w.hi);
+}
+
+function renderListen(){
+  const w=lesson.words[lesson.idx];
+  const pool=shuffle(UNITS.find(x=>x.id===lesson.unitId).words.filter(x=>x.en!==w.en)).slice(0,3);
+  const opts=shuffle([w,...pool]);
+  $("actBody").innerHTML=`
+    <div class="prompt">Tap the word you hear 👂</div>
+    <div class="card" style="padding:14px;">
+      <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Play sound</button>
+      <div class="roman" style="font-size:20px;margin-top:8px;opacity:.5;">(${w.ro})</div>
+    </div>
+    <div class="options" id="opts"></div>
+    <div class="encourage" id="enc"></div>`;
+  const o=$("opts");
+  opts.forEach(op=>{
+    const b=document.createElement("button"); b.className="opt";
+    b.innerHTML=`${op.ic}<span class="lab">${op.en}</span>`;
+    b.onclick=()=>checkListen(b,op,w);
+    o.appendChild(b);
+  });
+  speak(w.hi);
+}
+function checkListen(btn, chosen, correct){
+  if(btn.dataset.locked) return;
+  if(chosen.en===correct.en){
+    btn.classList.add("correct"); lesson.correct++;
+    $("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
+    [...$("opts").children].forEach(c=>c.dataset.locked=1);
+    setTimeout(nextStep,900);
+  }else{
+    btn.classList.add("wrong"); btn.dataset.locked=1;
+    $("enc").textContent="Almost! Listen again and try 🌟"; // no penalty
+    speak(correct.hi);
+  }
+}
+
+function renderSay(){
+  const w=lesson.words[lesson.idx];
+  $("actBody").innerHTML=`
+    <div class="prompt">Hear it, then say it out loud! 🎤</div>
+    <div class="card">
+      <div class="bigEmoji">${w.ic}</div>
+      <div class="hindi">${w.hi}</div>
+      <div class="roman">${w.ro}</div>
+      <div class="english">${w.en}</div>
+      <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it again</button>
+    </div>
+    <button class="footerBtn" onclick="lesson.correct++;nextStep()">I said it! 🎉</button>`;
+  speak(w.hi);
+}
+
+function finishActivity(){
+  const earned = Math.max(2, lesson.correct);
+  state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
+  if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
+  logActivity(lesson.words);
+  addSun(earned);
+  showReward(earned);
+}
+
+/* ============ CONVERSATIONS ============ */
+function playConvo(id){
+  const c=CONVOS.find(x=>x.id===id);
+  currentUnit=null;
+  let html=`<button class="backBtn" onclick="goHome()">⬅️ Garden</button>
+    <h1 style="margin-top:10px;">${c.emoji} ${c.name}</h1>
+    <div class="sub">Tap each bubble to hear it, then say it back!</div>`;
+  c.lines.forEach((l,i)=>{
+    const left = l.sp==="A";
+    html+=`<div class="card" style="text-align:${left?'left':'right'};margin-bottom:12px;background:${left?'#eef6ff':'#fff0f6'};cursor:pointer"
+       onclick="speak('${l.hi.replace(/'/g,"\\'")}')">
+       <div style="font-size:13px;font-weight:800;opacity:.5">${left?'🧒 Friend 1':'🧒 Friend 2'} • tap 🔊</div>
+       <div class="hindi" style="font-size:30px">${l.hi}</div>
+       <div class="roman" style="font-size:20px">${l.ro}</div>
+       <div class="english">${l.en}</div></div>`;
+  });
+  html+=`<button class="footerBtn" onclick="finishConvo('${id}')">We acted it out! 🎭</button>`;
+  // reuse menuScreen container
+  $("menuTitle").parentElement;
+  const ms=$("menuScreen"); ms.innerHTML=html.replace('class="screen"',''); show("menuScreen");
+  ms.scrollTop=0;
+}
+function finishConvo(id){
+  if(!state.done["convo_"+id]){ state.done["convo_"+id]=1; }
+  const c=CONVOS.find(x=>x.id===id); logActivity(c?c.lines:[]);
+  addSun(3); showReward(3);
+}
+
+/* ============ REWARD ============ */
+function showReward(earned){
+  growPlant(); saveState(); renderTop();
+  const plant=state.plants[state.plants.length-1]||"🌻";
+  const ov=document.createElement("div"); ov.className="overlay";
+  ov.innerHTML=`<div class="rewardCard">
+    <div class="grow">${plant}</div>
+    <h2>${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</h2>
+    <div style="font-size:18px;font-weight:800;margin:6px 0">You grew a new plant! 🌼</div>
+    <div class="pill" style="display:inline-flex;margin:10px auto">🌻 +${earned} sunshine</div>
+    <br>
+    <button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Garden 🏡</button>
+  </div>`;
+  document.body.appendChild(ov);
+  burstConfetti();
+}
+function closeReward(btn){ btn.closest(".overlay").remove(); goHome(); }
+function burstConfetti(){
+  const ems=["🌸","🌻","⭐","🌷","🎉","🌿"];
+  for(let i=0;i<22;i++){
+    const c=document.createElement("div"); c.className="confetti";
+    c.textContent=ems[Math.floor(Math.random()*ems.length)];
+    c.style.left=Math.random()*100+"vw";
+    c.style.animationDuration=(1.5+Math.random()*1.8)+"s";
+    c.style.fontSize=(18+Math.random()*22)+"px";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3400);
+  }
+}
+
+/* ============ PARENT AREA ============ */
+$("parentBtn").onclick=openParentGate;
+function openParentGate(){
+  const a=2+Math.floor(Math.random()*8), b=3+Math.floor(Math.random()*7), ans=a*b;
+  const wrongs=new Set(); while(wrongs.size<2){ const d=ans+(Math.floor(Math.random()*9)-4); if(d!==ans&&d>0) wrongs.add(d); }
+  const opts=shuffle([ans,...wrongs]);
+  const ov=document.createElement("div"); ov.className="overlay";
+  ov.innerHTML=`<div class="rewardCard">
+    <div style="font-size:46px">🔒</div>
+    <h2 style="font-size:22px">Grown-ups only</h2>
+    <div style="font-weight:800;font-size:20px;margin:8px 0">What is ${a} × ${b}?</div>
+    <div class="options" style="grid-template-columns:1fr 1fr 1fr">${opts.map(o=>`<button class="opt" style="font-size:26px" data-v="${o}">${o}</button>`).join("")}</div>
+    <button class="backBtn" style="margin-top:16px" onclick="this.closest('.overlay').remove()">Cancel</button>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{
+    if(parseInt(btn.dataset.v)===ans){ ov.remove(); openParent(); }
+    else { btn.classList.add("wrong"); }
+  });
+}
+function openParent(){
+  const learned=Object.keys(state.seen||{}).length;
+  const mastered=UNITS.filter(u=>{ const t=u.words.length*2; const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0)); return d>=t; }).length;
+  const convos=CONVOS.filter(c=>state.done["convo_"+c.id]).length;
+  const sessions=Object.values(state.log||{}).reduce((a,b)=>a+b,0);
+  // last 14 days activity
+  let cal="", activeDays=0;
+  for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=todayKey(d); const on=(state.log||{})[k]; if(on)activeDays++;
+    cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'🌼':''}</div><div class="dl">${d.getDate()}</div></div>`; }
+  const recent=Object.entries(state.seen||{}).slice(-18).map(([ro,en])=>`<span class="chip">${ro} · ${en}</span>`).join("");
+  $("parentBody").innerHTML=`
+    <div class="pcard">
+      <div class="statRow">
+        <div class="stat"><div class="n">${learned}</div><div class="l">words & phrases practiced</div></div>
+        <div class="stat"><div class="n">${state.plants.length}</div><div class="l">plants grown 🌱</div></div>
+        <div class="stat"><div class="n">${mastered}/${UNITS.length}</div><div class="l">topics mastered 👑</div></div>
+        <div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div style="font-weight:900;font-size:17px">Last 2 weeks</div>
+      <div style="font-size:14px;opacity:.7;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
+      <div class="cal">${cal}</div>
+    </div>
+    <div class="pcard">
+      <div style="font-weight:900;font-size:17px">Words she's met (${learned})</div>
+      <div class="wordChips">${recent||'<span style="opacity:.6">Nothing yet — play a lesson together!</span>'}</div>
+    </div>
+    <div class="pcard">
+      <div style="font-weight:900;font-size:17px">Practice ideas at home 🏡</div>
+      <div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:4px">
+        Use today's Word of the Day in a real sentence at dinner. Ask her one "Listen &amp; Find" word in the car.
+        Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟
+      </div>
+    </div>
+    <button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and empty the garden?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:#e88;box-shadow:0 6px 0 #b55">Reset progress</button>`;
+  show("parentScreen");
+}
+
+/* ============ MUTE ============ */
+$("muteBtn").onclick=()=>{ muted=!muted; $("muteBtn").textContent=muted?"🔇":"🔊"; if(muted) speechSynthesis.cancel(); else toast("Sound on 🔊"); };
+
+/* ============ BOOT ============ */
+// warm up speech on first touch (iOS needs a user gesture)
+let warmed=false;
+document.addEventListener("touchstart",()=>{ if(!warmed && 'speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); warmed=true; pickVoice(); } },{once:false});
+goHome();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
