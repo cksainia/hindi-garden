@@ -5,246 +5,252 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Aria's Hindi">
+<meta name="apple-mobile-web-app-title" content="Hindi Hop">
 <meta name="theme-color" content="#0d0a1f">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Aria's Hindi · Star Stage</title>
+<title>Hindi Hop · Star Stage</title>
 <style>
-  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
-  :root{
-    --bg1:#0d0a1f; --bg2:#160d2e; --bg3:#1d0f33;
-    --ink:#f5edff; --muted:#b8a6dc;
-    --card:#1b1330; --cardGlass:rgba(40,22,74,.55); --soft:#241640; --line:rgba(255,255,255,.10);
-    --pink:#ff2d95; --magenta:#ff4fb0; --purple:#9b3cff; --violet:#7a3cff;
-    --cyan:#36e6ff; --gold:#ffd24a; --good:#3fe3a0; --bad:#ff6f8d;
-    --glowPink:rgba(255,45,149,.45); --glowPurple:rgba(155,60,255,.42);
-    --shadow:rgba(0,0,0,.45); --shadowS:rgba(0,0,0,.30);
-  }
-  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);}
-  body{
-    background:
-      radial-gradient(circle at 18% -4%, rgba(155,60,255,.30), transparent 42%),
-      radial-gradient(circle at 86% 6%, rgba(255,45,149,.24), transparent 40%),
-      radial-gradient(circle at 50% 108%, rgba(54,230,255,.14), transparent 46%),
-      linear-gradient(165deg,#0d0a1f 0%, #160d2e 52%, #1d0f33 100%);
-    overflow:hidden;
-  }
-  #app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:760px;margin:0 auto;position:relative;}
-  .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 48px;}
-  .hidden{display:none!important;}
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
+:root{
+--bg1:#0d0a1f; --bg2:#160d2e; --bg3:#1d0f33;
+--ink:#f5edff; --muted:#b8a6dc;
+--card:#1b1330; --cardGlass:rgba(40,22,74,.55); --soft:#241640; --line:rgba(255,255,255,.10);
+--pink:#ff2d95; --magenta:#ff4fb0; --purple:#9b3cff; --violet:#7a3cff;
+--cyan:#36e6ff; --gold:#ffd24a; --good:#3fe3a0; --bad:#ff6f8d;
+--glowPink:rgba(255,45,149,.45); --glowPurple:rgba(155,60,255,.42);
+--shadow:rgba(0,0,0,.45); --shadowS:rgba(0,0,0,.30);
+}
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);}
+body{
+background:
+radial-gradient(circle at 18% -4%, rgba(155,60,255,.30), transparent 42%),
+radial-gradient(circle at 86% 6%, rgba(255,45,149,.24), transparent 40%),
+radial-gradient(circle at 50% 108%, rgba(54,230,255,.14), transparent 46%),
+linear-gradient(165deg,#0d0a1f 0%, #160d2e 52%, #1d0f33 100%);
+overflow:hidden;
+}
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:760px;margin:0 auto;position:relative;}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 48px;}
+.hidden{display:none!important;}
 
-  /* Top bar */
-  .topbar{display:flex;align-items:center;gap:8px;padding:12px 16px 4px;}
-  .pill{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:800;
-    backdrop-filter:blur(8px);box-shadow:0 2px 14px var(--shadowS), inset 0 0 0 1px rgba(255,255,255,.03);
-    display:flex;align-items:center;gap:7px;font-size:15px;color:var(--ink);}
-  .pill.star{box-shadow:0 0 16px var(--glowPink), inset 0 0 0 1px rgba(255,255,255,.04);border-color:rgba(255,45,149,.45);}
-  .pill.lvl{box-shadow:0 0 16px var(--glowPurple), inset 0 0 0 1px rgba(255,255,255,.04);border-color:rgba(155,60,255,.45);}
-  .pill .ico{font-size:17px;}
-  .spacer{flex:1;}
-  .iconbtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:19px;
-    backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);color:var(--ink);cursor:pointer;transition:transform .12s, box-shadow .15s;}
-  .iconbtn:active{transform:scale(.93);}
+/* Top bar */
+.topbar{display:flex;align-items:center;gap:8px;padding:12px 16px 4px;}
+.pill{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:800;
+backdrop-filter:blur(8px);box-shadow:0 2px 14px var(--shadowS), inset 0 0 0 1px rgba(255,255,255,.03);
+display:flex;align-items:center;gap:7px;font-size:15px;color:var(--ink);}
+.pill.star{box-shadow:0 0 16px var(--glowPink), inset 0 0 0 1px rgba(255,255,255,.04);border-color:rgba(255,45,149,.45);}
+.pill.lvl{box-shadow:0 0 16px var(--glowPurple), inset 0 0 0 1px rgba(255,255,255,.04);border-color:rgba(155,60,255,.45);}
+.pill .ico{font-size:17px;}
+.spacer{flex:1;}
+.iconbtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:19px;
+backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);color:var(--ink);cursor:pointer;transition:transform .12s, box-shadow .15s;}
+.iconbtn:active{transform:scale(.93);}
 
-  h1{font-size:27px;font-weight:900;margin:10px 0 2px;text-align:center;letter-spacing:-.4px;
-    background:linear-gradient(92deg,#ff2d95,#9b3cff 55%,#36e6ff);-webkit-background-clip:text;background-clip:text;color:transparent;
-    text-shadow:0 0 28px rgba(155,60,255,.30);}
-  .sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:16px;font-weight:600;letter-spacing:.3px;}
+h1{font-size:27px;font-weight:900;margin:6px 0 2px;text-align:center;letter-spacing:-.4px;
+background:linear-gradient(92deg,#ff2d95,#9b3cff 55%,#36e6ff);-webkit-background-clip:text;background-clip:text;color:transparent;
+text-shadow:0 0 28px rgba(155,60,255,.30);}
+.sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600;letter-spacing:.3px;}
 
-  /* Level banner */
-  #levelBanner{position:relative;overflow:hidden;border-radius:20px;padding:16px 18px;margin-bottom:16px;
-    background:linear-gradient(135deg, rgba(255,45,149,.20), rgba(155,60,255,.22) 55%, rgba(54,230,255,.14));
-    border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px var(--shadow), 0 0 24px rgba(155,60,255,.20) inset;}
-  #levelBanner::after{content:"";position:absolute;inset:-40% -10% auto auto;width:180px;height:180px;
-    background:radial-gradient(circle, rgba(255,45,149,.35), transparent 65%);filter:blur(8px);pointer-events:none;}
-  .lvlTop{display:flex;align-items:center;gap:12px;}
-  .lvlBadge{font-size:30px;width:54px;height:54px;flex:0 0 auto;border-radius:16px;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(145deg,#ff2d95,#9b3cff);box-shadow:0 6px 18px var(--glowPink), inset 0 0 0 2px rgba(255,255,255,.18);}
-  .lvlTitle{font-weight:900;font-size:19px;line-height:1.1;}
-  .lvlName{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:.4px;margin-top:2px;text-shadow:0 0 10px rgba(255,210,74,.4);}
-  .lvlBar{height:10px;background:rgba(0,0,0,.30);border-radius:999px;margin-top:13px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
-  .lvlBar > i{display:block;height:100%;width:0;border-radius:999px;transition:width .6s cubic-bezier(.2,.8,.2,1);
-    background:linear-gradient(90deg,#ffd24a,#ff2d95 55%,#9b3cff);box-shadow:0 0 12px var(--glowPink);}
-  .lvlHint{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:8px;text-align:center;}
+/* Top row: Word of the Day + Level side by side */
+.topRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;margin-bottom:12px;}
+.topRow > .wotd{margin-bottom:0;height:100%;}
+.topRow > #levelBanner{margin-bottom:0;height:100%;}
 
-  /* Dashboard live tiles */
-  .sectionTitle{font-size:13px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin:20px 2px 10px;}
-  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .tile{position:relative;overflow:hidden;border-radius:18px;padding:15px 14px;border:1px solid var(--line);
-    background:linear-gradient(150deg, var(--cardGlass), rgba(20,12,40,.65));box-shadow:0 6px 20px var(--shadowS);}
-  .tile .tn{font-size:30px;font-weight:900;line-height:1;letter-spacing:-.5px;}
-  .tile .tl{font-size:12.5px;font-weight:700;color:var(--muted);margin-top:6px;}
-  .tile .tIco{position:absolute;top:11px;right:12px;font-size:20px;opacity:.9;}
-  .tile.t-words .tn{color:#36e6ff;text-shadow:0 0 16px rgba(54,230,255,.45);}
-  .tile.t-today .tn{color:#3fe3a0;text-shadow:0 0 16px rgba(63,227,160,.40);}
-  .tile.t-stars .tn{color:#ffd24a;text-shadow:0 0 16px rgba(255,210,74,.45);}
-  .tile.t-topics .tn{color:#ff4fb0;text-shadow:0 0 16px rgba(255,79,176,.45);}
+/* Level banner */
+#levelBanner{position:relative;overflow:hidden;border-radius:18px;padding:14px;margin-bottom:16px;
+background:linear-gradient(135deg, rgba(255,45,149,.20), rgba(155,60,255,.22) 55%, rgba(54,230,255,.14));
+border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px var(--shadow), 0 0 24px rgba(155,60,255,.20) inset;}
+#levelBanner::after{content:"";position:absolute;inset:-40% -10% auto auto;width:180px;height:180px;
+background:radial-gradient(circle, rgba(255,45,149,.35), transparent 65%);filter:blur(8px);pointer-events:none;}
+.lvlTop{display:flex;align-items:center;gap:10px;}
+.lvlBadge{font-size:26px;width:46px;height:46px;flex:0 0 auto;border-radius:14px;display:flex;align-items:center;justify-content:center;
+background:linear-gradient(145deg,#ff2d95,#9b3cff);box-shadow:0 6px 18px var(--glowPink), inset 0 0 0 2px rgba(255,255,255,.18);}
+.lvlTitle{font-weight:900;font-size:17px;line-height:1.1;}
+.lvlName{font-size:12px;color:var(--gold);font-weight:800;letter-spacing:.4px;margin-top:2px;text-shadow:0 0 10px rgba(255,210,74,.4);}
+.lvlBar{height:9px;background:rgba(0,0,0,.30);border-radius:999px;margin-top:11px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+.lvlBar > i{display:block;height:100%;width:0;border-radius:999px;transition:width .6s cubic-bezier(.2,.8,.2,1);
+background:linear-gradient(90deg,#ffd24a,#ff2d95 55%,#9b3cff);box-shadow:0 0 12px var(--glowPink);}
+.lvlHint{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:7px;text-align:center;}
 
-  /* Topic tiles */
-  .units{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;}
-  .unit{position:relative;background:linear-gradient(155deg, var(--cardGlass), rgba(18,11,36,.7));border:1px solid var(--line);
-    border-radius:16px;padding:14px 10px;text-align:center;box-shadow:0 4px 16px var(--shadowS);transition:transform .12s, box-shadow .15s;cursor:pointer;}
-  .unit:active{transform:translateY(2px);}
-  .unit.mastered{border-color:rgba(255,210,74,.55);box-shadow:0 0 18px rgba(255,210,74,.22), 0 4px 16px var(--shadowS);}
-  .unit .emoji{font-size:32px;display:block;margin-bottom:6px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
-  .unit .name{font-weight:800;font-size:13.5px;line-height:1.2;color:var(--ink);}
-  .unit .prog{font-size:11px;color:var(--muted);margin-top:5px;font-weight:700;}
-  .unit .bar{height:5px;background:rgba(0,0,0,.30);border-radius:6px;margin-top:8px;overflow:hidden;}
-  .unit .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));width:0;border-radius:6px;transition:width .4s;box-shadow:0 0 8px var(--glowPurple);}
-  .unit .crown{font-size:13px;}
+/* Dashboard live tiles — one row */
+.sectionTitle{font-size:13px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin:14px 2px 8px;}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:4px;}
+.tile{position:relative;overflow:hidden;border-radius:15px;padding:12px 9px;border:1px solid var(--line);
+background:linear-gradient(150deg, var(--cardGlass), rgba(20,12,40,.65));box-shadow:0 6px 20px var(--shadowS);}
+.tile .tn{font-size:23px;font-weight:900;line-height:1;letter-spacing:-.5px;}
+.tile .tl{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:5px;line-height:1.15;}
+.tile .tIco{position:absolute;top:9px;right:9px;font-size:14px;opacity:.85;}
+.tile.t-words .tn{color:#36e6ff;text-shadow:0 0 16px rgba(54,230,255,.45);}
+.tile.t-today .tn{color:#3fe3a0;text-shadow:0 0 16px rgba(63,227,160,.40);}
+.tile.t-stars .tn{color:#ffd24a;text-shadow:0 0 16px rgba(255,210,74,.45);}
+.tile.t-topics .tn{color:#ff4fb0;text-shadow:0 0 16px rgba(255,79,176,.45);}
 
-  /* Lesson menu */
-  .actBtn{display:flex;align-items:center;gap:14px;width:100%;border:1px solid var(--line);border-radius:16px;
-    background:linear-gradient(150deg, var(--cardGlass), rgba(18,11,36,.7));
-    padding:15px;margin-bottom:11px;box-shadow:0 4px 16px var(--shadowS);text-align:left;cursor:pointer;transition:transform .12s, box-shadow .15s;color:var(--ink);}
-  .actBtn:active{transform:translateY(2px);}
-  .actBtn .big{font-size:26px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:13px;
-    background:linear-gradient(145deg,rgba(255,45,149,.25),rgba(155,60,255,.30));flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
-  .actBtn .t{font-weight:800;font-size:16px;}
-  .actBtn .d{font-size:13px;color:var(--muted);font-weight:600;}
+/* Topic tiles */
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;}
+.unit{position:relative;background:linear-gradient(155deg, var(--cardGlass), rgba(18,11,36,.7));border:1px solid var(--line);
+border-radius:16px;padding:14px 10px;text-align:center;box-shadow:0 4px 16px var(--shadowS);transition:transform .12s, box-shadow .15s;cursor:pointer;}
+.unit:active{transform:translateY(2px);}
+.unit.mastered{border-color:rgba(255,210,74,.55);box-shadow:0 0 18px rgba(255,210,74,.22), 0 4px 16px var(--shadowS);}
+.unit .emoji{font-size:32px;display:block;margin-bottom:6px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
+.unit .name{font-weight:800;font-size:13.5px;line-height:1.2;color:var(--ink);}
+.unit .prog{font-size:11px;color:var(--muted);margin-top:5px;font-weight:700;}
+.unit .bar{height:5px;background:rgba(0,0,0,.30);border-radius:6px;margin-top:8px;overflow:hidden;}
+.unit .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));width:0;border-radius:6px;transition:width .4s;box-shadow:0 0 8px var(--glowPurple);}
+.unit .crown{font-size:13px;}
 
-  /* Cards / activities */
-  .card{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:20px;
-    padding:26px 22px;box-shadow:0 8px 26px var(--shadowS), 0 0 22px rgba(155,60,255,.10) inset;text-align:center;margin-bottom:16px;}
-  .bigEmoji{font-size:80px;line-height:1.1;margin:4px 0;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5));}
-  .hindi{font-size:37px;font-weight:900;margin:4px 0;letter-spacing:-.5px;color:#fff;text-shadow:0 0 18px rgba(155,60,255,.35);}
-  .roman{font-size:21px;color:var(--magenta);font-weight:800;}
-  .english{font-size:17px;color:var(--muted);margin-top:6px;font-weight:700;}
-  .speakBtn{background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:800;
-    margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px var(--glowPink);transition:transform .12s;}
-  .speakBtn:active{transform:scale(.97);}
+/* Lesson menu */
+.actBtn{display:flex;align-items:center;gap:14px;width:100%;border:1px solid var(--line);border-radius:16px;
+background:linear-gradient(150deg, var(--cardGlass), rgba(18,11,36,.7));
+padding:15px;margin-bottom:11px;box-shadow:0 4px 16px var(--shadowS);text-align:left;cursor:pointer;transition:transform .12s, box-shadow .15s;color:var(--ink);}
+.actBtn:active{transform:translateY(2px);}
+.actBtn .big{font-size:26px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:13px;
+background:linear-gradient(145deg,rgba(255,45,149,.25),rgba(155,60,255,.30));flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.actBtn .t{font-weight:800;font-size:16px;}
+.actBtn .d{font-size:13px;color:var(--muted);font-weight:600;}
 
-  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
-  .opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:18px 10px;font-size:38px;
-    box-shadow:0 4px 14px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;color:var(--ink);}
-  .opt .lab{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px;}
-  .opt:active{transform:translateY(2px);}
-  .opt.correct{border-color:var(--good);box-shadow:0 0 20px rgba(63,227,160,.45);}
-  .opt.wrong{border-color:var(--bad);opacity:.7;}
+/* Cards / activities */
+.card{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:20px;
+padding:26px 22px;box-shadow:0 8px 26px var(--shadowS), 0 0 22px rgba(155,60,255,.10) inset;text-align:center;margin-bottom:16px;}
+.bigEmoji{font-size:80px;line-height:1.1;margin:4px 0;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5));}
+.hindi{font-size:37px;font-weight:900;margin:4px 0;letter-spacing:-.5px;color:#fff;text-shadow:0 0 18px rgba(155,60,255,.35);}
+.roman{font-size:21px;color:var(--magenta);font-weight:800;}
+.english{font-size:17px;color:var(--muted);margin-top:6px;font-weight:700;}
+.speakBtn{background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:800;
+margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px var(--glowPink);transition:transform .12s;}
+.speakBtn:active{transform:scale(.97);}
 
-  .prompt{font-size:16px;font-weight:800;color:var(--muted);margin:6px 0 14px;text-align:center;}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+.opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:18px 10px;font-size:38px;
+box-shadow:0 4px 14px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;color:var(--ink);}
+.opt .lab{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px;}
+.opt:active{transform:translateY(2px);}
+.opt.correct{border-color:var(--good);box-shadow:0 0 20px rgba(63,227,160,.45);}
+.opt.wrong{border-color:var(--bad);opacity:.7;}
 
-  /* progress dots */
-  .dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
-  .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);}
-  .dot.done{background:var(--good);box-shadow:0 0 8px rgba(63,227,160,.6);}
-  .dot.now{background:var(--magenta);transform:scale(1.35);box-shadow:0 0 10px var(--glowPink);}
+.prompt{font-size:16px;font-weight:800;color:var(--muted);margin:6px 0 14px;text-align:center;}
 
-  .backBtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-weight:700;font-size:14px;
-    backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer;}
+/* progress dots */
+.dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);}
+.dot.done{background:var(--good);box-shadow:0 0 8px rgba(63,227,160,.6);}
+.dot.now{background:var(--magenta);transform:scale(1.35);box-shadow:0 0 10px var(--glowPink);}
 
-  .footerBtn{position:sticky;bottom:0;width:100%;background:linear-gradient(92deg,#ff2d95,#9b3cff 60%,#7a3cff);color:#fff;border:none;border-radius:14px;
-    padding:16px;font-size:16px;font-weight:800;box-shadow:0 10px 26px var(--glowPink);margin-top:8px;cursor:pointer;transition:transform .12s;}
-  .footerBtn:active{transform:translateY(2px);}
-  .footerBtn:disabled{background:#3a2c52;box-shadow:none;color:rgba(255,255,255,.6);}
+.backBtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-weight:700;font-size:14px;
+backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer;}
 
-  /* Reward overlay */
-  .overlay{position:fixed;inset:0;background:rgba(8,5,18,.66);backdrop-filter:blur(7px);
-    display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;}
-  .rewardCard{position:relative;overflow:hidden;border-radius:24px;padding:30px;text-align:center;max-width:360px;width:100%;
-    background:linear-gradient(160deg,#231542,#170d2e);border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 24px 70px rgba(0,0,0,.6), 0 0 34px rgba(255,45,149,.25);animation:pop .4s;}
-  @keyframes pop{0%{transform:scale(0);}60%{transform:scale(1.18);}100%{transform:scale(1);}}
-  .rewardCard .grow{font-size:74px;animation:starPulse 1.4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,210,74,.7));}
-  @keyframes starPulse{0%,100%{transform:scale(1) rotate(-6deg);}50%{transform:scale(1.18) rotate(6deg);}}
-  .rewardCard h2{font-size:22px;font-weight:900;margin:8px 0;color:#fff;}
-  .lvlUpTag{display:inline-block;margin:6px 0;padding:7px 16px;border-radius:999px;font-weight:900;font-size:15px;color:#1a0f2e;
-    background:linear-gradient(135deg,#ffd24a,#ff7ac0);box-shadow:0 0 22px rgba(255,210,74,.6);animation:starPulse 1.2s ease-in-out infinite;}
-  .confetti{position:fixed;top:-10px;font-size:22px;z-index:60;pointer-events:none;animation:fall linear forwards;}
-  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);}}
+.footerBtn{position:sticky;bottom:0;width:100%;background:linear-gradient(92deg,#ff2d95,#9b3cff 60%,#7a3cff);color:#fff;border:none;border-radius:14px;
+padding:16px;font-size:16px;font-weight:800;box-shadow:0 10px 26px var(--glowPink);margin-top:8px;cursor:pointer;transition:transform .12s;}
+.footerBtn:active{transform:translateY(2px);}
+.footerBtn:disabled{background:#3a2c52;box-shadow:none;color:rgba(255,255,255,.6);}
 
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2a1850,#3a1c5e);color:#fff;
-    border:1px solid rgba(255,255,255,.14);padding:11px 18px;border-radius:999px;font-weight:700;z-index:70;font-size:14px;opacity:0;transition:opacity .3s;box-shadow:0 8px 24px var(--shadow);}
-  .toast.show{opacity:1;}
-  .encourage{font-size:16px;font-weight:800;color:var(--good);min-height:22px;margin-top:8px;text-shadow:0 0 12px rgba(63,227,160,.4);}
+/* Reward overlay */
+.overlay{position:fixed;inset:0;background:rgba(8,5,18,.66);backdrop-filter:blur(7px);
+display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;}
+.rewardCard{position:relative;overflow:hidden;border-radius:24px;padding:30px;text-align:center;max-width:360px;width:100%;
+background:linear-gradient(160deg,#231542,#170d2e);border:1px solid rgba(255,255,255,.12);
+box-shadow:0 24px 70px rgba(0,0,0,.6), 0 0 34px rgba(255,45,149,.25);animation:pop .4s;}
+@keyframes pop{0%{transform:scale(0);}60%{transform:scale(1.18);}100%{transform:scale(1);}}
+.rewardCard .grow{font-size:74px;animation:starPulse 1.4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,210,74,.7));}
+@keyframes starPulse{0%,100%{transform:scale(1) rotate(-6deg);}50%{transform:scale(1.18) rotate(6deg);}}
+.rewardCard h2{font-size:22px;font-weight:900;margin:8px 0;color:#fff;}
+.lvlUpTag{display:inline-block;margin:6px 0;padding:7px 16px;border-radius:999px;font-weight:900;font-size:15px;color:#1a0f2e;
+background:linear-gradient(135deg,#ffd24a,#ff7ac0);box-shadow:0 0 22px rgba(255,210,74,.6);animation:starPulse 1.2s ease-in-out infinite;}
+.confetti{position:fixed;top:-10px;font-size:22px;z-index:60;pointer-events:none;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);}}
 
-  /* Word of the day */
-  .wotd{display:block;width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);cursor:pointer;
-    background:linear-gradient(120deg, rgba(255,45,149,.16), rgba(155,60,255,.20));border-radius:18px;padding:16px;margin-bottom:16px;
-    box-shadow:0 6px 22px var(--shadowS), 0 0 18px rgba(155,60,255,.14) inset;}
-  .wotd .tag{font-size:11px;font-weight:900;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;text-shadow:0 0 10px rgba(255,210,74,.4);}
-  .wotd .row{display:flex;align-items:center;gap:14px;margin-top:8px;}
-  .wotd .wic{font-size:38px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
-  .wotd .whi{font-size:25px;font-weight:900;color:#fff;}
-  .wotd .wro{font-size:16px;color:var(--magenta);font-weight:800;}
-  .wotd .wen{font-size:14px;color:var(--muted);font-weight:700;}
-  .wotd .hear{margin-left:auto;font-size:19px;background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;border-radius:50%;width:42px;height:42px;
-    display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 14px var(--glowPink);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2a1850,#3a1c5e);color:#fff;
+border:1px solid rgba(255,255,255,.14);padding:11px 18px;border-radius:999px;font-weight:700;z-index:70;font-size:14px;opacity:0;transition:opacity .3s;box-shadow:0 8px 24px var(--shadow);}
+.toast.show{opacity:1;}
+.encourage{font-size:16px;font-weight:800;color:var(--good);min-height:22px;margin-top:8px;text-shadow:0 0 12px rgba(63,227,160,.4);}
 
-  /* Parent screen */
-  .pcard{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 20px var(--shadowS);margin-bottom:14px;}
-  .statRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .stat{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center;}
-  .stat .n{font-size:25px;font-weight:900;color:var(--magenta);text-shadow:0 0 14px var(--glowPink);}
-  .stat .l{font-size:12px;font-weight:700;color:var(--muted);}
-  .cal{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-  .cal .day{width:32px;text-align:center;}
-  .cal .box{height:28px;border-radius:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;}
-  .cal .box.on{background:linear-gradient(145deg,rgba(255,45,149,.4),rgba(155,60,255,.4));border-color:rgba(255,255,255,.18);}
-  .cal .dl{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
-  .wordChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
-  .chip{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink);}
+/* Word of the day */
+.wotd{display:block;width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);cursor:pointer;
+background:linear-gradient(120deg, rgba(255,45,149,.16), rgba(155,60,255,.20));border-radius:18px;padding:14px;margin-bottom:16px;
+box-shadow:0 6px 22px var(--shadowS), 0 0 18px rgba(155,60,255,.14) inset;}
+.wotd .tag{font-size:11px;font-weight:900;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;text-shadow:0 0 10px rgba(255,210,74,.4);}
+.wotd .row{display:flex;align-items:center;gap:12px;margin-top:8px;}
+.wotd .wic{font-size:32px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
+.wotd .whi{font-size:22px;font-weight:900;color:#fff;}
+.wotd .wro{font-size:15px;color:var(--magenta);font-weight:800;}
+.wotd .wen{font-size:13px;color:var(--muted);font-weight:700;}
+.wotd .hear{margin-left:auto;font-size:18px;background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;border-radius:50%;width:38px;height:38px;
+display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 14px var(--glowPink);}
+
+/* Parent screen */
+.pcard{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 20px var(--shadowS);margin-bottom:14px;}
+.statRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stat{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center;}
+.stat .n{font-size:25px;font-weight:900;color:var(--magenta);text-shadow:0 0 14px var(--glowPink);}
+.stat .l{font-size:12px;font-weight:700;color:var(--muted);}
+.cal{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.cal .day{width:32px;text-align:center;}
+.cal .box{height:28px;border-radius:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.cal .box.on{background:linear-gradient(145deg,rgba(255,45,149,.4),rgba(155,60,255,.4));border-color:rgba(255,255,255,.18);}
+.cal .dl{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
+.wordChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.chip{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink);}
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="topbar">
-    <div class="pill star"><span class="ico">⭐</span><span id="starCount">0</span></div>
-    <div class="pill lvl"><span class="ico">🩷</span>Lv <span id="levelCount">1</span></div>
-    <div class="spacer"></div>
-    <button class="iconbtn" id="parentBtn" title="grown-ups">👪</button>
-    <button class="iconbtn" id="muteBtn" title="sound">🔊</button>
-  </div>
+<div class="topbar">
+<div class="pill star"><span class="ico">⭐</span><span id="starCount">0</span></div>
+<div class="pill lvl"><span class="ico">🩷</span>Lv <span id="levelCount">1</span></div>
+<div class="spacer"></div>
+<button class="iconbtn" id="parentBtn" title="grown-ups">👪</button>
+<button class="iconbtn" id="muteBtn" title="sound">🔊</button>
+</div>
 
-  <!-- HOME -->
-  <div class="screen" id="homeScreen">
-    <h1>Aria's Hindi</h1>
-    <div class="sub" id="welcomeLine">✨ Star Stage · shine brighter with every word 💜</div>
-    <button id="wotd" class="wotd"></button>
+<!-- HOME -->
+<div class="screen" id="homeScreen">
+<h1>Hindi Hop</h1>
+<div class="sub" id="welcomeLine">✨ Star Stage · shine brighter with every word 💜</div>
 
-    <div id="levelBanner">
-      <div class="lvlTop">
-        <div class="lvlBadge" id="lvlBadge">🌟</div>
-        <div>
-          <div class="lvlTitle">Level <span id="lvlNum">1</span></div>
-          <div class="lvlName" id="lvlName">Rookie Star</div>
-        </div>
-      </div>
-      <div class="lvlBar"><i id="lvlFill"></i></div>
-      <div class="lvlHint" id="lvlHint">Earn stars to level up! ⭐</div>
-    </div>
+<div class="topRow">
+<button id="wotd" class="wotd"></button>
+<div id="levelBanner">
+<div class="lvlTop">
+<div class="lvlBadge" id="lvlBadge">🌟</div>
+<div>
+<div class="lvlTitle">Level <span id="lvlNum">1</span></div>
+<div class="lvlName" id="lvlName">Rookie Star</div>
+</div>
+</div>
+<div class="lvlBar"><i id="lvlFill"></i></div>
+<div class="lvlHint" id="lvlHint">Earn stars to level up! ⭐</div>
+</div>
+</div>
 
-    <div class="sectionTitle">Your Star Stats</div>
-    <div class="tiles" id="dashTiles"></div>
+<div class="tiles" id="dashTiles"></div>
 
-    <div class="sectionTitle">Topics</div>
-    <div class="units" id="unitsWrap"></div>
-  </div>
+<div class="sectionTitle">Topics</div>
+<div class="units" id="unitsWrap"></div>
+</div>
 
-  <!-- LESSON MENU -->
-  <div class="screen hidden" id="menuScreen">
-    <button class="backBtn" onclick="goHome()">⬅️ Home</button>
-    <h1 id="menuTitle" style="margin-top:10px;"></h1>
-    <div class="sub" id="menuSub"></div>
-    <div id="menuActs" style="margin-top:8px;"></div>
-  </div>
+<!-- LESSON MENU -->
+<div class="screen hidden" id="menuScreen">
+<button class="backBtn" onclick="goHome()">⬅️ Home</button>
+<h1 id="menuTitle" style="margin-top:10px;"></h1>
+<div class="sub" id="menuSub"></div>
+<div id="menuActs" style="margin-top:8px;"></div>
+</div>
 
-  <!-- ACTIVITY -->
-  <div class="screen hidden" id="actScreen">
-    <button class="backBtn" onclick="openUnit(currentUnit)">⬅️ Back</button>
-    <div class="dots" id="dots" style="margin-top:14px;"></div>
-    <div id="actBody"></div>
-  </div>
+<!-- ACTIVITY -->
+<div class="screen hidden" id="actScreen">
+<button class="backBtn" onclick="openUnit(currentUnit)">⬅️ Back</button>
+<div class="dots" id="dots" style="margin-top:14px;"></div>
+<div id="actBody"></div>
+</div>
 
-  <!-- PARENT -->
-  <div class="screen hidden" id="parentScreen">
-    <button class="backBtn" onclick="goHome()">⬅️ Home</button>
-    <h1 style="margin-top:10px;">Parent Dashboard</h1>
-    <div class="sub">Aria's Hindi progress — encouragement only, no pressure</div>
-    <div id="parentBody"></div>
-  </div>
+<!-- PARENT -->
+<div class="screen hidden" id="parentScreen">
+<button class="backBtn" onclick="goHome()">⬅️ Home</button>
+<h1 style="margin-top:10px;">Parent Dashboard</h1>
+<div class="sub">Aria's Hindi progress — encouragement only, no pressure</div>
+<div id="parentBody"></div>
+</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -264,38 +270,38 @@ let muted = false;
 let currentUnit = null;
 
 function loadState(){
-  let s = null;
-  try{ s = JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){}
-  if(!s || typeof s!=="object") s = {};
-  // base / legacy fields preserved
-  s.done = s.done || {};
-  s.log  = s.log  || {};
-  s.seen = s.seen || {};
-  // ---- graceful migration to Star Stage ----
-  // old currency was "sun"; carry it forward as starting stars so progress is never lost
-  if(typeof s.stars !== "number"){ s.stars = (typeof s.sun==="number") ? s.sun : 0; }
-  // mastered words: { ro: "YYYY-MM-DD" } — date a word was first nailed in Listen & Find
-  if(!s.mastered || typeof s.mastered!=="object") s.mastered = {};
-  // keep legacy keys (sun, plants) untouched so nothing is wiped
-  return s;
+let s = null;
+try{ s = JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){}
+if(!s || typeof s!=="object") s = {};
+// base / legacy fields preserved
+s.done = s.done || {};
+s.log = s.log || {};
+s.seen = s.seen || {};
+// ---- graceful migration to Star Stage ----
+// old currency was "sun"; carry it forward as starting stars so progress is never lost
+if(typeof s.stars !== "number"){ s.stars = (typeof s.sun==="number") ? s.sun : 0; }
+// mastered words: { ro: "YYYY-MM-DD" } — date a word was first nailed in Listen & Find
+if(!s.mastered || typeof s.mastered!=="object") s.mastered = {};
+// keep legacy keys (sun, plants) untouched so nothing is wiped
+return s;
 }
 function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} }
 
 /* ============ SPEECH ============ */
 let hiVoice = null;
 function pickVoice(){
-  const vs = speechSynthesis.getVoices();
-  hiVoice = vs.find(v=>v.lang==="hi-IN") || vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("hi")) || null;
+const vs = speechSynthesis.getVoices();
+hiVoice = vs.find(v=>v.lang==="hi-IN") || vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("hi")) || null;
 }
 if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
 function speak(text){
-  if(muted || !('speechSynthesis' in window)) return;
-  try{
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "hi-IN"; if(hiVoice) u.voice = hiVoice; u.rate = .85; u.pitch = 1.05;
-    speechSynthesis.speak(u);
-  }catch(e){}
+if(muted || !('speechSynthesis' in window)) return;
+try{
+speechSynthesis.cancel();
+const u = new SpeechSynthesisUtterance(text);
+u.lang = "hi-IN"; if(hiVoice) u.voice = hiVoice; u.rate = .85; u.pitch = 1.05;
+speechSynthesis.speak(u);
+}catch(e){}
 }
 
 /* ============ HELPERS ============ */
@@ -303,366 +309,366 @@ const $ = id => document.getElementById(id);
 function show(screen){ ["homeScreen","menuScreen","actScreen","parentScreen"].forEach(s=>$(s).classList.add("hidden")); $(screen).classList.remove("hidden"); $(screen).scrollTop=0; }
 function todayKey(d){ d=d||new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function logActivity(words){
-  const k=todayKey(); state.log=state.log||{}; state.log[k]=(state.log[k]||0)+1;
-  state.seen=state.seen||{}; (words||[]).forEach(w=>{ if(w&&w.ro) state.seen[w.ro]=w.en; });
+const k=todayKey(); state.log=state.log||{}; state.log[k]=(state.log[k]||0)+1;
+state.seen=state.seen||{}; (words||[]).forEach(w=>{ if(w&&w.ro) state.seen[w.ro]=w.en; });
 }
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1600); }
 
 /* ============ STARS / LEVELS ============ */
 function levelInfo(){
-  const stars = state.stars||0;
-  const level = Math.floor(stars/STARS_PER_LEVEL)+1;
-  const inLevel = stars % STARS_PER_LEVEL;
-  const toNext = STARS_PER_LEVEL - inLevel;
-  const pct = Math.round(inLevel/STARS_PER_LEVEL*100);
-  const idx = Math.min(level-1, LEVEL_NAMES.length-1);
-  return { stars, level, inLevel, toNext, pct, name:LEVEL_NAMES[idx], badge:LEVEL_BADGES[idx] };
+const stars = state.stars||0;
+const level = Math.floor(stars/STARS_PER_LEVEL)+1;
+const inLevel = stars % STARS_PER_LEVEL;
+const toNext = STARS_PER_LEVEL - inLevel;
+const pct = Math.round(inLevel/STARS_PER_LEVEL*100);
+const idx = Math.min(level-1, LEVEL_NAMES.length-1);
+return { stars, level, inLevel, toNext, pct, name:LEVEL_NAMES[idx], badge:LEVEL_BADGES[idx] };
 }
 // returns {leveledUp, newLevel}
 function addStars(n){
-  const before = levelInfo().level;
-  state.stars = (state.stars||0) + n;
-  saveState();
-  const after = levelInfo().level;
-  renderTop();
-  return { leveledUp: after>before, newLevel: after };
+const before = levelInfo().level;
+state.stars = (state.stars||0) + n;
+saveState();
+const after = levelInfo().level;
+renderTop();
+return { leveledUp: after>before, newLevel: after };
 }
 // mark a word mastered the first time it's correct in Listen & Find
 function markMastered(ro){
-  if(!ro) return false;
-  state.mastered = state.mastered || {};
-  if(!state.mastered[ro]){ state.mastered[ro] = todayKey(); return true; }
-  return false;
+if(!ro) return false;
+state.mastered = state.mastered || {};
+if(!state.mastered[ro]){ state.mastered[ro] = todayKey(); return true; }
+return false;
 }
 function masteredTodayCount(){
-  const k=todayKey(); let c=0;
-  for(const ro in (state.mastered||{})){ if(state.mastered[ro]===k) c++; }
-  return c;
+const k=todayKey(); let c=0;
+for(const ro in (state.mastered||{})){ if(state.mastered[ro]===k) c++; }
+return c;
 }
 function topicsMastered(){
-  return UNITS.filter(u=>{ const t=u.words.length*2; const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0)); return d>=t; }).length;
+return UNITS.filter(u=>{ const t=u.words.length*2; const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0)); return d>=t; }).length;
 }
 function renderTop(){
-  const li=levelInfo();
-  $("starCount").textContent=li.stars;
-  $("levelCount").textContent=li.level;
+const li=levelInfo();
+$("starCount").textContent=li.stars;
+$("levelCount").textContent=li.level;
 }
 
 /* ============ HOME / DASHBOARD ============ */
 function renderLevelBanner(){
-  const li=levelInfo();
-  $("lvlNum").textContent=li.level;
-  $("lvlName").textContent=li.name;
-  $("lvlBadge").textContent=li.badge;
-  $("lvlFill").style.width=li.pct+"%";
-  $("lvlHint").textContent = `${li.inLevel}/${STARS_PER_LEVEL} stars this level · ${li.toNext} more to Level ${li.level+1} ⭐`;
+const li=levelInfo();
+$("lvlNum").textContent=li.level;
+$("lvlName").textContent=li.name;
+$("lvlBadge").textContent=li.badge;
+$("lvlFill").style.width=li.pct+"%";
+$("lvlHint").textContent = `${li.inLevel}/${STARS_PER_LEVEL} stars this level · ${li.toNext} more to Level ${li.level+1} ⭐`;
 }
 function renderDashboard(){
-  const wordsLearned=Object.keys(state.seen||{}).length;
-  const todayM=masteredTodayCount();
-  const li=levelInfo();
-  const topics=topicsMastered();
-  const tiles=[
-    {cls:"t-words", ico:"📚", n:wordsLearned, l:"Words Learned"},
-    {cls:"t-today", ico:"🌟", n:todayM,       l:"Mastered Today"},
-    {cls:"t-stars", ico:"⭐", n:li.stars,      l:"Stars Earned"},
-    {cls:"t-topics",ico:"👑", n:topics+"/"+UNITS.length, l:"Topics Mastered"},
-  ];
-  $("dashTiles").innerHTML = tiles.map(t=>
-    `<div class="tile ${t.cls}"><span class="tIco">${t.ico}</span><div class="tn">${t.n}</div><div class="tl">${t.l}</div></div>`
-  ).join("");
+const wordsLearned=Object.keys(state.seen||{}).length;
+const todayM=masteredTodayCount();
+const li=levelInfo();
+const topics=topicsMastered();
+const tiles=[
+{cls:"t-words", ico:"📚", n:wordsLearned, l:"Words Learned"},
+{cls:"t-today", ico:"🌟", n:todayM, l:"Mastered Today"},
+{cls:"t-stars", ico:"⭐", n:li.stars, l:"Stars Earned"},
+{cls:"t-topics",ico:"👑", n:topics+"/"+UNITS.length, l:"Topics Mastered"},
+];
+$("dashTiles").innerHTML = tiles.map(t=>
+`<div class="tile ${t.cls}"><span class="tIco">${t.ico}</span><div class="tn">${t.n}</div><div class="tl">${t.l}</div></div>`
+).join("");
 }
 function renderUnits(){
-  const wrap=$("unitsWrap"); wrap.innerHTML="";
-  UNITS.forEach(u=>{
-    const total=u.words.length*2; // learn + listen target
-    const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));
-    const pct=Math.round(done/total*100);
-    const b=document.createElement("button"); b.className="unit"+(pct>=100?" mastered":""); b.onclick=()=>openUnit(u.id);
-    b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>
-      ${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% complete</div>`}
-      <div class="bar"><i style="width:${pct}%"></i></div>`;
-    wrap.appendChild(b);
-  });
-  // conversations card group
-  const ct=document.createElement("div"); ct.style.gridColumn="1/-1"; ct.className="sectionTitle"; ct.textContent="🎭 Little Conversations";
-  wrap.appendChild(ct);
-  CONVOS.forEach(c=>{
-    const b=document.createElement("button"); b.className="unit"; b.onclick=()=>playConvo(c.id);
-    const done=state.done["convo_"+c.id]?'<div class="prog">⭐ Practiced</div>':'<div class="prog">Tap to act it out</div>';
-    b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span>${done}`;
-    wrap.appendChild(b);
-  });
+const wrap=$("unitsWrap"); wrap.innerHTML="";
+UNITS.forEach(u=>{
+const total=u.words.length*2; // learn + listen target
+const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));
+const pct=Math.round(done/total*100);
+const b=document.createElement("button"); b.className="unit"+(pct>=100?" mastered":""); b.onclick=()=>openUnit(u.id);
+b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>
+${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% complete</div>`}
+<div class="bar"><i style="width:${pct}%"></i></div>`;
+wrap.appendChild(b);
+});
+// conversations card group
+const ct=document.createElement("div"); ct.style.gridColumn="1/-1"; ct.className="sectionTitle"; ct.textContent="🎭 Little Conversations";
+wrap.appendChild(ct);
+CONVOS.forEach(c=>{
+const b=document.createElement("button"); b.className="unit"; b.onclick=()=>playConvo(c.id);
+const done=state.done["convo_"+c.id]?'<div class="prog">⭐ Practiced</div>':'<div class="prog">Tap to act it out</div>';
+b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span>${done}`;
+wrap.appendChild(b);
+});
 }
 function goHome(){ renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
 
 /* ============ WORD OF THE DAY ============ */
 const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]);
 function renderWOTD(){
-  // deterministic by calendar day, changes each morning, same all day
-  const epochDay = Math.floor((Date.now() - new Date().getTimezoneOffset()*60000)/86400000);
-  const w = ALL_WORDS[epochDay % ALL_WORDS.length];
-  const el=$("wotd");
-  el.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div>
-    <div class="row">
-      <span class="wic">${w.ic}</span>
-      <span><span class="whi">${w.hi}</span><br><span class="wro">${w.ro}</span> — <span class="wen">${w.en}</span></span>
-      <span class="hear">🔊</span>
-    </div>`;
-  el.onclick=()=>speak(w.hi);
+// deterministic by calendar day, changes each morning, same all day
+const epochDay = Math.floor((Date.now() - new Date().getTimezoneOffset()*60000)/86400000);
+const w = ALL_WORDS[epochDay % ALL_WORDS.length];
+const el=$("wotd");
+el.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div>
+<div class="row">
+<span class="wic">${w.ic}</span>
+<span><span class="whi">${w.hi}</span><br><span class="wro">${w.ro}</span> — <span class="wen">${w.en}</span></span>
+<span class="hear">🔊</span>
+</div>`;
+el.onclick=()=>speak(w.hi);
 }
 
 /* ============ UNIT MENU ============ */
 function openUnit(id){
-  currentUnit=id; const u=UNITS.find(x=>x.id===id);
-  $("menuTitle").innerHTML=`${u.emoji} ${u.name}`;
-  $("menuSub").textContent=`${u.words.length} words to discover`;
-  const m=$("menuActs"); m.innerHTML="";
-  const acts=[
-    {k:"learn", big:"📖", t:"Learn the Words", d:"See, hear & say each word"},
-    {k:"listen", big:"👂", t:"Listen & Find", d:"Hear Hindi, tap the right picture"},
-    {k:"say", big:"🎤", t:"Say It!", d:"Hear it, then say it out loud"},
-  ];
-  acts.forEach(a=>{
-    const b=document.createElement("button"); b.className="actBtn"; b.onclick=()=>startActivity(id,a.k);
-    const seen = a.k==="listen" ? (state.done[id+"_listen"]?" ✓":"") : (state.done[id+"_"+a.k]?" ✓":"");
-    b.innerHTML=`<span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span>`;
-    m.appendChild(b);
-  });
-  show("menuScreen");
+currentUnit=id; const u=UNITS.find(x=>x.id===id);
+$("menuTitle").innerHTML=`${u.emoji} ${u.name}`;
+$("menuSub").textContent=`${u.words.length} words to discover`;
+const m=$("menuActs"); m.innerHTML="";
+const acts=[
+{k:"learn", big:"📖", t:"Learn the Words", d:"See, hear & say each word"},
+{k:"listen", big:"👂", t:"Listen & Find", d:"Hear Hindi, tap the right picture"},
+{k:"say", big:"🎤", t:"Say It!", d:"Hear it, then say it out loud"},
+];
+acts.forEach(a=>{
+const b=document.createElement("button"); b.className="actBtn"; b.onclick=()=>startActivity(id,a.k);
+const seen = a.k==="listen" ? (state.done[id+"_listen"]?" ✓":"") : (state.done[id+"_"+a.k]?" ✓":"");
+b.innerHTML=`<span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span>`;
+m.appendChild(b);
+});
+show("menuScreen");
 }
 
 /* ============ ACTIVITIES ============ */
 let lesson = null;
 function startActivity(unitId, kind){
-  const u=UNITS.find(x=>x.id===unitId);
-  lesson={unitId, kind, words:shuffle(u.words), idx:0, correct:0, newMastered:0};
-  renderDots();
-  if(kind==="learn") renderLearn();
-  else if(kind==="listen") renderListen();
-  else renderSay();
-  show("actScreen");
+const u=UNITS.find(x=>x.id===unitId);
+lesson={unitId, kind, words:shuffle(u.words), idx:0, correct:0, newMastered:0};
+renderDots();
+if(kind==="learn") renderLearn();
+else if(kind==="listen") renderListen();
+else renderSay();
+show("actScreen");
 }
 function renderDots(){
-  const d=$("dots"); d.innerHTML="";
-  lesson.words.forEach((_,i)=>{
-    const s=document.createElement("div"); s.className="dot"+(i<lesson.idx?" done":i===lesson.idx?" now":"");
-    d.appendChild(s);
-  });
+const d=$("dots"); d.innerHTML="";
+lesson.words.forEach((_,i)=>{
+const s=document.createElement("div"); s.className="dot"+(i<lesson.idx?" done":i===lesson.idx?" now":"");
+d.appendChild(s);
+});
 }
 function nextStep(){
-  lesson.idx++;
-  if(lesson.idx>=lesson.words.length){ finishActivity(); return; }
-  renderDots();
-  if(lesson.kind==="learn") renderLearn();
-  else if(lesson.kind==="listen") renderListen();
-  else renderSay();
+lesson.idx++;
+if(lesson.idx>=lesson.words.length){ finishActivity(); return; }
+renderDots();
+if(lesson.kind==="learn") renderLearn();
+else if(lesson.kind==="listen") renderListen();
+else renderSay();
 }
 
 function renderLearn(){
-  const w=lesson.words[lesson.idx];
-  $("actBody").innerHTML=`
-    <div class="card">
-      <div class="bigEmoji">${w.ic}</div>
-      <div class="hindi">${w.hi}</div>
-      <div class="roman">${w.ro}</div>
-      <div class="english">${w.en}</div>
-      <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it</button>
-    </div>
-    <button class="footerBtn" onclick="nextStep()">Got it! ✨</button>`;
-  speak(w.hi);
+const w=lesson.words[lesson.idx];
+$("actBody").innerHTML=`
+<div class="card">
+<div class="bigEmoji">${w.ic}</div>
+<div class="hindi">${w.hi}</div>
+<div class="roman">${w.ro}</div>
+<div class="english">${w.en}</div>
+<button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it</button>
+</div>
+<button class="footerBtn" onclick="nextStep()">Got it! ✨</button>`;
+speak(w.hi);
 }
 
 function renderListen(){
-  const w=lesson.words[lesson.idx];
-  const pool=shuffle(UNITS.find(x=>x.id===lesson.unitId).words.filter(x=>x.en!==w.en)).slice(0,3);
-  const opts=shuffle([w,...pool]);
-  $("actBody").innerHTML=`
-    <div class="prompt">Tap the word you hear 👂</div>
-    <div class="card" style="padding:14px;">
-      <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Play sound</button>
-      <div class="roman" style="font-size:20px;margin-top:8px;opacity:.5;">(${w.ro})</div>
-    </div>
-    <div class="options" id="opts"></div>
-    <div class="encourage" id="enc"></div>`;
-  const o=$("opts");
-  opts.forEach(op=>{
-    const b=document.createElement("button"); b.className="opt";
-    b.innerHTML=`${op.ic}<span class="lab">${op.en}</span>`;
-    b.onclick=()=>checkListen(b,op,w);
-    o.appendChild(b);
-  });
-  speak(w.hi);
+const w=lesson.words[lesson.idx];
+const pool=shuffle(UNITS.find(x=>x.id===lesson.unitId).words.filter(x=>x.en!==w.en)).slice(0,3);
+const opts=shuffle([w,...pool]);
+$("actBody").innerHTML=`
+<div class="prompt">Tap the word you hear 👂</div>
+<div class="card" style="padding:14px;">
+<button class="speakBtn" onclick="speak('${w.hi}')">🔊 Play sound</button>
+<div class="roman" style="font-size:20px;margin-top:8px;opacity:.5;">(${w.ro})</div>
+</div>
+<div class="options" id="opts"></div>
+<div class="encourage" id="enc"></div>`;
+const o=$("opts");
+opts.forEach(op=>{
+const b=document.createElement("button"); b.className="opt";
+b.innerHTML=`${op.ic}<span class="lab">${op.en}</span>`;
+b.onclick=()=>checkListen(b,op,w);
+o.appendChild(b);
+});
+speak(w.hi);
 }
 function checkListen(btn, chosen, correct){
-  if(btn.dataset.locked) return;
-  if(chosen.en===correct.en){
-    btn.classList.add("correct"); lesson.correct++;
-    if(markMastered(correct.ro)){ lesson.newMastered++; }   // first correct in Listen & Find = mastered
-    $("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
-    [...$("opts").children].forEach(c=>c.dataset.locked=1);
-    setTimeout(nextStep,900);
-  }else{
-    btn.classList.add("wrong"); btn.dataset.locked=1;
-    $("enc").textContent="Almost! Listen again and try 🌟"; // no penalty, ever
-    speak(correct.hi);
-  }
+if(btn.dataset.locked) return;
+if(chosen.en===correct.en){
+btn.classList.add("correct"); lesson.correct++;
+if(markMastered(correct.ro)){ lesson.newMastered++; } // first correct in Listen & Find = mastered
+$("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
+[...$("opts").children].forEach(c=>c.dataset.locked=1);
+setTimeout(nextStep,900);
+}else{
+btn.classList.add("wrong"); btn.dataset.locked=1;
+$("enc").textContent="Almost! Listen again and try 🌟"; // no penalty, ever
+speak(correct.hi);
+}
 }
 
 function renderSay(){
-  const w=lesson.words[lesson.idx];
-  $("actBody").innerHTML=`
-    <div class="prompt">Hear it, then say it out loud! 🎤</div>
-    <div class="card">
-      <div class="bigEmoji">${w.ic}</div>
-      <div class="hindi">${w.hi}</div>
-      <div class="roman">${w.ro}</div>
-      <div class="english">${w.en}</div>
-      <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it again</button>
-    </div>
-    <button class="footerBtn" onclick="lesson.correct++;nextStep()">I said it! 🎉</button>`;
-  speak(w.hi);
+const w=lesson.words[lesson.idx];
+$("actBody").innerHTML=`
+<div class="prompt">Hear it, then say it out loud! 🎤</div>
+<div class="card">
+<div class="bigEmoji">${w.ic}</div>
+<div class="hindi">${w.hi}</div>
+<div class="roman">${w.ro}</div>
+<div class="english">${w.en}</div>
+<button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it again</button>
+</div>
+<button class="footerBtn" onclick="lesson.correct++;nextStep()">I said it! 🎉</button>`;
+speak(w.hi);
 }
 
 function finishActivity(){
-  // stars: a base reward for finishing, plus a bonus star for each newly mastered word
-  const earned = Math.max(2, lesson.correct) + (lesson.newMastered||0);
-  state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
-  if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
-  logActivity(lesson.words);
-  const res = addStars(earned);
-  showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
+// stars: a base reward for finishing, plus a bonus star for each newly mastered word
+const earned = Math.max(2, lesson.correct) + (lesson.newMastered||0);
+state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
+if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
+logActivity(lesson.words);
+const res = addStars(earned);
+showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
 }
 
 /* ============ CONVERSATIONS ============ */
 function playConvo(id){
-  const c=CONVOS.find(x=>x.id===id);
-  currentUnit=null;
-  let html=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-    <h1 style="margin-top:10px;">${c.emoji} ${c.name}</h1>
-    <div class="sub">Tap each bubble to hear it, then say it back!</div>`;
-  c.lines.forEach((l,i)=>{
-    const left = l.sp==="A";
-    const bubble = left
-      ? "linear-gradient(150deg, rgba(155,60,255,.28), rgba(122,60,255,.16))"
-      : "linear-gradient(150deg, rgba(255,45,149,.28), rgba(255,79,176,.16))";
-    html+=`<div class="card" style="text-align:${left?'left':'right'};margin-bottom:12px;background:${bubble};cursor:pointer"
-       onclick="speak('${l.hi.replace(/'/g,"\\'")}')">
-       <div style="font-size:13px;font-weight:900;opacity:.7">${left?'🧒 Friend 1':'🧒 Friend 2'} • tap 🔊</div>
-       <div class="hindi" style="font-size:30px">${l.hi}</div>
-       <div class="roman" style="font-size:20px">${l.ro}</div>
-       <div class="english">${l.en}</div></div>`;
-  });
-  html+=`<button class="footerBtn" onclick="finishConvo('${id}')">We acted it out! 🎭</button>`;
-  // reuse menuScreen container
-  const ms=$("menuScreen"); ms.innerHTML=html.replace('class="screen"',''); show("menuScreen");
-  ms.scrollTop=0;
+const c=CONVOS.find(x=>x.id===id);
+currentUnit=null;
+let html=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
+<h1 style="margin-top:10px;">${c.emoji} ${c.name}</h1>
+<div class="sub">Tap each bubble to hear it, then say it back!</div>`;
+c.lines.forEach((l,i)=>{
+const left = l.sp==="A";
+const bubble = left
+? "linear-gradient(150deg, rgba(155,60,255,.28), rgba(122,60,255,.16))"
+: "linear-gradient(150deg, rgba(255,45,149,.28), rgba(255,79,176,.16))";
+html+=`<div class="card" style="text-align:${left?'left':'right'};margin-bottom:12px;background:${bubble};cursor:pointer"
+onclick="speak('${l.hi.replace(/'/g,"\\'")}')">
+<div style="font-size:13px;font-weight:900;opacity:.7">${left?'🧒 Friend 1':'🧒 Friend 2'} • tap 🔊</div>
+<div class="hindi" style="font-size:30px">${l.hi}</div>
+<div class="roman" style="font-size:20px">${l.ro}</div>
+<div class="english">${l.en}</div></div>`;
+});
+html+=`<button class="footerBtn" onclick="finishConvo('${id}')">We acted it out! 🎭</button>`;
+// reuse menuScreen container
+const ms=$("menuScreen"); ms.innerHTML=html.replace('class="screen"',''); show("menuScreen");
+ms.scrollTop=0;
 }
 function finishConvo(id){
-  if(!state.done["convo_"+id]){ state.done["convo_"+id]=1; }
-  const c=CONVOS.find(x=>x.id===id); logActivity(c?c.lines:[]);
-  const res = addStars(3); showReward(3, res.leveledUp, res.newLevel, 0);
+if(!state.done["convo_"+id]){ state.done["convo_"+id]=1; }
+const c=CONVOS.find(x=>x.id===id); logActivity(c?c.lines:[]);
+const res = addStars(3); showReward(3, res.leveledUp, res.newLevel, 0);
 }
 
 /* ============ REWARD ============ */
 function showReward(earned, leveledUp, newLevel, newMastered){
-  saveState(); renderTop();
-  const li=levelInfo();
-  const ov=document.createElement("div"); ov.className="overlay";
-  const masteredLine = newMastered>0
-    ? `<div style="font-size:15px;font-weight:800;margin:4px 0;color:var(--good)">🌟 ${newMastered} new word${newMastered>1?'s':''} mastered!</div>`
-    : "";
-  const lvlLine = leveledUp
-    ? `<div class="lvlUpTag">⬆️ LEVEL UP! Level ${newLevel} · ${li.name} ${li.badge}</div>`
-    : `<div style="font-size:14px;font-weight:800;color:var(--muted);margin:6px 0">${li.toNext} more ⭐ to Level ${li.level+1}</div>`;
-  ov.innerHTML=`<div class="rewardCard">
-    <div class="grow">${leveledUp?li.badge:'⭐'}</div>
-    <h2>${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</h2>
-    <div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars</div>
-    ${masteredLine}
-    ${lvlLine}
-    <br>
-    <button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Stage ✨</button>
-  </div>`;
-  document.body.appendChild(ov);
-  burstConfetti(leveledUp);
+saveState(); renderTop();
+const li=levelInfo();
+const ov=document.createElement("div"); ov.className="overlay";
+const masteredLine = newMastered>0
+? `<div style="font-size:15px;font-weight:800;margin:4px 0;color:var(--good)">🌟 ${newMastered} new word${newMastered>1?'s':''} mastered!</div>`
+: "";
+const lvlLine = leveledUp
+? `<div class="lvlUpTag">⬆️ LEVEL UP! Level ${newLevel} · ${li.name} ${li.badge}</div>`
+: `<div style="font-size:14px;font-weight:800;color:var(--muted);margin:6px 0">${li.toNext} more ⭐ to Level ${li.level+1}</div>`;
+ov.innerHTML=`<div class="rewardCard">
+<div class="grow">${leveledUp?li.badge:'⭐'}</div>
+<h2>${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</h2>
+<div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars</div>
+${masteredLine}
+${lvlLine}
+<br>
+<button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Stage ✨</button>
+</div>`;
+document.body.appendChild(ov);
+burstConfetti(leveledUp);
 }
 function closeReward(btn){ btn.closest(".overlay").remove(); goHome(); }
 function burstConfetti(big){
-  const ems=["⭐","🌟","✨","💜","🩷","💫"];
-  const count = big ? 36 : 22;
-  for(let i=0;i<count;i++){
-    const c=document.createElement("div"); c.className="confetti";
-    c.textContent=ems[Math.floor(Math.random()*ems.length)];
-    c.style.left=Math.random()*100+"vw";
-    c.style.animationDuration=(1.5+Math.random()*1.8)+"s";
-    c.style.fontSize=(18+Math.random()*22)+"px";
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3400);
-  }
+const ems=["⭐","🌟","✨","💜","🩷","💫"];
+const count = big ? 36 : 22;
+for(let i=0;i<count;i++){
+const c=document.createElement("div"); c.className="confetti";
+c.textContent=ems[Math.floor(Math.random()*ems.length)];
+c.style.left=Math.random()*100+"vw";
+c.style.animationDuration=(1.5+Math.random()*1.8)+"s";
+c.style.fontSize=(18+Math.random()*22)+"px";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),3400);
+}
 }
 
 /* ============ PARENT AREA ============ */
 $("parentBtn").onclick=openParentGate;
 function openParentGate(){
-  const a=2+Math.floor(Math.random()*8), b=3+Math.floor(Math.random()*7), ans=a*b;
-  const wrongs=new Set(); while(wrongs.size<2){ const d=ans+(Math.floor(Math.random()*9)-4); if(d!==ans&&d>0) wrongs.add(d); }
-  const opts=shuffle([ans,...wrongs]);
-  const ov=document.createElement("div"); ov.className="overlay";
-  ov.innerHTML=`<div class="rewardCard">
-    <div style="font-size:46px">🔒</div>
-    <h2 style="font-size:22px">Grown-ups only</h2>
-    <div style="font-weight:800;font-size:20px;margin:8px 0">What is ${a} × ${b}?</div>
-    <div class="options" style="grid-template-columns:1fr 1fr 1fr">${opts.map(o=>`<button class="opt" style="font-size:26px" data-v="${o}">${o}</button>`).join("")}</div>
-    <button class="backBtn" style="margin-top:16px" onclick="this.closest('.overlay').remove()">Cancel</button>
-  </div>`;
-  document.body.appendChild(ov);
-  ov.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{
-    if(parseInt(btn.dataset.v)===ans){ ov.remove(); openParent(); }
-    else { btn.classList.add("wrong"); }
-  });
+const a=2+Math.floor(Math.random()*8), b=3+Math.floor(Math.random()*7), ans=a*b;
+const wrongs=new Set(); while(wrongs.size<2){ const d=ans+(Math.floor(Math.random()*9)-4); if(d!==ans&&d>0) wrongs.add(d); }
+const opts=shuffle([ans,...wrongs]);
+const ov=document.createElement("div"); ov.className="overlay";
+ov.innerHTML=`<div class="rewardCard">
+<div style="font-size:46px">🔒</div>
+<h2 style="font-size:22px">Grown-ups only</h2>
+<div style="font-weight:800;font-size:20px;margin:8px 0">What is ${a} × ${b}?</div>
+<div class="options" style="grid-template-columns:1fr 1fr 1fr">${opts.map(o=>`<button class="opt" style="font-size:26px" data-v="${o}">${o}</button>`).join("")}</div>
+<button class="backBtn" style="margin-top:16px" onclick="this.closest('.overlay').remove()">Cancel</button>
+</div>`;
+document.body.appendChild(ov);
+ov.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>{
+if(parseInt(btn.dataset.v)===ans){ ov.remove(); openParent(); }
+else { btn.classList.add("wrong"); }
+});
 }
 function openParent(){
-  const learned=Object.keys(state.seen||{}).length;
-  const masteredWords=Object.keys(state.mastered||{}).length;
-  const mastered=topicsMastered();
-  const convos=CONVOS.filter(c=>state.done["convo_"+c.id]).length;
-  const li=levelInfo();
-  // last 14 days activity
-  let cal="", activeDays=0;
-  for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=todayKey(d); const on=(state.log||{})[k]; if(on)activeDays++;
-    cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'⭐':''}</div><div class="dl">${d.getDate()}</div></div>`; }
-  const recent=Object.entries(state.seen||{}).slice(-18).map(([ro,en])=>`<span class="chip">${ro} · ${en}</span>`).join("");
-  $("parentBody").innerHTML=`
-    <div class="pcard">
-      <div class="statRow">
-        <div class="stat"><div class="n">${learned}</div><div class="l">words & phrases practiced</div></div>
-        <div class="stat"><div class="n">${li.stars}</div><div class="l">stars earned ⭐</div></div>
-        <div class="stat"><div class="n">Lv ${li.level}</div><div class="l">${li.name} ${li.badge}</div></div>
-        <div class="stat"><div class="n">${masteredWords}</div><div class="l">words mastered 🌟</div></div>
-        <div class="stat"><div class="n">${mastered}/${UNITS.length}</div><div class="l">topics mastered 👑</div></div>
-        <div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
-      </div>
-    </div>
-    <div class="pcard">
-      <div style="font-weight:900;font-size:17px">Last 2 weeks</div>
-      <div style="font-size:14px;opacity:.8;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
-      <div class="cal">${cal}</div>
-    </div>
-    <div class="pcard">
-      <div style="font-weight:900;font-size:17px">Words she's met (${learned})</div>
-      <div class="wordChips">${recent||'<span style="opacity:.6">Nothing yet — play a lesson together!</span>'}</div>
-    </div>
-    <div class="pcard">
-      <div style="font-weight:900;font-size:17px">Practice ideas at home 🏡</div>
-      <div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:4px">
-        Use today's Word of the Day in a real sentence at dinner. Ask her one "Listen &amp; Find" word in the car.
-        Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟
-      </div>
-    </div>
-    <button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button>`;
-  show("parentScreen");
+const learned=Object.keys(state.seen||{}).length;
+const masteredWords=Object.keys(state.mastered||{}).length;
+const mastered=topicsMastered();
+const convos=CONVOS.filter(c=>state.done["convo_"+c.id]).length;
+const li=levelInfo();
+// last 14 days activity
+let cal="", activeDays=0;
+for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=todayKey(d); const on=(state.log||{})[k]; if(on)activeDays++;
+cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'⭐':''}</div><div class="dl">${d.getDate()}</div></div>`; }
+const recent=Object.entries(state.seen||{}).slice(-18).map(([ro,en])=>`<span class="chip">${ro} · ${en}</span>`).join("");
+$("parentBody").innerHTML=`
+<div class="pcard">
+<div class="statRow">
+<div class="stat"><div class="n">${learned}</div><div class="l">words & phrases practiced</div></div>
+<div class="stat"><div class="n">${li.stars}</div><div class="l">stars earned ⭐</div></div>
+<div class="stat"><div class="n">Lv ${li.level}</div><div class="l">${li.name} ${li.badge}</div></div>
+<div class="stat"><div class="n">${masteredWords}</div><div class="l">words mastered 🌟</div></div>
+<div class="stat"><div class="n">${mastered}/${UNITS.length}</div><div class="l">topics mastered 👑</div></div>
+<div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
+</div>
+</div>
+<div class="pcard">
+<div style="font-weight:900;font-size:17px">Last 2 weeks</div>
+<div style="font-size:14px;opacity:.8;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
+<div class="cal">${cal}</div>
+</div>
+<div class="pcard">
+<div style="font-weight:900;font-size:17px">Words she's met (${learned})</div>
+<div class="wordChips">${recent||'<span style="opacity:.6">Nothing yet — play a lesson together!</span>'}</div>
+</div>
+<div class="pcard">
+<div style="font-weight:900;font-size:17px">Practice ideas at home 🏡</div>
+<div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:4px">
+Use today's Word of the Day in a real sentence at dinner. Ask her one "Listen &amp; Find" word in the car.
+Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟
+</div>
+</div>
+<button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button>`;
+show("parentScreen");
 }
 
 /* ============ MUTE ============ */
@@ -676,7 +682,7 @@ goHome();
 </script>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 </script>
 </body>
