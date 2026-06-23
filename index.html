@@ -4,156 +4,195 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Hindi Garden">
-<meta name="theme-color" content="#eef2f8">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aria's Hindi">
+<meta name="theme-color" content="#0d0a1f">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Aria's Hindi Garden</title>
+<title>Aria's Hindi · Star Stage</title>
 <style>
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
   :root{
-    --bg1:#eef2f8; --bg2:#e7eef0;
-    --ink:#202a3d; --muted:#69748b;
-    --card:#ffffff; --soft:#f1f5fa; --line:#e4eaf2;
-    --accent:#3a63f5; --accent2:#7b54ff;
-    --teal:#12b1a4; --good:#16a85a; --sun:#f2b007; --purple:#6a59d6; --pink:#ff7aa2;
-    --shadow:rgba(26,36,64,.10); --shadowS:rgba(26,36,64,.06);
+    --bg1:#0d0a1f; --bg2:#160d2e; --bg3:#1d0f33;
+    --ink:#f5edff; --muted:#b8a6dc;
+    --card:#1b1330; --cardGlass:rgba(40,22,74,.55); --soft:#241640; --line:rgba(255,255,255,.10);
+    --pink:#ff2d95; --magenta:#ff4fb0; --purple:#9b3cff; --violet:#7a3cff;
+    --cyan:#36e6ff; --gold:#ffd24a; --good:#3fe3a0; --bad:#ff6f8d;
+    --glowPink:rgba(255,45,149,.45); --glowPurple:rgba(155,60,255,.42);
+    --shadow:rgba(0,0,0,.45); --shadowS:rgba(0,0,0,.30);
   }
   html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);}
-  body{ background:radial-gradient(125% 80% at 50% -12%, #ffffff 0%, var(--bg1) 46%, var(--bg2) 100%); overflow:hidden; }
+  body{
+    background:
+      radial-gradient(circle at 18% -4%, rgba(155,60,255,.30), transparent 42%),
+      radial-gradient(circle at 86% 6%, rgba(255,45,149,.24), transparent 40%),
+      radial-gradient(circle at 50% 108%, rgba(54,230,255,.14), transparent 46%),
+      linear-gradient(165deg,#0d0a1f 0%, #160d2e 52%, #1d0f33 100%);
+    overflow:hidden;
+  }
   #app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:760px;margin:0 auto;position:relative;}
   .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 48px;}
   .hidden{display:none!important;}
 
   /* Top bar */
   .topbar{display:flex;align-items:center;gap:8px;padding:12px 16px 4px;}
-  .pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:700;
-    box-shadow:0 2px 8px var(--shadowS);display:flex;align-items:center;gap:7px;font-size:15px;color:var(--ink);}
+  .pill{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:800;
+    backdrop-filter:blur(8px);box-shadow:0 2px 14px var(--shadowS), inset 0 0 0 1px rgba(255,255,255,.03);
+    display:flex;align-items:center;gap:7px;font-size:15px;color:var(--ink);}
+  .pill.star{box-shadow:0 0 16px var(--glowPink), inset 0 0 0 1px rgba(255,255,255,.04);border-color:rgba(255,45,149,.45);}
+  .pill.lvl{box-shadow:0 0 16px var(--glowPurple), inset 0 0 0 1px rgba(255,255,255,.04);border-color:rgba(155,60,255,.45);}
   .pill .ico{font-size:17px;}
   .spacer{flex:1;}
-  .iconbtn{background:var(--card);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:19px;
-    box-shadow:0 2px 8px var(--shadowS);color:var(--ink);cursor:pointer;transition:transform .12s;}
+  .iconbtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:19px;
+    backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);color:var(--ink);cursor:pointer;transition:transform .12s, box-shadow .15s;}
   .iconbtn:active{transform:scale(.93);}
 
-  h1{font-size:25px;font-weight:800;margin:10px 0 2px;text-align:center;letter-spacing:-.3px;}
-  .sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:16px;}
+  h1{font-size:27px;font-weight:900;margin:10px 0 2px;text-align:center;letter-spacing:-.4px;
+    background:linear-gradient(92deg,#ff2d95,#9b3cff 55%,#36e6ff);-webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 0 28px rgba(155,60,255,.30);}
+  .sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:16px;font-weight:600;letter-spacing:.3px;}
 
-  /* Garden — sleek dark feature panel */
-  #garden{background:linear-gradient(155deg,#313f59,#243349);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:16px;
-    box-shadow:0 12px 34px rgba(26,36,64,.24);margin-bottom:18px;min-height:150px;}
-  .gardenGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;}
-  .plot{font-size:25px;text-align:center;line-height:1;height:33px;display:flex;align-items:center;justify-content:center;
-    border-radius:9px;background:rgba(255,255,255,.045);transition:transform .3s;}
-  .plot.pop{animation:pop .5s;}
-  @keyframes pop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
-  .gardenNote{text-align:center;font-size:13px;color:rgba(255,255,255,.7);margin-top:12px;font-weight:600;}
+  /* Level banner */
+  #levelBanner{position:relative;overflow:hidden;border-radius:20px;padding:16px 18px;margin-bottom:16px;
+    background:linear-gradient(135deg, rgba(255,45,149,.20), rgba(155,60,255,.22) 55%, rgba(54,230,255,.14));
+    border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px var(--shadow), 0 0 24px rgba(155,60,255,.20) inset;}
+  #levelBanner::after{content:"";position:absolute;inset:-40% -10% auto auto;width:180px;height:180px;
+    background:radial-gradient(circle, rgba(255,45,149,.35), transparent 65%);filter:blur(8px);pointer-events:none;}
+  .lvlTop{display:flex;align-items:center;gap:12px;}
+  .lvlBadge{font-size:30px;width:54px;height:54px;flex:0 0 auto;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(145deg,#ff2d95,#9b3cff);box-shadow:0 6px 18px var(--glowPink), inset 0 0 0 2px rgba(255,255,255,.18);}
+  .lvlTitle{font-weight:900;font-size:19px;line-height:1.1;}
+  .lvlName{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:.4px;margin-top:2px;text-shadow:0 0 10px rgba(255,210,74,.4);}
+  .lvlBar{height:10px;background:rgba(0,0,0,.30);border-radius:999px;margin-top:13px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+  .lvlBar > i{display:block;height:100%;width:0;border-radius:999px;transition:width .6s cubic-bezier(.2,.8,.2,1);
+    background:linear-gradient(90deg,#ffd24a,#ff2d95 55%,#9b3cff);box-shadow:0 0 12px var(--glowPink);}
+  .lvlHint{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:8px;text-align:center;}
 
-  /* Section + topic tiles */
-  .sectionTitle{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:20px 2px 10px;}
+  /* Dashboard live tiles */
+  .sectionTitle{font-size:13px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin:20px 2px 10px;}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .tile{position:relative;overflow:hidden;border-radius:18px;padding:15px 14px;border:1px solid var(--line);
+    background:linear-gradient(150deg, var(--cardGlass), rgba(20,12,40,.65));box-shadow:0 6px 20px var(--shadowS);}
+  .tile .tn{font-size:30px;font-weight:900;line-height:1;letter-spacing:-.5px;}
+  .tile .tl{font-size:12.5px;font-weight:700;color:var(--muted);margin-top:6px;}
+  .tile .tIco{position:absolute;top:11px;right:12px;font-size:20px;opacity:.9;}
+  .tile.t-words .tn{color:#36e6ff;text-shadow:0 0 16px rgba(54,230,255,.45);}
+  .tile.t-today .tn{color:#3fe3a0;text-shadow:0 0 16px rgba(63,227,160,.40);}
+  .tile.t-stars .tn{color:#ffd24a;text-shadow:0 0 16px rgba(255,210,74,.45);}
+  .tile.t-topics .tn{color:#ff4fb0;text-shadow:0 0 16px rgba(255,79,176,.45);}
+
+  /* Topic tiles */
   .units{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;}
-  .unit{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 10px;text-align:center;
-    box-shadow:0 2px 10px var(--shadowS);transition:transform .12s,box-shadow .12s;cursor:pointer;}
-  .unit:active{transform:translateY(2px);box-shadow:0 1px 5px var(--shadowS);}
-  .unit .emoji{font-size:32px;display:block;margin-bottom:6px;}
-  .unit .name{font-weight:700;font-size:13.5px;line-height:1.2;}
-  .unit .prog{font-size:11px;color:var(--muted);margin-top:5px;font-weight:600;}
-  .unit .bar{height:5px;background:var(--soft);border-radius:6px;margin-top:8px;overflow:hidden;}
-  .unit .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--good),var(--teal));width:0;border-radius:6px;transition:width .4s;}
+  .unit{position:relative;background:linear-gradient(155deg, var(--cardGlass), rgba(18,11,36,.7));border:1px solid var(--line);
+    border-radius:16px;padding:14px 10px;text-align:center;box-shadow:0 4px 16px var(--shadowS);transition:transform .12s, box-shadow .15s;cursor:pointer;}
+  .unit:active{transform:translateY(2px);}
+  .unit.mastered{border-color:rgba(255,210,74,.55);box-shadow:0 0 18px rgba(255,210,74,.22), 0 4px 16px var(--shadowS);}
+  .unit .emoji{font-size:32px;display:block;margin-bottom:6px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
+  .unit .name{font-weight:800;font-size:13.5px;line-height:1.2;color:var(--ink);}
+  .unit .prog{font-size:11px;color:var(--muted);margin-top:5px;font-weight:700;}
+  .unit .bar{height:5px;background:rgba(0,0,0,.30);border-radius:6px;margin-top:8px;overflow:hidden;}
+  .unit .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));width:0;border-radius:6px;transition:width .4s;box-shadow:0 0 8px var(--glowPurple);}
   .unit .crown{font-size:13px;}
 
   /* Lesson menu */
-  .actBtn{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:15px;margin-bottom:11px;box-shadow:0 2px 10px var(--shadowS);text-align:left;cursor:pointer;transition:transform .12s;}
+  .actBtn{display:flex;align-items:center;gap:14px;width:100%;border:1px solid var(--line);border-radius:16px;
+    background:linear-gradient(150deg, var(--cardGlass), rgba(18,11,36,.7));
+    padding:15px;margin-bottom:11px;box-shadow:0 4px 16px var(--shadowS);text-align:left;cursor:pointer;transition:transform .12s, box-shadow .15s;color:var(--ink);}
   .actBtn:active{transform:translateY(2px);}
-  .actBtn .big{font-size:26px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:var(--soft);flex:0 0 auto;}
-  .actBtn .t{font-weight:700;font-size:16px;}
-  .actBtn .d{font-size:13px;color:var(--muted);font-weight:500;}
+  .actBtn .big{font-size:26px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:13px;
+    background:linear-gradient(145deg,rgba(255,45,149,.25),rgba(155,60,255,.30));flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+  .actBtn .t{font-weight:800;font-size:16px;}
+  .actBtn .d{font-size:13px;color:var(--muted);font-weight:600;}
 
   /* Cards / activities */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 22px;box-shadow:0 4px 18px var(--shadowS);text-align:center;margin-bottom:16px;}
-  .bigEmoji{font-size:80px;line-height:1.1;margin:4px 0;}
-  .hindi{font-size:37px;font-weight:800;margin:4px 0;letter-spacing:-.5px;}
-  .roman{font-size:21px;color:var(--purple);font-weight:700;}
-  .english{font-size:17px;color:var(--muted);margin-top:6px;font-weight:600;}
-  .speakBtn{background:var(--ink);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;
-    margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 3px 12px var(--shadowS);transition:transform .12s;}
+  .card{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:20px;
+    padding:26px 22px;box-shadow:0 8px 26px var(--shadowS), 0 0 22px rgba(155,60,255,.10) inset;text-align:center;margin-bottom:16px;}
+  .bigEmoji{font-size:80px;line-height:1.1;margin:4px 0;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5));}
+  .hindi{font-size:37px;font-weight:900;margin:4px 0;letter-spacing:-.5px;color:#fff;text-shadow:0 0 18px rgba(155,60,255,.35);}
+  .roman{font-size:21px;color:var(--magenta);font-weight:800;}
+  .english{font-size:17px;color:var(--muted);margin-top:6px;font-weight:700;}
+  .speakBtn{background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:800;
+    margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px var(--glowPink);transition:transform .12s;}
   .speakBtn:active{transform:scale(.97);}
 
   .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
-  .opt{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px 10px;font-size:38px;
-    box-shadow:0 2px 8px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,background .15s;color:var(--ink);}
-  .opt .lab{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-top:6px;}
+  .opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:18px 10px;font-size:38px;
+    box-shadow:0 4px 14px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;color:var(--ink);}
+  .opt .lab{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px;}
   .opt:active{transform:translateY(2px);}
-  .opt.correct{border-color:var(--good);background:#eafaf1;}
-  .opt.wrong{border-color:#f4b5b5;background:#fdf0f0;opacity:.75;}
+  .opt.correct{border-color:var(--good);box-shadow:0 0 20px rgba(63,227,160,.45);}
+  .opt.wrong{border-color:var(--bad);opacity:.7;}
 
-  .prompt{font-size:16px;font-weight:700;color:var(--muted);margin:6px 0 14px;text-align:center;}
+  .prompt{font-size:16px;font-weight:800;color:var(--muted);margin:6px 0 14px;text-align:center;}
 
   /* progress dots */
   .dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
-  .dot{width:8px;height:8px;border-radius:50%;background:#d2d9e6;}
-  .dot.done{background:var(--good);}
-  .dot.now{background:var(--accent);transform:scale(1.3);}
+  .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);}
+  .dot.done{background:var(--good);box-shadow:0 0 8px rgba(63,227,160,.6);}
+  .dot.now{background:var(--magenta);transform:scale(1.35);box-shadow:0 0 10px var(--glowPink);}
 
-  .backBtn{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-weight:600;font-size:14px;
-    box-shadow:0 2px 8px var(--shadowS);display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer;}
+  .backBtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-weight:700;font-size:14px;
+    backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer;}
 
-  .footerBtn{position:sticky;bottom:0;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:14px;
-    padding:16px;font-size:16px;font-weight:700;box-shadow:0 8px 20px rgba(58,99,245,.33);margin-top:8px;cursor:pointer;transition:transform .12s;}
+  .footerBtn{position:sticky;bottom:0;width:100%;background:linear-gradient(92deg,#ff2d95,#9b3cff 60%,#7a3cff);color:#fff;border:none;border-radius:14px;
+    padding:16px;font-size:16px;font-weight:800;box-shadow:0 10px 26px var(--glowPink);margin-top:8px;cursor:pointer;transition:transform .12s;}
   .footerBtn:active{transform:translateY(2px);}
-  .footerBtn:disabled{background:#cdd3df;box-shadow:none;color:#fff;}
+  .footerBtn:disabled{background:#3a2c52;box-shadow:none;color:rgba(255,255,255,.6);}
 
   /* Reward overlay */
-  .overlay{position:fixed;inset:0;background:rgba(18,26,46,.46);backdrop-filter:blur(6px);
+  .overlay{position:fixed;inset:0;background:rgba(8,5,18,.66);backdrop-filter:blur(7px);
     display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;}
-  .rewardCard{background:var(--card);border-radius:22px;padding:30px;text-align:center;max-width:360px;width:100%;
-    box-shadow:0 24px 60px rgba(18,26,46,.42);animation:pop .4s;}
-  .rewardCard .grow{font-size:74px;animation:bounce 1.5s ease-in-out infinite;}
-  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-  .rewardCard h2{font-size:22px;font-weight:800;margin:8px 0;}
+  .rewardCard{position:relative;overflow:hidden;border-radius:24px;padding:30px;text-align:center;max-width:360px;width:100%;
+    background:linear-gradient(160deg,#231542,#170d2e);border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 24px 70px rgba(0,0,0,.6), 0 0 34px rgba(255,45,149,.25);animation:pop .4s;}
+  @keyframes pop{0%{transform:scale(0);}60%{transform:scale(1.18);}100%{transform:scale(1);}}
+  .rewardCard .grow{font-size:74px;animation:starPulse 1.4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,210,74,.7));}
+  @keyframes starPulse{0%,100%{transform:scale(1) rotate(-6deg);}50%{transform:scale(1.18) rotate(6deg);}}
+  .rewardCard h2{font-size:22px;font-weight:900;margin:8px 0;color:#fff;}
+  .lvlUpTag{display:inline-block;margin:6px 0;padding:7px 16px;border-radius:999px;font-weight:900;font-size:15px;color:#1a0f2e;
+    background:linear-gradient(135deg,#ffd24a,#ff7ac0);box-shadow:0 0 22px rgba(255,210,74,.6);animation:starPulse 1.2s ease-in-out infinite;}
   .confetti{position:fixed;top:-10px;font-size:22px;z-index:60;pointer-events:none;animation:fall linear forwards;}
   @keyframes fall{to{transform:translateY(110vh) rotate(360deg);}}
 
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
-    padding:11px 18px;border-radius:999px;font-weight:600;z-index:70;font-size:14px;opacity:0;transition:opacity .3s;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2a1850,#3a1c5e);color:#fff;
+    border:1px solid rgba(255,255,255,.14);padding:11px 18px;border-radius:999px;font-weight:700;z-index:70;font-size:14px;opacity:0;transition:opacity .3s;box-shadow:0 8px 24px var(--shadow);}
   .toast.show{opacity:1;}
-  .encourage{font-size:16px;font-weight:700;color:var(--good);min-height:22px;margin-top:8px;}
+  .encourage{font-size:16px;font-weight:800;color:var(--good);min-height:22px;margin-top:8px;text-shadow:0 0 12px rgba(63,227,160,.4);}
 
   /* Word of the day */
-  .wotd{display:block;width:100%;text-align:left;border:1px solid var(--line);cursor:pointer;
-    background:linear-gradient(120deg,#eef2ff,#f3f0ff);border-radius:18px;padding:16px;margin-bottom:16px;
-    box-shadow:0 2px 12px var(--shadowS);}
-  .wotd .tag{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:1px;text-transform:uppercase;}
+  .wotd{display:block;width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);cursor:pointer;
+    background:linear-gradient(120deg, rgba(255,45,149,.16), rgba(155,60,255,.20));border-radius:18px;padding:16px;margin-bottom:16px;
+    box-shadow:0 6px 22px var(--shadowS), 0 0 18px rgba(155,60,255,.14) inset;}
+  .wotd .tag{font-size:11px;font-weight:900;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;text-shadow:0 0 10px rgba(255,210,74,.4);}
   .wotd .row{display:flex;align-items:center;gap:14px;margin-top:8px;}
-  .wotd .wic{font-size:38px;}
-  .wotd .whi{font-size:25px;font-weight:800;}
-  .wotd .wro{font-size:16px;color:var(--purple);font-weight:700;}
-  .wotd .wen{font-size:14px;color:var(--muted);font-weight:600;}
-  .wotd .hear{margin-left:auto;font-size:19px;background:var(--ink);color:#fff;border-radius:50%;width:42px;height:42px;
-    display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .wotd .wic{font-size:38px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
+  .wotd .whi{font-size:25px;font-weight:900;color:#fff;}
+  .wotd .wro{font-size:16px;color:var(--magenta);font-weight:800;}
+  .wotd .wen{font-size:14px;color:var(--muted);font-weight:700;}
+  .wotd .hear{margin-left:auto;font-size:19px;background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;border-radius:50%;width:42px;height:42px;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 14px var(--glowPink);}
 
   /* Parent screen */
-  .pcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 10px var(--shadowS);margin-bottom:14px;}
+  .pcard{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 20px var(--shadowS);margin-bottom:14px;}
   .statRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .stat{background:var(--soft);border-radius:13px;padding:14px;text-align:center;}
-  .stat .n{font-size:25px;font-weight:800;color:var(--accent);}
-  .stat .l{font-size:12px;font-weight:600;color:var(--muted);}
+  .stat{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center;}
+  .stat .n{font-size:25px;font-weight:900;color:var(--magenta);text-shadow:0 0 14px var(--glowPink);}
+  .stat .l{font-size:12px;font-weight:700;color:var(--muted);}
   .cal{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
   .cal .day{width:32px;text-align:center;}
-  .cal .box{height:28px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:15px;}
-  .cal .box.on{background:#d6f0e0;}
-  .cal .dl{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+  .cal .box{height:28px;border-radius:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .cal .box.on{background:linear-gradient(145deg,rgba(255,45,149,.4),rgba(155,60,255,.4));border-color:rgba(255,255,255,.18);}
+  .cal .dl{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
   .wordChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
-  .chip{background:var(--soft);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;}
+  .chip{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink);}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="topbar">
-    <div class="pill"><span class="ico">🌻</span><span id="sunCount">0</span></div>
-    <div class="pill"><span class="ico">🌱</span><span id="plantCount">0</span></div>
+    <div class="pill star"><span class="ico">⭐</span><span id="starCount">0</span></div>
+    <div class="pill lvl"><span class="ico">🩷</span>Lv <span id="levelCount">1</span></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="parentBtn" title="grown-ups">👪</button>
     <button class="iconbtn" id="muteBtn" title="sound">🔊</button>
@@ -161,20 +200,32 @@
 
   <!-- HOME -->
   <div class="screen" id="homeScreen">
-    <h1>Aria's Hindi Garden</h1>
-    <div class="sub" id="welcomeLine">हर शब्द, एक नया पौधा · learn a word, grow your garden</div>
+    <h1>Aria's Hindi</h1>
+    <div class="sub" id="welcomeLine">✨ Star Stage · shine brighter with every word 💜</div>
     <button id="wotd" class="wotd"></button>
-    <div id="garden">
-      <div class="gardenGrid" id="gardenGrid"></div>
-      <div class="gardenNote" id="gardenNote">Your garden is waiting for seeds — play a lesson to grow it! 🌿</div>
+
+    <div id="levelBanner">
+      <div class="lvlTop">
+        <div class="lvlBadge" id="lvlBadge">🌟</div>
+        <div>
+          <div class="lvlTitle">Level <span id="lvlNum">1</span></div>
+          <div class="lvlName" id="lvlName">Rookie Star</div>
+        </div>
+      </div>
+      <div class="lvlBar"><i id="lvlFill"></i></div>
+      <div class="lvlHint" id="lvlHint">Earn stars to level up! ⭐</div>
     </div>
+
+    <div class="sectionTitle">Your Star Stats</div>
+    <div class="tiles" id="dashTiles"></div>
+
     <div class="sectionTitle">Topics</div>
     <div class="units" id="unitsWrap"></div>
   </div>
 
   <!-- LESSON MENU -->
   <div class="screen hidden" id="menuScreen">
-    <button class="backBtn" onclick="goHome()">⬅️ Garden</button>
+    <button class="backBtn" onclick="goHome()">⬅️ Home</button>
     <h1 id="menuTitle" style="margin-top:10px;"></h1>
     <div class="sub" id="menuSub"></div>
     <div id="menuActs" style="margin-top:8px;"></div>
@@ -189,7 +240,7 @@
 
   <!-- PARENT -->
   <div class="screen hidden" id="parentScreen">
-    <button class="backBtn" onclick="goHome()">⬅️ Garden</button>
+    <button class="backBtn" onclick="goHome()">⬅️ Home</button>
     <h1 style="margin-top:10px;">Parent Dashboard</h1>
     <div class="sub">Aria's Hindi progress — encouragement only, no pressure</div>
     <div id="parentBody"></div>
@@ -201,8 +252,10 @@
 <script src="data.js"></script>
 <script>
 /* ============ DATA ============ */
-const PLANT_STAGES = ["🌱","🌿","🌷","🌻","🌳","🌸","🪻","🌺"];
-const CONGRATS = ["शाबाश! Shabash!","बहुत अच्छा! Wonderful!","Amazing, Aria!","You're a star! ⭐","कमाल! Brilliant!","Keep going! 🌟"];
+const CONGRATS = ["शाबाश! Shabash!","बहुत अच्छा! Wonderful!","Amazing, Aria!","You're a star! ⭐","कमाल! Brilliant!","Keep shining! 🌟","दमदार! Powerful!","Stage star! ✨"];
+const LEVEL_NAMES = ["Rookie Star","Rising Star","Spark","Stage Star","Headliner","Star Hunter","Neon Idol","Superstar","Diamond Idol","Legend"];
+const LEVEL_BADGES = ["🌟","✨","💫","⭐","🩷","💜","🗡️","👑","💎","🏆"];
+const STARS_PER_LEVEL = 12;
 
 /* ============ STATE ============ */
 const SAVE_KEY = "ariaHindiGarden_v1";
@@ -211,8 +264,20 @@ let muted = false;
 let currentUnit = null;
 
 function loadState(){
-  try{ const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if(s) return s; }catch(e){}
-  return { sun:0, plants:[], done:{}, log:{}, seen:{} }; // done: {unitId_activity: count}
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem(SAVE_KEY)); }catch(e){}
+  if(!s || typeof s!=="object") s = {};
+  // base / legacy fields preserved
+  s.done = s.done || {};
+  s.log  = s.log  || {};
+  s.seen = s.seen || {};
+  // ---- graceful migration to Star Stage ----
+  // old currency was "sun"; carry it forward as starting stars so progress is never lost
+  if(typeof s.stars !== "number"){ s.stars = (typeof s.sun==="number") ? s.sun : 0; }
+  // mastered words: { ro: "YYYY-MM-DD" } — date a word was first nailed in Listen & Find
+  if(!s.mastered || typeof s.mastered!=="object") s.mastered = {};
+  // keep legacy keys (sun, plants) untouched so nothing is wiped
+  return s;
 }
 function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} }
 
@@ -244,32 +309,69 @@ function logActivity(words){
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1600); }
 
-function addSun(n){
-  state.sun += n;
-  for(let i=0;i<n;i++){ if(state.sun % 5 === 0) growPlant(); } // a plant every 5 sunshine
-  saveState(); renderTop();
+/* ============ STARS / LEVELS ============ */
+function levelInfo(){
+  const stars = state.stars||0;
+  const level = Math.floor(stars/STARS_PER_LEVEL)+1;
+  const inLevel = stars % STARS_PER_LEVEL;
+  const toNext = STARS_PER_LEVEL - inLevel;
+  const pct = Math.round(inLevel/STARS_PER_LEVEL*100);
+  const idx = Math.min(level-1, LEVEL_NAMES.length-1);
+  return { stars, level, inLevel, toNext, pct, name:LEVEL_NAMES[idx], badge:LEVEL_BADGES[idx] };
 }
-function growPlant(){
-  state.plants.push(PLANT_STAGES[Math.floor(Math.random()*PLANT_STAGES.length)]);
+// returns {leveledUp, newLevel}
+function addStars(n){
+  const before = levelInfo().level;
+  state.stars = (state.stars||0) + n;
+  saveState();
+  const after = levelInfo().level;
+  renderTop();
+  return { leveledUp: after>before, newLevel: after };
 }
-function renderTop(){ $("sunCount").textContent=state.sun; $("plantCount").textContent=state.plants.length; }
+// mark a word mastered the first time it's correct in Listen & Find
+function markMastered(ro){
+  if(!ro) return false;
+  state.mastered = state.mastered || {};
+  if(!state.mastered[ro]){ state.mastered[ro] = todayKey(); return true; }
+  return false;
+}
+function masteredTodayCount(){
+  const k=todayKey(); let c=0;
+  for(const ro in (state.mastered||{})){ if(state.mastered[ro]===k) c++; }
+  return c;
+}
+function topicsMastered(){
+  return UNITS.filter(u=>{ const t=u.words.length*2; const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0)); return d>=t; }).length;
+}
+function renderTop(){
+  const li=levelInfo();
+  $("starCount").textContent=li.stars;
+  $("levelCount").textContent=li.level;
+}
 
-/* ============ HOME / GARDEN ============ */
-function renderGarden(){
-  const grid=$("gardenGrid"); grid.innerHTML="";
-  const cols=8;                       // garden is 8 plants wide
-  const minCells=40;                  // always show at least 5 rows of soil
-  // grow the plot by whole rows as more plants are earned — no upper limit
-  const total=Math.max(minCells, Math.ceil(state.plants.length/cols)*cols);
-  for(let i=0;i<total;i++){
-    const d=document.createElement("div"); d.className="plot";
-    if(state.plants[i]){ d.textContent=state.plants[i]; }
-    else { d.textContent="·"; d.style.opacity=.35; }  // empty soil
-    grid.appendChild(d);
-  }
-  $("gardenNote").textContent = state.plants.length===0
-    ? "Your garden is waiting for seeds — play a lesson to grow it! 🌿"
-    : `Your garden has ${state.plants.length} growing things! 🌼`;
+/* ============ HOME / DASHBOARD ============ */
+function renderLevelBanner(){
+  const li=levelInfo();
+  $("lvlNum").textContent=li.level;
+  $("lvlName").textContent=li.name;
+  $("lvlBadge").textContent=li.badge;
+  $("lvlFill").style.width=li.pct+"%";
+  $("lvlHint").textContent = `${li.inLevel}/${STARS_PER_LEVEL} stars this level · ${li.toNext} more to Level ${li.level+1} ⭐`;
+}
+function renderDashboard(){
+  const wordsLearned=Object.keys(state.seen||{}).length;
+  const todayM=masteredTodayCount();
+  const li=levelInfo();
+  const topics=topicsMastered();
+  const tiles=[
+    {cls:"t-words", ico:"📚", n:wordsLearned, l:"Words Learned"},
+    {cls:"t-today", ico:"🌟", n:todayM,       l:"Mastered Today"},
+    {cls:"t-stars", ico:"⭐", n:li.stars,      l:"Stars Earned"},
+    {cls:"t-topics",ico:"👑", n:topics+"/"+UNITS.length, l:"Topics Mastered"},
+  ];
+  $("dashTiles").innerHTML = tiles.map(t=>
+    `<div class="tile ${t.cls}"><span class="tIco">${t.ico}</span><div class="tn">${t.n}</div><div class="tl">${t.l}</div></div>`
+  ).join("");
 }
 function renderUnits(){
   const wrap=$("unitsWrap"); wrap.innerHTML="";
@@ -277,9 +379,9 @@ function renderUnits(){
     const total=u.words.length*2; // learn + listen target
     const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));
     const pct=Math.round(done/total*100);
-    const b=document.createElement("button"); b.className="unit"; b.onclick=()=>openUnit(u.id);
+    const b=document.createElement("button"); b.className="unit"+(pct>=100?" mastered":""); b.onclick=()=>openUnit(u.id);
     b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>
-      ${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% grown</div>`}
+      ${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% complete</div>`}
       <div class="bar"><i style="width:${pct}%"></i></div>`;
     wrap.appendChild(b);
   });
@@ -293,7 +395,7 @@ function renderUnits(){
     wrap.appendChild(b);
   });
 }
-function goHome(){ renderTop(); renderWOTD(); renderGarden(); renderUnits(); show("homeScreen"); }
+function goHome(){ renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
 
 /* ============ WORD OF THE DAY ============ */
 const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]);
@@ -302,7 +404,7 @@ function renderWOTD(){
   const epochDay = Math.floor((Date.now() - new Date().getTimezoneOffset()*60000)/86400000);
   const w = ALL_WORDS[epochDay % ALL_WORDS.length];
   const el=$("wotd");
-  el.innerHTML=`<div class="tag">🌅 WORD OF THE DAY</div>
+  el.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div>
     <div class="row">
       <span class="wic">${w.ic}</span>
       <span><span class="whi">${w.hi}</span><br><span class="wro">${w.ro}</span> — <span class="wen">${w.en}</span></span>
@@ -335,7 +437,7 @@ function openUnit(id){
 let lesson = null;
 function startActivity(unitId, kind){
   const u=UNITS.find(x=>x.id===unitId);
-  lesson={unitId, kind, words:shuffle(u.words), idx:0, correct:0};
+  lesson={unitId, kind, words:shuffle(u.words), idx:0, correct:0, newMastered:0};
   renderDots();
   if(kind==="learn") renderLearn();
   else if(kind==="listen") renderListen();
@@ -368,7 +470,7 @@ function renderLearn(){
       <div class="english">${w.en}</div>
       <button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it</button>
     </div>
-    <button class="footerBtn" onclick="nextStep()">Got it! 🌱</button>`;
+    <button class="footerBtn" onclick="nextStep()">Got it! ✨</button>`;
   speak(w.hi);
 }
 
@@ -397,12 +499,13 @@ function checkListen(btn, chosen, correct){
   if(btn.dataset.locked) return;
   if(chosen.en===correct.en){
     btn.classList.add("correct"); lesson.correct++;
+    if(markMastered(correct.ro)){ lesson.newMastered++; }   // first correct in Listen & Find = mastered
     $("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
     [...$("opts").children].forEach(c=>c.dataset.locked=1);
     setTimeout(nextStep,900);
   }else{
     btn.classList.add("wrong"); btn.dataset.locked=1;
-    $("enc").textContent="Almost! Listen again and try 🌟"; // no penalty
+    $("enc").textContent="Almost! Listen again and try 🌟"; // no penalty, ever
     speak(correct.hi);
   }
 }
@@ -423,62 +526,73 @@ function renderSay(){
 }
 
 function finishActivity(){
-  const earned = Math.max(2, lesson.correct);
+  // stars: a base reward for finishing, plus a bonus star for each newly mastered word
+  const earned = Math.max(2, lesson.correct) + (lesson.newMastered||0);
   state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
   if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
   logActivity(lesson.words);
-  addSun(earned);
-  showReward(earned);
+  const res = addStars(earned);
+  showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
 }
 
 /* ============ CONVERSATIONS ============ */
 function playConvo(id){
   const c=CONVOS.find(x=>x.id===id);
   currentUnit=null;
-  let html=`<button class="backBtn" onclick="goHome()">⬅️ Garden</button>
+  let html=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
     <h1 style="margin-top:10px;">${c.emoji} ${c.name}</h1>
     <div class="sub">Tap each bubble to hear it, then say it back!</div>`;
   c.lines.forEach((l,i)=>{
     const left = l.sp==="A";
-    html+=`<div class="card" style="text-align:${left?'left':'right'};margin-bottom:12px;background:${left?'#eef6ff':'#fff0f6'};cursor:pointer"
+    const bubble = left
+      ? "linear-gradient(150deg, rgba(155,60,255,.28), rgba(122,60,255,.16))"
+      : "linear-gradient(150deg, rgba(255,45,149,.28), rgba(255,79,176,.16))";
+    html+=`<div class="card" style="text-align:${left?'left':'right'};margin-bottom:12px;background:${bubble};cursor:pointer"
        onclick="speak('${l.hi.replace(/'/g,"\\'")}')">
-       <div style="font-size:13px;font-weight:800;opacity:.5">${left?'🧒 Friend 1':'🧒 Friend 2'} • tap 🔊</div>
+       <div style="font-size:13px;font-weight:900;opacity:.7">${left?'🧒 Friend 1':'🧒 Friend 2'} • tap 🔊</div>
        <div class="hindi" style="font-size:30px">${l.hi}</div>
        <div class="roman" style="font-size:20px">${l.ro}</div>
        <div class="english">${l.en}</div></div>`;
   });
   html+=`<button class="footerBtn" onclick="finishConvo('${id}')">We acted it out! 🎭</button>`;
   // reuse menuScreen container
-  $("menuTitle").parentElement;
   const ms=$("menuScreen"); ms.innerHTML=html.replace('class="screen"',''); show("menuScreen");
   ms.scrollTop=0;
 }
 function finishConvo(id){
   if(!state.done["convo_"+id]){ state.done["convo_"+id]=1; }
   const c=CONVOS.find(x=>x.id===id); logActivity(c?c.lines:[]);
-  addSun(3); showReward(3);
+  const res = addStars(3); showReward(3, res.leveledUp, res.newLevel, 0);
 }
 
 /* ============ REWARD ============ */
-function showReward(earned){
-  growPlant(); saveState(); renderTop();
-  const plant=state.plants[state.plants.length-1]||"🌻";
+function showReward(earned, leveledUp, newLevel, newMastered){
+  saveState(); renderTop();
+  const li=levelInfo();
   const ov=document.createElement("div"); ov.className="overlay";
+  const masteredLine = newMastered>0
+    ? `<div style="font-size:15px;font-weight:800;margin:4px 0;color:var(--good)">🌟 ${newMastered} new word${newMastered>1?'s':''} mastered!</div>`
+    : "";
+  const lvlLine = leveledUp
+    ? `<div class="lvlUpTag">⬆️ LEVEL UP! Level ${newLevel} · ${li.name} ${li.badge}</div>`
+    : `<div style="font-size:14px;font-weight:800;color:var(--muted);margin:6px 0">${li.toNext} more ⭐ to Level ${li.level+1}</div>`;
   ov.innerHTML=`<div class="rewardCard">
-    <div class="grow">${plant}</div>
+    <div class="grow">${leveledUp?li.badge:'⭐'}</div>
     <h2>${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</h2>
-    <div style="font-size:18px;font-weight:800;margin:6px 0">You grew a new plant! 🌼</div>
-    <div class="pill" style="display:inline-flex;margin:10px auto">🌻 +${earned} sunshine</div>
+    <div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars</div>
+    ${masteredLine}
+    ${lvlLine}
     <br>
-    <button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Garden 🏡</button>
+    <button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Stage ✨</button>
   </div>`;
   document.body.appendChild(ov);
-  burstConfetti();
+  burstConfetti(leveledUp);
 }
 function closeReward(btn){ btn.closest(".overlay").remove(); goHome(); }
-function burstConfetti(){
-  const ems=["🌸","🌻","⭐","🌷","🎉","🌿"];
-  for(let i=0;i<22;i++){
+function burstConfetti(big){
+  const ems=["⭐","🌟","✨","💜","🩷","💫"];
+  const count = big ? 36 : 22;
+  for(let i=0;i<count;i++){
     const c=document.createElement("div"); c.className="confetti";
     c.textContent=ems[Math.floor(Math.random()*ems.length)];
     c.style.left=Math.random()*100+"vw";
@@ -511,26 +625,29 @@ function openParentGate(){
 }
 function openParent(){
   const learned=Object.keys(state.seen||{}).length;
-  const mastered=UNITS.filter(u=>{ const t=u.words.length*2; const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0)); return d>=t; }).length;
+  const masteredWords=Object.keys(state.mastered||{}).length;
+  const mastered=topicsMastered();
   const convos=CONVOS.filter(c=>state.done["convo_"+c.id]).length;
-  const sessions=Object.values(state.log||{}).reduce((a,b)=>a+b,0);
+  const li=levelInfo();
   // last 14 days activity
   let cal="", activeDays=0;
   for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=todayKey(d); const on=(state.log||{})[k]; if(on)activeDays++;
-    cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'🌼':''}</div><div class="dl">${d.getDate()}</div></div>`; }
+    cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'⭐':''}</div><div class="dl">${d.getDate()}</div></div>`; }
   const recent=Object.entries(state.seen||{}).slice(-18).map(([ro,en])=>`<span class="chip">${ro} · ${en}</span>`).join("");
   $("parentBody").innerHTML=`
     <div class="pcard">
       <div class="statRow">
         <div class="stat"><div class="n">${learned}</div><div class="l">words & phrases practiced</div></div>
-        <div class="stat"><div class="n">${state.plants.length}</div><div class="l">plants grown 🌱</div></div>
+        <div class="stat"><div class="n">${li.stars}</div><div class="l">stars earned ⭐</div></div>
+        <div class="stat"><div class="n">Lv ${li.level}</div><div class="l">${li.name} ${li.badge}</div></div>
+        <div class="stat"><div class="n">${masteredWords}</div><div class="l">words mastered 🌟</div></div>
         <div class="stat"><div class="n">${mastered}/${UNITS.length}</div><div class="l">topics mastered 👑</div></div>
         <div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
       </div>
     </div>
     <div class="pcard">
       <div style="font-weight:900;font-size:17px">Last 2 weeks</div>
-      <div style="font-size:14px;opacity:.7;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
+      <div style="font-size:14px;opacity:.8;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
       <div class="cal">${cal}</div>
     </div>
     <div class="pcard">
@@ -544,7 +661,7 @@ function openParent(){
         Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟
       </div>
     </div>
-    <button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and empty the garden?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:#e88;box-shadow:0 6px 0 #b55">Reset progress</button>`;
+    <button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button>`;
   show("parentScreen");
 }
 
