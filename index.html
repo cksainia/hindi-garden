@@ -250,21 +250,22 @@ function addSun(n){
 }
 function growPlant(){
   state.plants.push(PLANT_STAGES[Math.floor(Math.random()*PLANT_STAGES.length)]);
-  if(state.plants.length>40) state.plants.shift();
 }
 function renderTop(){ $("sunCount").textContent=state.sun; $("plantCount").textContent=state.plants.length; }
 
 /* ============ HOME / GARDEN ============ */
 function renderGarden(){
   const grid=$("gardenGrid"); grid.innerHTML="";
-  const total=40;
+  const cols=8;                       // garden is 8 plants wide
+  const minCells=40;                  // always show at least 5 rows of soil
+  // grow the plot by whole rows as more plants are earned — no upper limit
+  const total=Math.max(minCells, Math.ceil(state.plants.length/cols)*cols);
   for(let i=0;i<total;i++){
     const d=document.createElement("div"); d.className="plot";
-    d.textContent = state.plants[i] || (i < state.plants.length+0 ? "" : (Math.random()<0.12?"🟫":""));
+    if(state.plants[i]){ d.textContent=state.plants[i]; }
+    else { d.textContent="·"; d.style.opacity=.35; }  // empty soil
     grid.appendChild(d);
   }
-  // fill empties with soil dots subtly
-  [...grid.children].forEach((c,i)=>{ if(!state.plants[i] && !c.textContent) c.textContent="·"; if(!state.plants[i]) c.style.opacity=.35; });
   $("gardenNote").textContent = state.plants.length===0
     ? "Your garden is waiting for seeds — play a lesson to grow it! 🌿"
     : `Your garden has ${state.plants.length} growing things! 🌼`;
