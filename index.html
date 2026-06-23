@@ -6,146 +6,147 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Hindi Garden">
-<meta name="theme-color" content="#aee9ff">
+<meta name="theme-color" content="#eef2f8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <title>Aria's Hindi Garden</title>
 <style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
   :root{
-    --sky1:#aee9ff; --sky2:#d7f7ff; --grass:#9be37d; --grass2:#7fd55f;
-    --sun:#ffd84d; --ink:#3a3320; --card:#ffffff; --pink:#ff8fb1; --purple:#b58cff;
-    --good:#52c878; --soft:#fff6e0; --shadow:rgba(60,50,20,.18);
+    --bg1:#eef2f8; --bg2:#e7eef0;
+    --ink:#202a3d; --muted:#69748b;
+    --card:#ffffff; --soft:#f1f5fa; --line:#e4eaf2;
+    --accent:#3a63f5; --accent2:#7b54ff;
+    --teal:#12b1a4; --good:#16a85a; --sun:#f2b007; --purple:#6a59d6; --pink:#ff7aa2;
+    --shadow:rgba(26,36,64,.10); --shadowS:rgba(26,36,64,.06);
   }
-  html,body{margin:0;height:100%;font-family:-apple-system,"Segoe UI",system-ui,sans-serif;color:var(--ink);}
-  body{
-    background:linear-gradient(180deg,var(--sky1),var(--sky2) 45%,var(--grass2) 46%,var(--grass) 100%);
-    overflow:hidden;
-  }
-  #app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:900px;margin:0 auto;position:relative;}
-  .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 18px 40px;}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);}
+  body{ background:radial-gradient(125% 80% at 50% -12%, #ffffff 0%, var(--bg1) 46%, var(--bg2) 100%); overflow:hidden; }
+  #app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:760px;margin:0 auto;position:relative;}
+  .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 48px;}
   .hidden{display:none!important;}
 
   /* Top bar */
-  .topbar{display:flex;align-items:center;gap:10px;padding:10px 16px;}
-  .pill{background:var(--card);border-radius:30px;padding:8px 16px;font-weight:800;
-    box-shadow:0 4px 0 var(--shadow);display:flex;align-items:center;gap:6px;font-size:18px;}
-  .pill .ico{font-size:22px;}
+  .topbar{display:flex;align-items:center;gap:8px;padding:12px 16px 4px;}
+  .pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:700;
+    box-shadow:0 2px 8px var(--shadowS);display:flex;align-items:center;gap:7px;font-size:15px;color:var(--ink);}
+  .pill .ico{font-size:17px;}
   .spacer{flex:1;}
-  .iconbtn{background:var(--card);border:none;border-radius:50%;width:48px;height:48px;font-size:24px;
-    box-shadow:0 4px 0 var(--shadow);}
+  .iconbtn{background:var(--card);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:19px;
+    box-shadow:0 2px 8px var(--shadowS);color:var(--ink);cursor:pointer;transition:transform .12s;}
+  .iconbtn:active{transform:scale(.93);}
 
-  h1{font-size:30px;margin:6px 0 2px;text-align:center;letter-spacing:.5px;}
-  .sub{text-align:center;font-size:16px;opacity:.7;margin-bottom:10px;}
+  h1{font-size:25px;font-weight:800;margin:10px 0 2px;text-align:center;letter-spacing:-.3px;}
+  .sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:16px;}
 
-  /* Garden */
-  #garden{background:linear-gradient(180deg,#bff0a0,#8fdc6e);border-radius:26px;padding:16px;
-    box-shadow:inset 0 6px 14px rgba(255,255,255,.4),0 8px 0 var(--shadow);margin-bottom:16px;min-height:170px;}
-  .gardenGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
-  .plot{font-size:30px;text-align:center;line-height:1.1;height:38px;display:flex;align-items:flex-end;justify-content:center;
-    transition:transform .3s;}
+  /* Garden — sleek dark feature panel */
+  #garden{background:linear-gradient(155deg,#313f59,#243349);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:16px;
+    box-shadow:0 12px 34px rgba(26,36,64,.24);margin-bottom:18px;min-height:150px;}
+  .gardenGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;}
+  .plot{font-size:25px;text-align:center;line-height:1;height:33px;display:flex;align-items:center;justify-content:center;
+    border-radius:9px;background:rgba(255,255,255,.045);transition:transform .3s;}
   .plot.pop{animation:pop .5s;}
-  @keyframes pop{0%{transform:scale(0) translateY(10px);}60%{transform:scale(1.4);}100%{transform:scale(1);}}
-  .gardenNote{text-align:center;font-size:14px;opacity:.65;margin-top:8px;font-weight:700;}
+  @keyframes pop{0%{transform:scale(0);}60%{transform:scale(1.3);}100%{transform:scale(1);}}
+  .gardenNote{text-align:center;font-size:13px;color:rgba(255,255,255,.7);margin-top:12px;font-weight:600;}
 
-  /* Units */
-  .sectionTitle{font-size:20px;font-weight:900;margin:14px 4px 8px;}
-  .units{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
-  .unit{background:var(--card);border:none;border-radius:22px;padding:16px 12px;text-align:center;
-    box-shadow:0 6px 0 var(--shadow);transition:transform .1s;cursor:pointer;}
-  .unit:active{transform:translateY(3px);box-shadow:0 3px 0 var(--shadow);}
-  .unit .emoji{font-size:44px;display:block;margin-bottom:6px;}
-  .unit .name{font-weight:900;font-size:17px;}
-  .unit .prog{font-size:13px;opacity:.6;margin-top:4px;font-weight:700;}
-  .unit .bar{height:8px;background:#eee;border-radius:6px;margin-top:8px;overflow:hidden;}
-  .unit .bar > i{display:block;height:100%;background:var(--good);width:0;border-radius:6px;transition:width .4s;}
-  .unit .crown{font-size:18px;}
+  /* Section + topic tiles */
+  .sectionTitle{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:20px 2px 10px;}
+  .units{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;}
+  .unit{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 10px;text-align:center;
+    box-shadow:0 2px 10px var(--shadowS);transition:transform .12s,box-shadow .12s;cursor:pointer;}
+  .unit:active{transform:translateY(2px);box-shadow:0 1px 5px var(--shadowS);}
+  .unit .emoji{font-size:32px;display:block;margin-bottom:6px;}
+  .unit .name{font-weight:700;font-size:13.5px;line-height:1.2;}
+  .unit .prog{font-size:11px;color:var(--muted);margin-top:5px;font-weight:600;}
+  .unit .bar{height:5px;background:var(--soft);border-radius:6px;margin-top:8px;overflow:hidden;}
+  .unit .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--good),var(--teal));width:0;border-radius:6px;transition:width .4s;}
+  .unit .crown{font-size:13px;}
 
   /* Lesson menu */
-  .actBtn{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:none;border-radius:20px;
-    padding:16px;margin-bottom:12px;box-shadow:0 6px 0 var(--shadow);text-align:left;cursor:pointer;}
-  .actBtn:active{transform:translateY(3px);box-shadow:0 3px 0 var(--shadow);}
-  .actBtn .big{font-size:38px;}
-  .actBtn .t{font-weight:900;font-size:19px;}
-  .actBtn .d{font-size:14px;opacity:.65;font-weight:600;}
+  .actBtn{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:15px;margin-bottom:11px;box-shadow:0 2px 10px var(--shadowS);text-align:left;cursor:pointer;transition:transform .12s;}
+  .actBtn:active{transform:translateY(2px);}
+  .actBtn .big{font-size:26px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:var(--soft);flex:0 0 auto;}
+  .actBtn .t{font-weight:700;font-size:16px;}
+  .actBtn .d{font-size:13px;color:var(--muted);font-weight:500;}
 
   /* Cards / activities */
-  .card{background:var(--card);border-radius:26px;padding:22px;box-shadow:0 8px 0 var(--shadow);text-align:center;margin-bottom:16px;}
-  .bigEmoji{font-size:96px;line-height:1.1;margin:6px 0;}
-  .hindi{font-size:40px;font-weight:900;margin:4px 0;}
-  .roman{font-size:26px;color:var(--purple);font-weight:800;}
-  .english{font-size:20px;opacity:.7;margin-top:6px;font-weight:700;}
-  .speakBtn{background:var(--sun);border:none;border-radius:30px;padding:14px 26px;font-size:20px;font-weight:900;
-    box-shadow:0 5px 0 #d9b21f;margin-top:14px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;}
-  .speakBtn:active{transform:translateY(3px);box-shadow:0 2px 0 #d9b21f;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 22px;box-shadow:0 4px 18px var(--shadowS);text-align:center;margin-bottom:16px;}
+  .bigEmoji{font-size:80px;line-height:1.1;margin:4px 0;}
+  .hindi{font-size:37px;font-weight:800;margin:4px 0;letter-spacing:-.5px;}
+  .roman{font-size:21px;color:var(--purple);font-weight:700;}
+  .english{font-size:17px;color:var(--muted);margin-top:6px;font-weight:600;}
+  .speakBtn{background:var(--ink);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:15px;font-weight:700;
+    margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 3px 12px var(--shadowS);transition:transform .12s;}
+  .speakBtn:active{transform:scale(.97);}
 
-  .options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
-  .opt{background:var(--card);border:3px solid transparent;border-radius:22px;padding:18px 10px;font-size:44px;
-    box-shadow:0 6px 0 var(--shadow);cursor:pointer;transition:transform .1s;}
-  .opt .lab{display:block;font-size:16px;font-weight:800;margin-top:6px;}
-  .opt:active{transform:translateY(3px);}
-  .opt.correct{border-color:var(--good);background:#e8fbef;}
-  .opt.wrong{border-color:#ffb3b3;background:#fff0f0;opacity:.7;}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+  .opt{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:18px 10px;font-size:38px;
+    box-shadow:0 2px 8px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,background .15s;color:var(--ink);}
+  .opt .lab{display:block;font-size:14px;font-weight:600;color:var(--ink);margin-top:6px;}
+  .opt:active{transform:translateY(2px);}
+  .opt.correct{border-color:var(--good);background:#eafaf1;}
+  .opt.wrong{border-color:#f4b5b5;background:#fdf0f0;opacity:.75;}
 
-  .prompt{font-size:20px;font-weight:800;margin:6px 0 14px;text-align:center;}
+  .prompt{font-size:16px;font-weight:700;color:var(--muted);margin:6px 0 14px;text-align:center;}
 
   /* progress dots */
-  .dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px;}
-  .dot{width:14px;height:14px;border-radius:50%;background:#ffffff88;}
+  .dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
+  .dot{width:8px;height:8px;border-radius:50%;background:#d2d9e6;}
   .dot.done{background:var(--good);}
-  .dot.now{background:var(--sun);transform:scale(1.2);}
+  .dot.now{background:var(--accent);transform:scale(1.3);}
 
-  .backBtn{background:var(--card);border:none;border-radius:30px;padding:10px 18px;font-weight:800;font-size:16px;
-    box-shadow:0 4px 0 var(--shadow);display:inline-flex;align-items:center;gap:6px;}
+  .backBtn{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-weight:600;font-size:14px;
+    box-shadow:0 2px 8px var(--shadowS);display:inline-flex;align-items:center;gap:6px;color:var(--ink);cursor:pointer;}
 
-  .footerBtn{position:sticky;bottom:0;width:100%;background:var(--good);color:#fff;border:none;border-radius:22px;
-    padding:18px;font-size:20px;font-weight:900;box-shadow:0 6px 0 #3a9c5a;margin-top:6px;cursor:pointer;}
-  .footerBtn:active{transform:translateY(3px);box-shadow:0 3px 0 #3a9c5a;}
-  .footerBtn:disabled{background:#cfcfcf;box-shadow:0 6px 0 #b0b0b0;}
+  .footerBtn{position:sticky;bottom:0;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:14px;
+    padding:16px;font-size:16px;font-weight:700;box-shadow:0 8px 20px rgba(58,99,245,.33);margin-top:8px;cursor:pointer;transition:transform .12s;}
+  .footerBtn:active{transform:translateY(2px);}
+  .footerBtn:disabled{background:#cdd3df;box-shadow:none;color:#fff;}
 
   /* Reward overlay */
-  .overlay{position:fixed;inset:0;background:rgba(120,200,255,.35);backdrop-filter:blur(4px);
+  .overlay{position:fixed;inset:0;background:rgba(18,26,46,.46);backdrop-filter:blur(6px);
     display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;}
-  .rewardCard{background:#fff;border-radius:30px;padding:30px;text-align:center;max-width:380px;width:100%;
-    box-shadow:0 12px 0 var(--shadow);animation:pop .5s;}
-  .rewardCard .grow{font-size:90px;animation:bounce 1s infinite;}
-  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-  .rewardCard h2{font-size:28px;margin:8px 0;}
-  .confetti{position:fixed;top:-10px;font-size:26px;z-index:60;pointer-events:none;animation:fall linear forwards;}
+  .rewardCard{background:var(--card);border-radius:22px;padding:30px;text-align:center;max-width:360px;width:100%;
+    box-shadow:0 24px 60px rgba(18,26,46,.42);animation:pop .4s;}
+  .rewardCard .grow{font-size:74px;animation:bounce 1.5s ease-in-out infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .rewardCard h2{font-size:22px;font-weight:800;margin:8px 0;}
+  .confetti{position:fixed;top:-10px;font-size:22px;z-index:60;pointer-events:none;animation:fall linear forwards;}
   @keyframes fall{to{transform:translateY(110vh) rotate(360deg);}}
 
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#3a3320;color:#fff;
-    padding:12px 20px;border-radius:30px;font-weight:800;z-index:70;font-size:15px;opacity:0;transition:opacity .3s;}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:11px 18px;border-radius:999px;font-weight:600;z-index:70;font-size:14px;opacity:0;transition:opacity .3s;}
   .toast.show{opacity:1;}
-  .encourage{font-size:18px;font-weight:900;color:var(--good);min-height:24px;margin-top:8px;}
+  .encourage{font-size:16px;font-weight:700;color:var(--good);min-height:22px;margin-top:8px;}
 
   /* Word of the day */
-  .wotd{display:block;width:100%;text-align:left;border:none;cursor:pointer;
-    background:linear-gradient(120deg,#fff3c4,#ffe6f0);border-radius:22px;padding:14px 16px;margin-bottom:14px;
-    box-shadow:0 6px 0 var(--shadow);}
-  .wotd .tag{font-size:13px;font-weight:900;color:#c98a00;letter-spacing:.5px;}
-  .wotd .row{display:flex;align-items:center;gap:14px;margin-top:4px;}
-  .wotd .wic{font-size:46px;}
-  .wotd .whi{font-size:28px;font-weight:900;}
-  .wotd .wro{font-size:18px;color:var(--purple);font-weight:800;}
-  .wotd .wen{font-size:15px;opacity:.7;font-weight:700;}
-  .wotd .hear{margin-left:auto;font-size:26px;background:var(--sun);border-radius:50%;width:46px;height:46px;
-    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #d9b21f;flex:0 0 auto;}
+  .wotd{display:block;width:100%;text-align:left;border:1px solid var(--line);cursor:pointer;
+    background:linear-gradient(120deg,#eef2ff,#f3f0ff);border-radius:18px;padding:16px;margin-bottom:16px;
+    box-shadow:0 2px 12px var(--shadowS);}
+  .wotd .tag{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:1px;text-transform:uppercase;}
+  .wotd .row{display:flex;align-items:center;gap:14px;margin-top:8px;}
+  .wotd .wic{font-size:38px;}
+  .wotd .whi{font-size:25px;font-weight:800;}
+  .wotd .wro{font-size:16px;color:var(--purple);font-weight:700;}
+  .wotd .wen{font-size:14px;color:var(--muted);font-weight:600;}
+  .wotd .hear{margin-left:auto;font-size:19px;background:var(--ink);color:#fff;border-radius:50%;width:42px;height:42px;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
 
   /* Parent screen */
-  .pcard{background:var(--card);border-radius:22px;padding:18px;box-shadow:0 6px 0 var(--shadow);margin-bottom:14px;}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 10px var(--shadowS);margin-bottom:14px;}
   .statRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .stat{background:var(--soft);border-radius:18px;padding:14px;text-align:center;}
-  .stat .n{font-size:30px;font-weight:900;}
-  .stat .l{font-size:13px;font-weight:800;opacity:.65;}
+  .stat{background:var(--soft);border-radius:13px;padding:14px;text-align:center;}
+  .stat .n{font-size:25px;font-weight:800;color:var(--accent);}
+  .stat .l{font-size:12px;font-weight:600;color:var(--muted);}
   .cal{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-  .cal .day{width:34px;text-align:center;}
-  .cal .box{height:30px;border-radius:8px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:16px;}
-  .cal .box.on{background:#cdeccd;}
-  .cal .dl{font-size:11px;opacity:.55;font-weight:700;margin-top:2px;}
+  .cal .day{width:32px;text-align:center;}
+  .cal .box{height:28px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .cal .box.on{background:#d6f0e0;}
+  .cal .dl{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
   .wordChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
-  .chip{background:var(--soft);border-radius:16px;padding:6px 12px;font-size:14px;font-weight:700;}
+  .chip{background:var(--soft);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -160,14 +161,14 @@
 
   <!-- HOME -->
   <div class="screen" id="homeScreen">
-    <h1>Aria's Hindi Garden 🌸</h1>
-    <div class="sub" id="welcomeLine">हर शब्द एक नया फूल! Every word grows a flower.</div>
+    <h1>Aria's Hindi Garden</h1>
+    <div class="sub" id="welcomeLine">हर शब्द, एक नया पौधा · learn a word, grow your garden</div>
     <button id="wotd" class="wotd"></button>
     <div id="garden">
       <div class="gardenGrid" id="gardenGrid"></div>
       <div class="gardenNote" id="gardenNote">Your garden is waiting for seeds — play a lesson to grow it! 🌿</div>
     </div>
-    <div class="sectionTitle">Pick something fun 👇</div>
+    <div class="sectionTitle">Topics</div>
     <div class="units" id="unitsWrap"></div>
   </div>
 
@@ -189,8 +190,8 @@
   <!-- PARENT -->
   <div class="screen hidden" id="parentScreen">
     <button class="backBtn" onclick="goHome()">⬅️ Garden</button>
-    <h1 style="margin-top:10px;">👪 Grown-Ups Corner</h1>
-    <div class="sub">Aria's Hindi progress — encouragement only, no pressure 🌷</div>
+    <h1 style="margin-top:10px;">Parent Dashboard</h1>
+    <div class="sub">Aria's Hindi progress — encouragement only, no pressure</div>
     <div id="parentBody"></div>
   </div>
 </div>
