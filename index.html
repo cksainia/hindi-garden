@@ -235,6 +235,24 @@ background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));box-sha
 .qrow .qbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:6px;}
 .qrow .qsc{font-size:14px;font-weight:900;width:56px;text-align:right;flex:0 0 auto;}
 .qsc.g{color:var(--good);} .qsc.m{color:var(--gold);} .qsc.b{color:var(--bad);}
+
+/* Grammar Arena games */
+.auraRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+.auraBtn{font-size:18px;font-weight:900;color:#fff;border-radius:16px;padding:18px 10px;cursor:pointer;line-height:1.5;border:2px solid var(--line);transition:transform .12s, box-shadow .15s;}
+.auraBtn:active{transform:translateY(2px);}
+.auraBtn.fAura{background:linear-gradient(150deg,rgba(255,45,149,.30),rgba(255,79,176,.16));border-color:rgba(255,45,149,.55);box-shadow:0 0 18px rgba(255,45,149,.35);}
+.auraBtn.mAura{background:linear-gradient(150deg,rgba(54,230,255,.26),rgba(54,230,255,.10));border-color:rgba(54,230,255,.5);box-shadow:0 0 18px rgba(54,230,255,.3);}
+.auraBtn.hit{outline:3px solid var(--good);outline-offset:2px;}
+.comboSlots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:8px 0 12px;}
+.comboSlot{border:2px dashed rgba(255,255,255,.25);border-radius:14px;padding:12px 6px;text-align:center;background:rgba(0,0,0,.22);min-height:80px;display:flex;flex-direction:column;justify-content:center;}
+.comboSlot.filled{border-style:solid;border-color:var(--magenta);background:linear-gradient(150deg,rgba(255,45,149,.2),rgba(155,60,255,.2));cursor:pointer;}
+.comboSlot .csLab{font-size:11px;color:var(--muted);font-weight:800;line-height:1.2;}
+.comboSlot .csVal{font-size:20px;font-weight:900;color:#fff;margin-top:6px;}
+.stanceBtn{width:100%;text-align:left;font-size:15px;font-weight:800;color:#fff;border:2px solid var(--line);border-radius:14px;padding:13px 16px;cursor:pointer;transition:transform .12s;line-height:1.5;}
+.stanceBtn:active{transform:translateY(2px);}
+.stanceBtn.aapBtn{background:linear-gradient(150deg,rgba(54,230,255,.2),rgba(155,60,255,.2));}
+.stanceBtn.tumBtn{background:linear-gradient(150deg,rgba(255,45,149,.2),rgba(255,79,176,.14));}
+.stanceBtn .stanceHi{font-size:18px;font-weight:900;}
 </style>
 </head>
 <body>
@@ -487,16 +505,27 @@ panel.innerHTML=`<div class="qpHead">Quiz scores · best ${best}% · avg ${avg}%
 }
 wrap.appendChild(panel);
 }
+function renderGameTiles(wrap){
+(typeof GAMES!=="undefined"?GAMES:[]).forEach(g=>{
+const b=document.createElement("button"); b.className="unit"+(state.done["game_"+g.id]?" mastered":""); b.onclick=()=>openGame(g.id);
+const d=state.done["game_"+g.id]?'<div class="prog">⭐ Played</div>':'<div class="prog">Play ▶</div>';
+b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</span>${d}`;
+wrap.appendChild(b);
+});
+}
 function renderUnits(){
 const wrap=$("unitsWrap"); wrap.innerHTML="";
 const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
 const wp=pctWords(), cv=convosDone(), gd=grammarDoneCount(), qb=quizBest();
 const qList=state.quizzes||[];
 const learnedCount=(typeof learnedWords==="function"?learnedWords().length:0);
+const gamesN=(typeof GAMES!=="undefined"?GAMES.length:0);
+const gamesDoneN=(typeof GAMES!=="undefined"?GAMES:[]).filter(g=>state.done["game_"+g.id]).length;
 const sections=[
 {key:"words", emoji:"📚", name:"Learning Words", sub:UNITS.length+" topics · "+wp+"% complete", pct:wp, fn:renderTopicTiles},
 {key:"convos", emoji:"🎭", name:"Little Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100), fn:renderConvoTiles},
 {key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons done", pct:(gN?Math.round(gd/gN*100):0), fn:renderGrammarTiles},
+{key:"games", emoji:"🕹️", name:"Grammar Arena", sub:gamesN+" mini-games · "+gamesDoneN+"/"+gamesN+" played", pct:(gamesN?Math.round(gamesDoneN/gamesN*100):0), fn:renderGameTiles},
 {key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?qList.length+" taken · best "+qb+"%":(learnedCount<4?"learn words to unlock":Math.min(25,learnedCount)+" Qs from learned words")), pct:qb, fn:renderQuizSection},
 ];
 sections.forEach(s=>{
@@ -753,6 +782,137 @@ ms.innerHTML=`<button class="backBtn" onclick="openGrammar('${gb.id}')">⬅️ B
 ${msg}
 <button class="footerBtn" ${full?'':'disabled'} onclick="buildCheck()">${(gb.checked&&gb.ok)?'Yay! ✨':'Check ✅'}</button>`;
 show("menuScreen"); ms.scrollTop=0;
+}
+
+/* ============ GRAMMAR ARENA (mini-games) ============ */
+let game=null;
+function gameDots(){ return '<div class="dots" style="margin-top:14px">'+game.rounds.map((_,i)=>`<div class="dot${i<game.idx?' done':i===game.idx?' now':''}"></div>`).join("")+'</div>'; }
+function openGame(id){
+const g=(typeof GAMES!=="undefined"?GAMES:[]).find(x=>x.id===id); if(!g) return;
+currentUnit=null;
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
+<h1 style="margin-top:10px">${g.emoji} ${g.name}</h1>
+<div class="gtip">${g.intro}</div>
+<button class="footerBtn" style="margin-top:14px" onclick="startGame('${id}')">⚔️ Enter the Arena ▶</button>`;
+show("menuScreen"); ms.scrollTop=0;
+}
+function startGame(id){
+const g=(typeof GAMES!=="undefined"?GAMES:[]).find(x=>x.id===id); if(!g) return;
+game={ id, g, type:g.type, rounds:shuffle(g.rounds), idx:0, score:0, done:false, tiles:null, slots:[] };
+renderGame();
+}
+function renderGame(){
+const t=game.type;
+if(t==="aura") renderAura();
+else if(t==="combo") renderCombo();
+else if(t==="respect") renderRespect();
+else if(t==="runes") renderRunes();
+else if(t==="potion") renderPotion();
+}
+function gameNext(){ game.idx++; if(game.idx>=game.rounds.length){ finishGame(); return; } game.done=false; game.tiles=null; game.slots=[]; renderGame(); }
+function finishGame(){
+state.done["game_"+game.id]=(state.done["game_"+game.id]||0)+1;
+logActivity([]);
+const earned=Math.max(3, game.score);
+const res=addStars(earned);
+showReward(earned, res.leveledUp, res.newLevel, 0);
+}
+function gameShell(inner){
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="openGame('${game.id}')">⬅️ Back</button>${gameDots()}${inner}`;
+show("menuScreen"); ms.scrollTop=0;
+}
+/* --- Aura Match --- */
+function renderAura(){
+const r=game.rounds[game.idx];
+const fb = game.done ? `<div class="encourage">⚡ Aura hit! ${r.prompt.replace('___', r.ans==='f'?r.optF:r.optM)}</div>` : "";
+gameShell(`<div class="prompt">Match the aura to land the hit 🩷🩵</div>
+<div class="card"><div style="font-size:13px;color:var(--muted);font-weight:800">${r.en}</div><div class="hindi" style="margin-top:6px">${r.prompt}</div></div>
+<div class="auraRow">
+<button class="auraBtn fAura ${game.done&&r.ans==='f'?'hit':''}" ${game.done?'':`onclick="auraPick('f')"`}>🩷<br>${r.optF}</button>
+<button class="auraBtn mAura ${game.done&&r.ans==='m'?'hit':''}" ${game.done?'':`onclick="auraPick('m')"`}>🩵<br>${r.optM}</button>
+</div>${fb}`);
+}
+function auraPick(g){
+const r=game.rounds[game.idx];
+if(r.ans===g){ game.score++; game.done=true; speak(r.prompt.replace('___', g==='f'?r.optF:r.optM)); renderAura(); setTimeout(gameNext,1300); }
+else { toast(g==='f'?"That's the boy glow 🩵 — try magenta!":"That's the boy glow — pick her magenta 🩷"); }
+}
+/* --- Combo Chains --- */
+function renderCombo(){
+const r=game.rounds[game.idx];
+if(!game.tiles){ game.tiles=shuffle([{hi:r.s,role:'S'},{hi:r.o,role:'O'},{hi:r.v,role:'V'}]); game.slots=[]; }
+const labels=["🥷 Fighter","🎯 Target","⚔️ Attack (verb!)"];
+const slotsHtml=labels.map((lab,i)=>{ const f=game.slots[i]; return `<div class="comboSlot ${f?'filled':''}" ${f?`onclick="comboUnplace(${i})"`:''}><div class="csLab">${lab}</div><div class="csVal">${f?f.hi:'—'}</div></div>`; }).join("");
+const bankHtml=game.tiles.map((t,i)=> game.slots.indexOf(t)>=0?"":`<button class="wtile" onclick="comboPlace(${i})">${t.hi}</button>`).join("");
+const full=game.slots.length===3;
+let fb="";
+if(game.done) fb=`<div class="encourage">💥 Critical Hit! ${r.s} ${r.o} ${r.v}</div>`;
+else if(game.checked) fb=`<div class="encourage" style="color:var(--bad)">Not yet — the verb must go in the last slot ⚔️</div>`;
+gameShell(`<div class="prompt">Chain the combo: “${r.en}”</div>
+<div class="comboSlots">${slotsHtml}</div>
+<div class="bank">${bankHtml}</div>
+${fb}
+<button class="footerBtn" ${full?'':'disabled'} onclick="comboCheck()">${game.done?'Critical! 💥':'Strike! ⚔️'}</button>`);
+}
+function comboPlace(i){ if(game.done) return; const t=game.tiles[i]; if(game.slots.indexOf(t)<0 && game.slots.length<3){ game.slots.push(t); game.checked=false; renderCombo(); } }
+function comboUnplace(i){ if(game.done) return; game.slots.splice(i,1); game.checked=false; renderCombo(); }
+function comboCheck(){
+if(game.slots.length<3) return;
+const roles=game.slots.map(t=>t.role).join("");
+game.checked=true;
+if(roles==="SOV"){ game.score++; game.done=true; const r=game.rounds[game.idx]; speak(r.s+" "+r.o+" "+r.v); renderCombo(); setTimeout(gameNext,1500); }
+else renderCombo();
+}
+/* --- Respect Shield --- */
+function renderRespect(){
+const r=game.rounds[game.idx];
+const correct=r.who==='elder'?'aap':'tum';
+const order = Math.random()<0.5;
+const aapBtn=`<button class="stanceBtn aapBtn ${game.done?'won':''}" ${game.done?'':`onclick="respectPick('aap')"`}>🛡️ Aap (polite)<br><span class="stanceHi">${r.aap}</span></button>`;
+const tumBtn=`<button class="stanceBtn tumBtn ${game.done?'won':''}" ${game.done?'':`onclick="respectPick('tum')"`}>⚔️ Tum (casual)<br><span class="stanceHi">${r.tum}</span></button>`;
+const fb = game.done ? `<div class="encourage">${correct==='aap'?'🛡️ Perfect block! Aap shows respect.':'⚔️ Nice hit! Tum is right for friends.'}</div>` : "";
+gameShell(`<div class="prompt">Pick the right stance</div>
+<div class="card"><div class="hindi" style="font-size:26px">${r.scenario}</div></div>
+<div class="qopts">${order?aapBtn+tumBtn:tumBtn+aapBtn}</div>${fb}`);
+}
+function respectPick(kind){
+const r=game.rounds[game.idx]; const correct=r.who==='elder'?'aap':'tum';
+if(kind===correct){ game.score++; game.done=true; speak(kind==='aap'?r.aap:r.tum); renderRespect(); setTimeout(gameNext,1400); }
+else { toast(r.who==='elder'?"Manners penalty! Elders need Aap 🛡️":"Too formal — friends use Tum ⚔️"); }
+}
+/* --- Time Runes --- */
+function renderRunes(){
+const r=game.rounds[game.idx];
+const askKey={now:'present',past:'past',future:'future'}[r.ask];
+const askLabel={now:'⚡ NOW (happening)',past:'🌑 DONE (past)',future:'✨ LATER (future)'}[r.ask];
+const forms=shuffle([{k:'present',hi:r.present},{k:'past',hi:r.past},{k:'future',hi:r.future}]);
+const btns=forms.map(f=>`<button class="qopt ${game.done&&f.k===askKey?'correct':''}" ${game.done?'':`onclick="runePick('${f.k}')"`}>${f.hi}</button>`).join("");
+const fb = game.done ? `<div class="encourage">${askLabel.split(' ')[0]} Rune snapped! ${r[askKey]}</div>` : "";
+gameShell(`<div class="prompt">Snap the ${askLabel} rune onto “${r.verb}”</div>
+<div class="qopts">${btns}</div>${fb}`);
+}
+function runePick(k){
+const r=game.rounds[game.idx]; const askKey={now:'present',past:'past',future:'future'}[r.ask];
+if(k===askKey){ game.score++; game.done=true; speak(r[askKey]); renderRunes(); setTimeout(gameNext,1300); }
+else toast("Wrong rune! Look at the verb ending ✨");
+}
+/* --- Potion Lab --- */
+function renderPotion(){
+const r=game.rounds[game.idx];
+const opts=game.potOpts||(game.potOpts=shuffle(r.opts));
+const btns=opts.map(p=>`<button class="qopt ${game.done&&p===r.post?'correct':''}" ${game.done?'':`onclick="potionPick('${p}')"`}>${p}</button>`).join("");
+const brew = game.done ? r.noun+" "+r.post : r.noun+" + ?";
+const fb = game.done ? `<div class="encourage">⚗️ Brewed! ${r.noun} ${r.post} = ${r.en}</div>` : "";
+gameShell(`<div class="prompt">Add the catalyst after the noun · “${r.en}”</div>
+<div class="card"><div style="font-size:46px">⚗️</div><div class="hindi" style="margin-top:6px">${brew}</div></div>
+<div class="qopts">${btns}</div>${fb}`);
+}
+function potionPick(p){
+const r=game.rounds[game.idx];
+if(p===r.post){ game.score++; game.done=true; game.potOpts=null; speak(r.noun+" "+r.post); renderPotion(); setTimeout(()=>{ game.potOpts=null; gameNext(); },1400); }
+else toast("Potion fizzled! Try another catalyst ⚗️");
 }
 
 /* ============ DAILY QUIZ ============ */

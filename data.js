@@ -895,4 +895,60 @@ const GRAMMAR = [
     ]},
 ];
 
-if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; }
+/* ===== ARENA GAMES: neon grammar mini-games ===== */
+const GAMES = [
+  { id:"aura", name:"Aura Match", emoji:"🌈", type:"aura",
+    intro:"Boy words & boy verb-endings glow CYAN 🩵. Girl ones glow MAGENTA 🩷. Aria is a girl, so for herself she taps the magenta ending! Match the aura to land the hit.",
+    rounds:[
+      {en:"I (a girl) am playing", prompt:"मैं खेल ___", optF:"रही हूँ", optM:"रहा हूँ", ans:"f"},
+      {en:"I (a girl) eat food", prompt:"मैं खाना खा ___", optF:"ती हूँ", optM:"ता हूँ", ans:"f"},
+      {en:"I (a girl) will go", prompt:"मैं ___", optF:"जाऊँगी", optM:"जाऊँगा", ans:"f"},
+      {en:"That BOY is running", prompt:"वह लड़का दौड़ ___", optF:"रही है", optM:"रहा है", ans:"m"},
+      {en:"That GIRL is reading", prompt:"वह लड़की पढ़ ___", optF:"रही है", optM:"रहा है", ans:"f"},
+      {en:"I (a girl) am good", prompt:"मैं ___ हूँ", optF:"अच्छी", optM:"अच्छा", ans:"f"},
+      {en:"That BOY is good", prompt:"वह लड़का ___ है", optF:"अच्छी", optM:"अच्छा", ans:"m"},
+      {en:"I (a girl) sing", prompt:"मैं गा ___", optF:"ती हूँ", optM:"ता हूँ", ans:"f"},
+    ]},
+  { id:"combo", name:"Combo Chains", emoji:"🥷", type:"combo",
+    intro:"Hindi attacks in order: Fighter (who) → Target (what) → Attack (verb). Put the VERB last to land a Critical Hit! 💥",
+    rounds:[
+      {en:"I eat an apple", s:"मैं", o:"सेब", v:"खाती हूँ"},
+      {en:"I drink milk", s:"मैं", o:"दूध", v:"पीती हूँ"},
+      {en:"She reads a book", s:"वह", o:"किताब", v:"पढ़ती है"},
+      {en:"We play a game", s:"हम", o:"खेल", v:"खेलते हैं"},
+      {en:"I see the moon", s:"मैं", o:"चाँद", v:"देखती हूँ"},
+      {en:"I want water", s:"मुझे", o:"पानी", v:"चाहिए"},
+    ]},
+  { id:"respect", name:"Respect Shield", emoji:"🛡️", type:"respect",
+    intro:"Elders, teachers & grandparents are BOSSES — they need the polite Aap 🛡️ shield. Friends & little ones are minions — fight them with Tum ⚔️. Pick the right stance!",
+    rounds:[
+      {scenario:"Ask Nani (grandma) for water 👵", who:"elder", aap:"आप पानी दीजिए", tum:"तुम पानी दो"},
+      {scenario:"Ask your friend to play 🧒", who:"friend", aap:"आप खेलिए", tum:"तुम खेलो"},
+      {scenario:"Greet your teacher 🧑‍🏫", who:"elder", aap:"आप कैसे हैं?", tum:"तुम कैसे हो?"},
+      {scenario:"Tell your little brother to come 👦", who:"friend", aap:"आप आइए", tum:"तुम आओ"},
+      {scenario:"Tell Dadaji (grandpa) to sit 👴", who:"elder", aap:"आप बैठिए", tum:"तुम बैठो"},
+      {scenario:"Call your best friend 🧒", who:"friend", aap:"आप सुनिए", tum:"तुम सुनो"},
+    ]},
+  { id:"runes", name:"Time Runes", emoji:"⏳", type:"runes",
+    intro:"Verbs are your weapons. Snap on a time rune: ⚡ NOW (happening), 🌑 DONE (past), or ✨ LATER (future). Tap the verb form that matches!",
+    rounds:[
+      {verb:"play", ask:"future", present:"खेल रही हूँ", past:"खेली", future:"खेलूँगी"},
+      {verb:"go", ask:"now", present:"जा रही हूँ", past:"गई", future:"जाऊँगी"},
+      {verb:"sleep", ask:"past", present:"सो रही हूँ", past:"सोई", future:"सोऊँगी"},
+      {verb:"come", ask:"future", present:"आ रही हूँ", past:"आई", future:"आऊँगी"},
+      {verb:"dance", ask:"now", present:"नाच रही हूँ", past:"नाची", future:"नाचूँगी"},
+      {verb:"sing", ask:"past", present:"गा रही हूँ", past:"गाई", future:"गाऊँगी"},
+    ]},
+  { id:"potion", name:"Potion Lab", emoji:"⚗️", type:"potion",
+    intro:"Hindi puts in/on/to AFTER the word, like a catalyst dropped in last: घर में (in the house). Brew the potion — add the right catalyst after the noun!",
+    rounds:[
+      {en:"in the house", noun:"घर", post:"में", opts:["में","पर","को"]},
+      {en:"on the table", noun:"मेज़", post:"पर", opts:["पर","में","से"]},
+      {en:"in the closet", noun:"अलमारी", post:"में", opts:["में","पर","को"]},
+      {en:"on the bed", noun:"बिस्तर", post:"पर", opts:["पर","में","को"]},
+      {en:"to school", noun:"स्कूल", post:"को", opts:["को","में","पर"]},
+      {en:"in the water", noun:"पानी", post:"में", opts:["में","पर","से"]},
+    ]},
+];
+
+if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; }
