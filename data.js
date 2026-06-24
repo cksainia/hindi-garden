@@ -920,7 +920,7 @@ const GAMES = [
       {en:"I want water", s:"मुझे", o:"पानी", v:"चाहिए"},
     ]},
   { id:"respect", name:"Respect Shield", emoji:"🛡️", type:"respect",
-    intro:"Elders, teachers & grandparents are BOSSES — they need the polite Aap 🛡️ shield. Friends & little ones are minions — fight them with Tum ⚔️. Pick the right stance!",
+    intro:"Elders, teachers & grandparents get the polite Aap 🛡️ shield to show respect. Friends & younger kids use the casual Tum ⚔️. Pick the right stance!",
     rounds:[
       {scenario:"Ask Nani (grandma) for water 👵", who:"elder", aap:"आप पानी दीजिए", tum:"तुम पानी दो"},
       {scenario:"Ask your friend to play 🧒", who:"friend", aap:"आप खेलिए", tum:"तुम खेलो"},
