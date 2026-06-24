@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Hindi Slayer">
@@ -253,16 +253,56 @@ background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));box-sha
 .stanceBtn.aapBtn{background:linear-gradient(150deg,rgba(54,230,255,.2),rgba(155,60,255,.2));}
 .stanceBtn.tumBtn{background:linear-gradient(150deg,rgba(255,45,149,.2),rgba(255,79,176,.14));}
 .stanceBtn .stanceHi{font-size:18px;font-weight:900;}
+
+/* Recommended-next CTA */
+.ctaCard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid rgba(255,210,74,.5);border-radius:18px;
+background:linear-gradient(120deg, rgba(255,45,149,.30), rgba(255,210,74,.18) 60%, rgba(54,230,255,.16));
+padding:14px 18px;margin-bottom:12px;box-shadow:0 0 22px rgba(255,45,149,.28), 0 6px 18px var(--shadowS);cursor:pointer;color:var(--ink);transition:transform .12s, box-shadow .15s;}
+.ctaCard:active{transform:translateY(2px);}
+.ctaCard .ctaIco{font-size:26px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:rgba(0,0,0,.26);flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.ctaCard .ctaText{display:flex;flex-direction:column;min-width:0;}
+.ctaCard .ctaLab{font-size:10.5px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);text-shadow:0 0 10px rgba(255,210,74,.4);}
+.ctaCard .ctaMain{font-weight:900;font-size:17px;line-height:1.15;margin-top:2px;}
+.ctaCard .ctaSub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px;}
+.ctaCard .ctaGo{margin-left:auto;font-size:18px;font-weight:900;color:#fff;flex:0 0 auto;}
+
+/* Progress explainer note */
+.progNote{display:block;width:100%;text-align:left;border:1px dashed rgba(255,255,255,.18);border-radius:13px;
+background:rgba(0,0,0,.20);color:var(--muted);font-size:11.5px;font-weight:700;line-height:1.55;padding:9px 12px;margin:8px 0 2px;cursor:pointer;}
+.progNote b{color:var(--ink);} .progNote u{color:var(--cyan);}
+
+/* Review / win-back buttons */
+.reviewBtn{flex:1;min-width:130px;border:1px solid var(--line);border-radius:13px;padding:12px 14px;font-size:14px;font-weight:800;color:#fff;cursor:pointer;
+background:linear-gradient(150deg,rgba(54,230,255,.22),rgba(155,60,255,.24));box-shadow:0 4px 14px var(--shadowS);transition:transform .12s;}
+.reviewBtn:active{transform:translateY(2px);}
+.reviewBtn.winback{background:linear-gradient(150deg,rgba(255,45,149,.32),rgba(155,60,255,.26));border-color:rgba(255,45,149,.5);box-shadow:0 0 16px rgba(255,45,149,.3);}
+
+/* Mastery ladder (parent dashboard) */
+.mlrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.mlcell{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;}
+.mlcell .mn{font-size:21px;font-weight:900;}
+.mlcell .ml{font-size:10.5px;font-weight:800;color:var(--muted);margin-top:3px;line-height:1.1;}
+.mlcell.l1 .mn{color:#b8a6dc;} .mlcell.l2 .mn{color:#36e6ff;} .mlcell.l3 .mn{color:#3fe3a0;} .mlcell.l4 .mn{color:#ffd24a;text-shadow:0 0 14px rgba(255,210,74,.5);}
+
+/* Settings toggle buttons */
+.setRow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.setBtn{flex:1;min-width:84px;border:1px solid var(--line);border-radius:12px;padding:11px 8px;font-size:13.5px;font-weight:800;color:var(--ink);cursor:pointer;
+background:rgba(0,0,0,.22);transition:transform .12s, border-color .15s, box-shadow .15s;text-align:center;}
+.setBtn:active{transform:translateY(2px);}
+.setBtn.on{border-color:var(--magenta);background:linear-gradient(150deg,rgba(255,45,149,.28),rgba(155,60,255,.28));box-shadow:0 0 14px rgba(255,45,149,.28);}
+
+/* Script mode: Devanagari-only hides romanization helpers */
+body.deva-only .roman, body.deva-only .wro, body.deva-only .gro{display:none!important;}
 </style>
 </head>
 <body>
 <div id="app">
 <div class="topbar">
-<div class="pill star"><span class="ico">⭐</span><span id="starCount">0</span></div>
-<div class="pill lvl"><span class="ico">🩷</span>Lv <span id="levelCount">1</span></div>
+<div class="pill star" aria-label="Stars earned"><span class="ico" aria-hidden="true">⭐</span><span id="starCount">0</span></div>
+<div class="pill lvl" aria-label="Current level"><span class="ico" aria-hidden="true">🩷</span>Lv <span id="levelCount">1</span></div>
 <div class="spacer"></div>
-<button class="iconbtn" id="parentBtn" title="grown-ups">👪</button>
-<button class="iconbtn" id="muteBtn" title="sound">🔊</button>
+<button class="iconbtn" id="parentBtn" title="grown-ups" aria-label="Open parent dashboard">👪</button>
+<button class="iconbtn" id="muteBtn" title="sound" aria-label="Toggle sound on or off">🔊</button>
 </div>
 
 <!-- HOME -->
@@ -286,18 +326,14 @@ background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));box-sha
 </div>
 
 <div class="tiles" id="dashTiles"></div>
+<button class="progNote" id="progNote" type="button">📚 <b>Words Learned</b> = words she's met · 🌟 <b>Mastered</b> = answered right · ⭐ <b>Stars</b> add up after each set → level up. <u>What do these mean?</u></button>
 
 <div class="sectionTitle">Choose what to practice</div>
 <div class="units" id="unitsWrap"></div>
 </div>
 
-<!-- LESSON MENU -->
-<div class="screen hidden" id="menuScreen">
-<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-<h1 id="menuTitle" style="margin-top:10px;"></h1>
-<div class="sub" id="menuSub"></div>
-<div id="menuActs" style="margin-top:8px;"></div>
-</div>
+<!-- LESSON MENU (content is built dynamically by openUnit / openGrammar / quiz / games) -->
+<div class="screen hidden" id="menuScreen"></div>
 
 <!-- ACTIVITY -->
 <div class="screen hidden" id="actScreen">
@@ -352,6 +388,17 @@ if(typeof s.stars !== "number"){ s.stars = (typeof s.sun==="number") ? s.sun : 0
 if(!s.mastered || typeof s.mastered!=="object") s.mastered = {};
 // quiz history: [{date, score, total, pct, t}]
 if(!Array.isArray(s.quizzes)) s.quizzes = [];
+// words she missed (quiz/listen) — to "win back": { ro: {en, t} }
+if(!s.missed || typeof s.missed!=="object") s.missed = {};
+// per-word mastery ladder: 1 Seen · 2 Heard · 3 Recognized · 4 Slayed
+if(!s.wordLevel || typeof s.wordLevel!=="object") s.wordLevel = {};
+// first-seen date per word { ro: "YYYY-MM-DD" } for spaced review
+if(!s.seenDate || typeof s.seenDate!=="object") s.seenDate = {};
+// settings
+if(typeof s.speed !== "number") s.speed = 0.85;
+if(s.scriptMode!=="deva" && s.scriptMode!=="both") s.scriptMode = "both";
+// backfill seenDate for already-learned words (so review has something to work with)
+for(const ro in s.seen){ if(!s.seenDate[ro]) s.seenDate[ro]=todayKey(); if(!s.wordLevel[ro]) s.wordLevel[ro]=(s.mastered&&s.mastered[ro])?3:1; }
 // keep legacy keys (sun, plants) untouched so nothing is wiped
 return s;
 }
@@ -364,15 +411,18 @@ const vs = speechSynthesis.getVoices();
 hiVoice = vs.find(v=>v.lang==="hi-IN") || vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("hi")) || null;
 }
 if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-function speak(text){
+function speak(text, rate){
 if(muted || !('speechSynthesis' in window)) return;
 try{
 speechSynthesis.cancel();
 const u = new SpeechSynthesisUtterance(text);
-u.lang = "hi-IN"; if(hiVoice) u.voice = hiVoice; u.rate = .85; u.pitch = 1.05;
+u.lang = "hi-IN"; if(hiVoice) u.voice = hiVoice;
+u.rate = (typeof rate==="number") ? rate : ((state&&typeof state.speed==="number")?state.speed:.85);
+u.pitch = 1.05;
 speechSynthesis.speak(u);
 }catch(e){}
 }
+function speakSlow(text){ speak(text, 0.5); }
 
 /* ============ HELPERS ============ */
 const $ = id => document.getElementById(id);
@@ -380,8 +430,12 @@ function show(screen){ ["homeScreen","menuScreen","actScreen","parentScreen"].fo
 function todayKey(d){ d=d||new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function logActivity(words){
 const k=todayKey(); state.log=state.log||{}; state.log[k]=(state.log[k]||0)+1;
-state.seen=state.seen||{}; (words||[]).forEach(w=>{ if(w&&w.ro) state.seen[w.ro]=w.en; });
+state.seen=state.seen||{}; state.seenDate=state.seenDate||{}; state.wordLevel=state.wordLevel||{};
+(words||[]).forEach(w=>{ if(w&&w.ro){ state.seen[w.ro]=w.en; if(!state.seenDate[w.ro]) state.seenDate[w.ro]=k; state.wordLevel[w.ro]=Math.max(state.wordLevel[w.ro]||0,1); } });
 }
+// bump a word up the mastery ladder (never down) — 1 Seen·2 Heard·3 Recognized·4 Slayed
+function setLevel(ro,lvl){ if(!ro) return; state.wordLevel=state.wordLevel||{}; state.wordLevel[ro]=Math.max(state.wordLevel[ro]||0,lvl); }
+const MASTERY_NAMES = {1:"Seen",2:"Heard",3:"Recognized",4:"Slayed"};
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1600); }
 
@@ -408,6 +462,7 @@ return { leveledUp: after>before, newLevel: after };
 function markMastered(ro){
 if(!ro) return false;
 state.mastered = state.mastered || {};
+setLevel(ro,3); // recognized in Listen & Find
 if(!state.mastered[ro]){ state.mastered[ro] = todayKey(); return true; }
 return false;
 }
@@ -480,7 +535,17 @@ function pctWords(){ let d=0,t=0; UNITS.forEach(u=>{const tot=u.words.length*2; 
 function convosDone(){ return CONVOS.filter(c=>state.done["convo_"+c.id]).length; }
 function grammarDoneCount(){ return (typeof GRAMMAR!=="undefined"?GRAMMAR:[]).filter(g=>state.done["grammar_"+g.id]).length; }
 function quizBest(){ const l=state.quizzes||[]; return l.length?Math.max(...l.map(q=>q.pct)):0; }
+function renderReviewButtons(wrap){
+const missedN=Object.keys(state.missed||{}).length;
+const spacedN=spacedPool().length;
+if(missedN<1 && spacedN<1) return;
+const row=document.createElement("div"); row.style.gridColumn="1/-1"; row.style.display="flex"; row.style.gap="8px"; row.style.flexWrap="wrap"; row.style.margin="2px 0 8px";
+if(missedN>0){ const b=document.createElement("button"); b.className="reviewBtn winback"; b.innerHTML="⚔️ Win back "+missedN+" word"+(missedN>1?"s":""); b.onclick=()=>startReview('missed'); row.appendChild(b); }
+if(spacedN>0){ const b=document.createElement("button"); b.className="reviewBtn"; b.innerHTML="🔁 Review earlier words"; b.onclick=()=>startReview('spaced'); row.appendChild(b); }
+wrap.appendChild(row);
+}
 function renderQuizSection(wrap){
+renderReviewButtons(wrap);
 const learnedCount = learnedWords().length;
 const list=(state.quizzes||[]);
 if(learnedCount < 4){
@@ -513,8 +578,24 @@ b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</
 wrap.appendChild(b);
 });
 }
+// pick the single best "do this next" action for the child
+function recommendNext(){
+const missedN=Object.keys(state.missed||{}).length;
+if(missedN>=3) return {ico:"⚔️", label:"Win back "+missedN+" words", sub:"Practice the ones that slipped off", run:function(){ startReview('missed'); }};
+const inProg=UNITS.find(u=>{const t=u.words.length*2;const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));return d>0&&d<t;});
+if(inProg) return {ico:"▶", label:"Continue "+inProg.name, sub:"Pick up where she left off", run:function(){ openUnit(inProg.id); }};
+const fresh=UNITS.find(u=>!state.done[u.id+"_learn"]);
+if(fresh) return {ico:"✨", label:"Start "+fresh.name, sub:"A fresh topic to explore", run:function(){ openUnit(fresh.id); }};
+if(missedN>0) return {ico:"⚔️", label:"Win back "+missedN+" word"+(missedN>1?"s":""), sub:"Practice the ones that slipped off", run:function(){ startReview('missed'); }};
+if((typeof learnedWords==="function"?learnedWords().length:0)>=4) return {ico:"🎯", label:"Take today's quiz", sub:"Review what she's learned", run:function(){ openSection='quiz'; renderUnits(); startQuiz(); }};
+return {ico:"📚", label:"Explore the topics", sub:"Tap a topic to begin", run:function(){ openSection='words'; renderUnits(); }};
+}
 function renderUnits(){
 const wrap=$("unitsWrap"); wrap.innerHTML="";
+const rec=recommendNext();
+const cta=document.createElement("button"); cta.type="button"; cta.className="ctaCard"; cta.style.gridColumn="1/-1";
+cta.innerHTML=`<span class="ctaIco">${rec.ico}</span><span class="ctaText"><span class="ctaLab">Recommended next</span><span class="ctaMain">${rec.label}</span><span class="ctaSub">${rec.sub}</span></span><span class="ctaGo">▶</span>`;
+cta.onclick=rec.run; wrap.appendChild(cta);
 const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
 const wp=pctWords(), cv=convosDone(), gd=grammarDoneCount(), qb=quizBest();
 const qList=state.quizzes||[];
@@ -550,7 +631,7 @@ const el=$("wotd");
 el.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div>
 <div class="row">
 <span class="wic">${w.ic}</span>
-<span><span class="whi">${w.hi}</span><br><span class="wro">${w.ro}</span> — <span class="wen">${w.en}</span></span>
+<span><span class="whi" lang="hi">${w.hi}</span><br><span class="wro">${w.ro}</span> — <span class="wen">${w.en}</span></span>
 <span class="hear">🔊</span>
 </div>`;
 el.onclick=()=>speak(w.hi);
@@ -610,10 +691,13 @@ const w=lesson.words[lesson.idx];
 $("actBody").innerHTML=`
 <div class="card">
 <div class="bigEmoji">${w.ic}</div>
-<div class="hindi">${w.hi}</div>
+<div class="hindi" lang="hi">${w.hi}</div>
 <div class="roman">${w.ro}</div>
 <div class="english">${w.en}</div>
-<button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it</button>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+<button class="speakBtn" onclick="speak('${w.hi.replace(/'/g,"\\'")}')">🔊 Hear it</button>
+<button class="speakBtn" style="background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="speakSlow('${w.hi.replace(/'/g,"\\'")}')">🐢 Slower</button>
+</div>
 </div>
 <button class="footerBtn" onclick="nextStep()">Got it! ✨</button>`;
 speak(w.hi);
@@ -626,8 +710,8 @@ const opts=shuffle([w,...pool]);
 $("actBody").innerHTML=`
 <div class="prompt">Tap the word you hear 👂</div>
 <div class="card" style="padding:14px;">
-<button class="speakBtn" onclick="speak('${w.hi}')">🔊 Play sound</button>
-<div class="roman" style="font-size:20px;margin-top:8px;opacity:.5;">(${w.ro})</div>
+<button class="speakBtn" onclick="speak('${w.hi.replace(/'/g,"\\'")}')">🔊 Play sound</button>
+<button class="speakBtn" style="background:linear-gradient(135deg,#36e6ff,#9b3cff);margin-left:8px" onclick="speakSlow('${w.hi.replace(/'/g,"\\'")}')">🐢 Slower</button>
 </div>
 <div class="options" id="opts"></div>
 <div class="encourage" id="enc"></div>`;
@@ -644,14 +728,15 @@ function checkListen(btn, chosen, correct){
 if(btn.dataset.locked) return;
 if(chosen.en===correct.en){
 btn.classList.add("correct"); lesson.correct++;
+if(state.missed) delete state.missed[correct.ro]; // got it right → not on the win-back list
 if(markMastered(correct.ro)){ lesson.newMastered++; } // first correct in Listen & Find = mastered
-$("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
+$("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)]+" — "+correct.hi+" ("+correct.ro+")";
 [...$("opts").children].forEach(c=>c.dataset.locked=1);
-setTimeout(nextStep,900);
+setTimeout(nextStep,1000);
 }else{
 btn.classList.add("wrong"); btn.dataset.locked=1;
 $("enc").textContent="Almost! Listen again and try 🌟"; // no penalty, ever
-speak(correct.hi);
+speakSlow(correct.hi);
 }
 }
 
@@ -661,10 +746,13 @@ $("actBody").innerHTML=`
 <div class="prompt">Hear it, then say it out loud! 🎤</div>
 <div class="card">
 <div class="bigEmoji">${w.ic}</div>
-<div class="hindi">${w.hi}</div>
+<div class="hindi" lang="hi">${w.hi}</div>
 <div class="roman">${w.ro}</div>
 <div class="english">${w.en}</div>
-<button class="speakBtn" onclick="speak('${w.hi}')">🔊 Hear it again</button>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+<button class="speakBtn" onclick="speak('${w.hi.replace(/'/g,"\\'")}')">🔊 Hear it again</button>
+<button class="speakBtn" style="background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="speakSlow('${w.hi.replace(/'/g,"\\'")}')">🐢 Slower</button>
+</div>
 </div>
 <button class="footerBtn" onclick="lesson.correct++;nextStep()">I said it! 🎉</button>`;
 speak(w.hi);
@@ -676,6 +764,7 @@ const earned = Math.max(2, lesson.correct) + (lesson.newMastered||0);
 state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
 if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
 logActivity(lesson.words);
+if(lesson.kind==="say"){ lesson.words.forEach(w=>setLevel(w.ro,2)); } // heard & repeated
 const res = addStars(earned);
 showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
 }
@@ -695,11 +784,11 @@ const bubble = left
 html+=`<div class="card" style="text-align:${left?'left':'right'};margin-bottom:12px;background:${bubble};cursor:pointer"
 onclick="speak('${l.hi.replace(/'/g,"\\'")}')">
 <div style="font-size:13px;font-weight:900;opacity:.7">${left?'🧒 Friend 1':'🧒 Friend 2'} • tap 🔊</div>
-<div class="hindi" style="font-size:30px">${l.hi}</div>
+<div class="hindi" lang="hi" style="font-size:30px">${l.hi}</div>
 <div class="roman" style="font-size:20px">${l.ro}</div>
 <div class="english">${l.en}</div></div>`;
 });
-html+=`<button class="footerBtn" onclick="finishConvo('${id}')">We acted it out! 🎭</button>`;
+html+=`<button class="footerBtn" style="position:static;margin-top:16px" onclick="finishConvo('${id}')">We acted it out! 🎭</button>`;
 // reuse menuScreen container
 const ms=$("menuScreen"); ms.innerHTML=html.replace('class="screen"',''); show("menuScreen");
 ms.scrollTop=0;
@@ -715,7 +804,7 @@ let gb=null;
 function openGrammar(id){
 const g=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).find(x=>x.id===id); if(!g) return;
 currentUnit=null;
-const ex=g.examples.map(e=>`<div class="gex" onclick="speak('${e.hi.replace(/'/g,"\\'")}')"><span><span class="ghi">${e.hi}</span><br><span class="gro">${e.ro}</span> — <span class="gen">${e.en}</span></span><span class="ghear">🔊</span></div>`).join("");
+const ex=g.examples.map(e=>`<div class="gex" onclick="speak('${e.hi.replace(/'/g,"\\'")}')"><span><span class="ghi" lang="hi">${e.hi}</span><br><span class="gro">${e.ro}</span> — <span class="gen">${e.en}</span></span><span class="ghear">🔊</span></div>`).join("");
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
 <h1 style="margin-top:10px">${g.emoji} ${g.name}</h1>
@@ -727,7 +816,7 @@ show("menuScreen"); ms.scrollTop=0;
 }
 function startBuild(id){
 const g=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).find(x=>x.id===id); if(!g) return;
-gb={ id, builds:g.builds, idx:0, correct:0 };
+gb={ id, builds:g.builds, idx:0, correct:0, tip:g.tip||"In Hindi, the verb usually comes last." };
 loadBuild();
 }
 function loadBuild(){
@@ -762,13 +851,13 @@ showReward(earned, res.leveledUp, res.newLevel, 0);
 function renderBuild(){
 const b=gb.builds[gb.idx];
 const dots=gb.builds.map((_,i)=>`<div class="dot${i<gb.idx?' done':i===gb.idx?' now':''}"></div>`).join("");
-const trayTiles=gb.tray.map(id=>`<button class="wtile" onclick="buildTap(${id})">${gb.tiles.find(t=>t.id===id).w}</button>`).join("");
-const bankTiles=gb.tiles.filter(t=>gb.tray.indexOf(t.id)<0).map(t=>`<button class="wtile" onclick="buildTap(${t.id})">${t.w}</button>`).join("");
+const trayTiles=gb.tray.map(id=>`<button class="wtile" lang="hi" onclick="buildTap(${id})">${gb.tiles.find(t=>t.id===id).w}</button>`).join("");
+const bankTiles=gb.tiles.filter(t=>gb.tray.indexOf(t.id)<0).map(t=>`<button class="wtile" lang="hi" onclick="buildTap(${t.id})">${t.w}</button>`).join("");
 const trayCls="tray"+(gb.tray.length?"":" empty")+(gb.checked&&gb.ok?" good":"");
 const full=(gb.tray.length===b.words.length);
 let msg="";
-if(gb.checked&&gb.ok) msg=`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</div>`;
-else if(gb.checked&&!gb.ok) msg=`<div class="encourage" style="color:var(--bad)">Not quite — tap tiles to fix the order ✨</div>`;
+if(gb.checked&&gb.ok) msg=`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</div><div class="qpEmpty" style="margin-top:6px;text-align:center">💡 Why this order? ${gb.tip}</div>`;
+else if(gb.checked&&!gb.ok) msg=`<div class="encourage" style="color:var(--bad)">Not quite — 💡 in Hindi the verb usually comes last. Tap a tile to send it back, then re-order ✨</div>`;
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="openGrammar('${gb.id}')">⬅️ Back</button>
 <div class="dots" style="margin-top:14px">${dots}</div>
@@ -777,7 +866,7 @@ ms.innerHTML=`<button class="backBtn" onclick="openGrammar('${gb.id}')">⬅️ B
 <div class="bank">${bankTiles}</div>
 <div style="display:flex;gap:8px;justify-content:center;margin-top:4px">
 <button class="backBtn" onclick="buildReset()">↺ Reset</button>
-<button class="speakBtn" style="margin-top:0" onclick="speak('${b.words.join(' ')}')">🔊 Hint</button>
+<button class="speakBtn" style="margin-top:0" onclick="speak('${b.words.join(' ').replace(/'/g,"\\'")}')">🔊 Hint</button>
 </div>
 ${msg}
 <button class="footerBtn" ${full?'':'disabled'} onclick="buildCheck()">${(gb.checked&&gb.ok)?'Yay! ✨':'Check ✅'}</button>`;
@@ -957,7 +1046,7 @@ if(quiz.answered){ enc = (quiz.pick===Q.ans) ? `<div class="encourage">${CONGRAT
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave the quiz? This score won\\'t be saved.')) goHome();">⬅️ Quit</button>
 <div class="prompt" style="margin-top:14px">🎯 Question ${quiz.idx+1} of ${quiz.qs.length} · Score ${quiz.score}</div>
-<div class="card"><div class="bigEmoji" style="font-size:58px">${Q.ic||"❓"}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman">${Q.sub}</div>`:""}${audioBtn}</div>
+<div class="card"><div class="bigEmoji" style="font-size:58px">${Q.ic||"❓"}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman">${Q.sub}</div>`:""}${audioBtn}</div>
 <div class="qopts">${opts}</div>
 ${enc}`;
 show("menuScreen"); ms.scrollTop=0;
@@ -967,11 +1056,17 @@ function answerQuiz(i){
 if(quiz.answered) return;
 quiz.answered=true; quiz.pick=i;
 const Q=quiz.qs[quiz.idx];
-if(i===Q.ans){ quiz.score++; }
+if(i===Q.ans){
+quiz.score++;
+if(Q.wordRo){ setLevel(Q.wordRo,4); if(state.missed) delete state.missed[Q.wordRo]; saveState(); } // recalled correctly = Slayed
+}
 else if(Q.wordRo){
-// missed it → no longer "learned"; remove and update progress
+// missed it → no longer "learned"; remove, flag to win back, update progress
+const w=ALL_WORDS.find(x=>x.ro===Q.wordRo);
 if(state.seen) delete state.seen[Q.wordRo];
 if(state.mastered) delete state.mastered[Q.wordRo];
+if(state.wordLevel) state.wordLevel[Q.wordRo]=1;
+state.missed=state.missed||{}; state.missed[Q.wordRo]={en:w?w.en:"", t:Date.now()};
 quiz.demoted=(quiz.demoted||0)+1;
 saveState();
 }
@@ -1007,6 +1102,63 @@ ${lvlLine}
 </div>`;
 document.body.appendChild(ov);
 burstConfetti(pct>=70);
+}
+
+/* ============ REVIEW (Win-back + Spaced) ============ */
+let review=null;
+function missedPool(){ return Object.keys(state.missed||{}).map(ro=>ALL_WORDS.find(w=>w.ro===ro)).filter(Boolean); }
+function spacedPool(){
+const today=todayKey();
+return ALL_WORDS.filter(w=> state.seen&&state.seen[w.ro] && state.seenDate&&state.seenDate[w.ro] && state.seenDate[w.ro]<today);
+}
+function buildReviewQs(pool, max){
+const allW=ALL_WORDS;
+function distinct(key,ex,n){ const s=new Set([ex]); const o=[]; for(const x of shuffle(allW)){ const v=x[key]; if(v&&!s.has(v)){ s.add(v); o.push(v); if(o.length>=n)break; } } return o; }
+return shuffle(pool).slice(0,max).map(w=>{ const opts=shuffle([w.en,...distinct("en",w.en,3)]); return {w, q:w.hi, sub:w.ro, ic:w.ic, opts, ans:opts.indexOf(w.en)}; });
+}
+function startReview(mode){
+const pool = mode==="missed"?missedPool():spacedPool();
+if(pool.length<1){ toast(mode==="missed"?"Nothing to win back — amazing! 🌟":"Come back tomorrow to review ✨"); return; }
+review={ mode, qs:buildReviewQs(pool, mode==="missed"?12:8), idx:0, score:0, answered:false, pick:-1, wonBack:0 };
+renderReview();
+}
+function renderReview(){
+const Q=review.qs[review.idx];
+const opts=Q.opts.map((o,i)=>{ let cls="qopt"; if(review.answered){ if(o===Q.w.en) cls+=" correct"; else if(i===review.pick) cls+=" wrong"; } return `<button class="${cls}" ${review.answered?'':`onclick="answerReview(${i})"`}>${o}</button>`; }).join("");
+let enc=""; if(review.answered){ enc = (review.pick===Q.ans)?`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]} — ${Q.w.hi} (${Q.w.ro})</div>`:`<div class="encourage" style="color:var(--bad)">It's ${Q.w.en} 💜 — ${Q.w.hi} (${Q.w.ro}). Keep going!</div>`; }
+const title=review.mode==="missed"?"⚔️ Win-Back Arena":"🔁 Review Earlier Words";
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave review? Progress is saved as you go.')) goHome();">⬅️ Quit</button>
+<div class="prompt" style="margin-top:14px">${title} · ${review.idx+1} of ${review.qs.length} · Score ${review.score}</div>
+<div class="card"><div class="bigEmoji" style="font-size:58px">${Q.ic||"❓"}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">What does this mean?</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div><div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap"><button class="speakBtn" style="margin-top:0" onclick="speak('${Q.q.replace(/'/g,"\\'")}')">🔊 Hear it</button><button class="speakBtn" style="margin-top:0;background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="speakSlow('${Q.q.replace(/'/g,"\\'")}')">🐢 Slower</button></div></div>
+<div class="qopts">${opts}</div>${enc}`;
+show("menuScreen"); ms.scrollTop=0; speak(Q.q);
+}
+function answerReview(i){
+if(review.answered) return; review.answered=true; review.pick=i;
+const Q=review.qs[review.idx];
+if(i===Q.ans){
+review.score++;
+if(review.mode==="missed"){ if(state.missed) delete state.missed[Q.w.ro]; state.seen=state.seen||{}; state.seen[Q.w.ro]=Q.w.en; state.seenDate=state.seenDate||{}; if(!state.seenDate[Q.w.ro]) state.seenDate[Q.w.ro]=todayKey(); setLevel(Q.w.ro,3); review.wonBack++; }
+else { setLevel(Q.w.ro,3); }
+saveState();
+} else if(review.mode!=="missed"){
+state.missed=state.missed||{}; state.missed[Q.w.ro]={en:Q.w.en, t:Date.now()}; saveState();
+}
+renderReview();
+setTimeout(()=>{ review.idx++; review.answered=false; review.pick=-1; if(review.idx>=review.qs.length) finishReview(); else renderReview(); }, 1150);
+}
+function finishReview(){
+logActivity([]);
+const earned=Math.max(2, review.score);
+const res=addStars(earned); saveState(); renderTop();
+const li=levelInfo();
+const wb=review.wonBack||0;
+const wbLine = wb>0?`<div style="font-size:15px;font-weight:800;color:var(--good);margin:4px 0">🛡️ ${wb} word${wb>1?'s':''} won back onto her learned list!</div>`:"";
+const lvlLine = res.leveledUp?`<div class="lvlUpTag">⬆️ LEVEL UP! Level ${res.newLevel} · ${li.name} ${li.badge}</div>`:`<div style="font-size:14px;font-weight:800;color:var(--muted);margin:6px 0">${li.toNext} more ⭐ to Level ${li.level+1}</div>`;
+const ov=document.createElement("div"); ov.className="overlay";
+ov.innerHTML=`<div class="rewardCard"><div class="grow">${review.mode==="missed"?'🛡️':'🔁'}</div><h2>${review.score}/${review.qs.length}</h2><div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars</div>${wbLine}${lvlLine}<br><button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Stage ✨</button></div>`;
+document.body.appendChild(ov); burstConfetti(review.score>=review.qs.length/2);
 }
 
 /* ============ REWARD ============ */
@@ -1106,6 +1258,18 @@ ${ syncCode
 <div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
 </div>
 </div>
+${(()=>{ const lv={1:0,2:0,3:0,4:0}; Object.values(state.wordLevel||{}).forEach(l=>{ if(lv[l]!==undefined) lv[l]++; });
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">Mastery ladder 🪜</div><div style="font-size:13px;opacity:.78;font-weight:700;margin-top:2px">Each word climbs as she practices: Seen → Heard → Recognized → Slayed.</div><div class="mlrow"><div class="mlcell l1"><div class="mn">${lv[1]}</div><div class="ml">👁️ Seen</div></div><div class="mlcell l2"><div class="mn">${lv[2]}</div><div class="ml">👂 Heard</div></div><div class="mlcell l3"><div class="mn">${lv[3]}</div><div class="ml">✅ Recognized</div></div><div class="mlcell l4"><div class="mn">${lv[4]}</div><div class="ml">🗡️ Slayed</div></div></div></div>`; })()}
+${(()=>{ const m=Object.entries(state.missed||{});
+if(!m.length) return `<div class="pcard"><div style="font-weight:900;font-size:17px">Words to win back ⚔️</div><div style="font-size:14px;opacity:.78;font-weight:700;margin-top:4px">Nothing to win back right now — she's holding onto everything she's learned. 🌟</div></div>`;
+const chips=m.slice(-24).map(([ro,info])=>`<span class="chip">${ro}${info&&info.en?' · '+info.en:''}</span>`).join("");
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">Words to win back ⚔️ (${m.length})</div><div style="font-size:13px;opacity:.8;font-weight:700;margin:4px 0 8px">Missed in a quiz — they leave her learned list until she practices them. She can win them back from the “⚔️ Win back” button on the home Daily Quiz panel.</div><div class="wordChips">${chips}</div></div>`; })()}
+${(()=>{ const today=new Date(); const wk=todayKey(new Date(today.getTime()-6*86400000));
+let wkWords=0; for(const ro in (state.seenDate||{})){ if(state.seenDate[ro]>=wk) wkWords++; }
+const wkQ=(state.quizzes||[]).filter(q=>q.date>=wk); const wkAcc=wkQ.length?Math.round(wkQ.reduce((a,q)=>a+q.pct,0)/wkQ.length):null;
+let wkDays=0; for(let i=0;i<7;i++){ const d=new Date(today.getTime()-i*86400000); if((state.log||{})[todayKey(d)]) wkDays++; }
+const touched=new Set(); UNITS.forEach(u=>{ if(state.done[u.id+"_learn"]||state.done[u.id+"_listen"]||state.done[u.id+"_say"]) touched.add(u.id); });
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">This week 📅</div><div class="statRow" style="grid-template-columns:repeat(4,1fr);margin-top:10px"><div class="stat"><div class="n">${wkWords}</div><div class="l">new words</div></div><div class="stat"><div class="n">${wkDays}/7</div><div class="l">days practiced</div></div><div class="stat"><div class="n">${touched.size}</div><div class="l">topics touched</div></div><div class="stat"><div class="n">${wkAcc===null?'—':wkAcc+'%'}</div><div class="l">quiz accuracy</div></div></div></div>`; })()}
 ${(()=>{ const l=state.quizzes||[];
 if(!l.length) return `<div class="pcard"><div style="font-weight:900;font-size:17px">Quiz scores 🎯</div><div style="font-size:14px;opacity:.78;font-weight:700;margin-top:4px">No quizzes yet. Have her take a Daily Quiz to start tracking how much she's actually learning over time.</div></div>`;
 const best=Math.max(...l.map(q=>q.pct)), avg=Math.round(l.reduce((a,q)=>a+q.pct,0)/l.length);
@@ -1126,10 +1290,26 @@ return `<div class="pcard"><div style="font-weight:900;font-size:17px">Quiz scor
 </div>
 <div class="pcard">
 <div style="font-weight:900;font-size:17px">Practice ideas at home 🏡</div>
-<div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:4px">
+<div style="font-size:14px;font-weight:800;color:var(--gold);margin-top:6px">⏱️ Today's 3-minute idea: ${(function(){ try{ return recommendNext().label; }catch(e){ return "Play a quick lesson together"; } })()}</div>
+<div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:6px">
 Use today's Word of the Day in a real sentence at dinner. Ask her one "Listen &amp; Find" word in the car.
 Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟
 </div>
+</div>
+<div class="pcard">
+<div style="font-weight:900;font-size:17px">Settings ⚙️</div>
+<div style="font-size:13px;opacity:.8;font-weight:700;margin-top:8px">Pronunciation speed</div>
+<div class="setRow">
+<button class="setBtn ${state.speed<.75?'on':''}" onclick="setSpeed(0.6)">🐢 Slow</button>
+<button class="setBtn ${state.speed>=.75&&state.speed<=1?'on':''}" onclick="setSpeed(0.85)">🚶 Normal</button>
+<button class="setBtn ${state.speed>1?'on':''}" onclick="setSpeed(1.1)">🐇 Fast</button>
+</div>
+<div style="font-size:13px;opacity:.8;font-weight:700;margin-top:14px">Script help</div>
+<div class="setRow">
+<button class="setBtn ${state.scriptMode==='both'?'on':''}" onclick="setScript('both')">अ + romanized</button>
+<button class="setBtn ${state.scriptMode==='deva'?'on':''}" onclick="setScript('deva')">अ Devanagari only</button>
+</div>
+<div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:8px">“Devanagari only” hides the romanized spelling once she's ready to read the script itself.</div>
 </div>
 <button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button>`;
 show("parentScreen");
@@ -1159,6 +1339,17 @@ out.log = lg;
 const qmap={};
 (remote.quizzes||[]).concat(local.quizzes||[]).forEach(q=>{ if(q&&q.t) qmap[q.t]=q; });
 out.quizzes = Object.values(qmap).sort((a,b)=>a.t-b.t).slice(-50);
+// word mastery: keep the higher level reached on any device
+const wl = Object.assign({}, remote.wordLevel||{});
+for(const k in (local.wordLevel||{})){ wl[k] = Math.max(wl[k]||0, local.wordLevel[k]||0); }
+out.wordLevel = wl;
+// first-seen dates: keep the earliest
+const sd = Object.assign({}, remote.seenDate||{});
+for(const k in (local.seenDate||{})){ if(!sd[k] || local.seenDate[k] < sd[k]) sd[k] = local.seenDate[k]; }
+out.seenDate = sd;
+// missed words: union (a word stays "to win back" until practiced on the device that fixes it)
+out.missed = Object.assign({}, remote.missed||{}, local.missed||{});
+// settings stay device-local (out===local already keeps speed/scriptMode)
 return out;
 }
 async function syncPull(){
@@ -1190,6 +1381,27 @@ syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); openParent()
 function syncNow(){ syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); openParent(); }); }
 function syncDisconnect(){ syncCode=""; try{ localStorage.removeItem(SYNC_CODE_KEY); }catch(e){} toast("Sync off"); openParent(); }
 
+/* ============ SETTINGS ============ */
+function applySettings(){ document.body.classList.toggle('deva-only', state.scriptMode==='deva'); }
+function setSpeed(v){ state.speed=v; saveState(); applySettings(); speak("नमस्ते"); openParent(); }
+function setScript(m){ state.scriptMode=m; saveState(); applySettings(); toast(m==='deva'?"Devanagari only ✍️":"Romanized help on"); openParent(); }
+function explainProgress(){
+const ov=document.createElement("div"); ov.className="overlay";
+ov.innerHTML=`<div class="rewardCard" style="text-align:left;max-width:380px">
+<div style="font-size:40px;text-align:center">📈</div>
+<h2 style="font-size:20px;text-align:center">How progress works</h2>
+<div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:6px">
+📚 <b>Words Learned</b> — every word she's met in a lesson. (If she misses one in a quiz it drops off until she wins it back.)<br><br>
+🌟 <b>Mastered Today</b> — words she answered correctly today in Listen &amp; Find.<br><br>
+⭐ <b>Stars</b> — earned after finishing any activity. They add up to <b>level her up</b> — never taken away.<br><br>
+🪜 <b>Mastery ladder</b> (in the parent area): each word climbs Seen → Heard → Recognized → Slayed as she practices it different ways.
+</div>
+<button class="footerBtn" style="margin-top:16px" onclick="this.closest('.overlay').remove()">Got it ✨</button>
+</div>`;
+document.body.appendChild(ov);
+}
+$("progNote").onclick=explainProgress;
+
 /* ============ MUTE ============ */
 $("muteBtn").onclick=()=>{ muted=!muted; $("muteBtn").textContent=muted?"🔇":"🔊"; if(muted) speechSynthesis.cancel(); else toast("Sound on 🔊"); };
 
@@ -1197,6 +1409,7 @@ $("muteBtn").onclick=()=>{ muted=!muted; $("muteBtn").textContent=muted?"🔇":"
 // warm up speech on first touch (iOS needs a user gesture)
 let warmed=false;
 document.addEventListener("touchstart",()=>{ if(!warmed && 'speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); warmed=true; pickVoice(); } },{once:false});
+applySettings();
 goHome();
 if(syncCode){ syncPull().then(ok=>{ if(ok) goHome(); }); }
 </script>
