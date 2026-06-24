@@ -205,6 +205,17 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:
 .wtile{font-size:20px;font-weight:900;color:#fff;background:linear-gradient(145deg,rgba(255,45,149,.30),rgba(155,60,255,.34));border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 14px;cursor:pointer;box-shadow:0 4px 14px var(--shadowS);transition:transform .1s;}
 .wtile:active{transform:translateY(2px);}
 .tray .wtile{background:linear-gradient(145deg,rgba(54,230,255,.24),rgba(155,60,255,.30));}
+
+/* Collapsible landing sections */
+.sectionCard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid var(--line);border-radius:18px;
+background:linear-gradient(150deg, rgba(255,45,149,.18), rgba(155,60,255,.22));padding:15px 18px;box-shadow:0 4px 16px var(--shadowS);cursor:pointer;color:var(--ink);transition:transform .12s, background .15s, box-shadow .15s;margin-top:2px;}
+.sectionCard:active{transform:translateY(2px);}
+.sectionCard.open{background:linear-gradient(150deg, rgba(255,45,149,.30), rgba(155,60,255,.34));box-shadow:0 0 20px rgba(155,60,255,.25), 0 4px 16px var(--shadowS);}
+.sectionCard .scEmoji{font-size:27px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:rgba(0,0,0,.28);flex:0 0 auto;}
+.sectionCard .scText{display:flex;flex-direction:column;min-width:0;}
+.sectionCard .scName{font-weight:900;font-size:18px;}
+.sectionCard .scSub{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:2px;}
+.sectionCard .scChev{margin-left:auto;font-size:15px;color:var(--muted);font-weight:900;}
 </style>
 </head>
 <body>
@@ -239,7 +250,7 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:
 
 <div class="tiles" id="dashTiles"></div>
 
-<div class="sectionTitle">Topics</div>
+<div class="sectionTitle">Choose what to practice</div>
 <div class="units" id="unitsWrap"></div>
 </div>
 
@@ -399,35 +410,49 @@ $("dashTiles").innerHTML = tiles.map(t=>
 `<div class="tile ${t.cls}"><span class="tIco">${t.ico}</span><div class="tn">${t.n}</div><div class="tl">${t.l}</div></div>`
 ).join("");
 }
-function renderUnits(){
-const wrap=$("unitsWrap"); wrap.innerHTML="";
+let openSection=null;
+function renderTopicTiles(wrap){
 UNITS.forEach(u=>{
-const total=u.words.length*2; // learn + listen target
+const total=u.words.length*2;
 const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));
 const pct=Math.round(done/total*100);
 const b=document.createElement("button"); b.className="unit"+(pct>=100?" mastered":""); b.onclick=()=>openUnit(u.id);
-b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>
-${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% complete</div>`}
-<div class="bar"><i style="width:${pct}%"></i></div>`;
+b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% complete</div>`}<div class="bar"><i style="width:${pct}%"></i></div>`;
 wrap.appendChild(b);
 });
-// conversations card group
-const ct=document.createElement("div"); ct.style.gridColumn="1/-1"; ct.className="sectionTitle"; ct.textContent="🎭 Little Conversations";
-wrap.appendChild(ct);
+}
+function renderConvoTiles(wrap){
 CONVOS.forEach(c=>{
 const b=document.createElement("button"); b.className="unit"; b.onclick=()=>playConvo(c.id);
 const done=state.done["convo_"+c.id]?'<div class="prog">⭐ Practiced</div>':'<div class="prog">Tap to act it out</div>';
 b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span>${done}`;
 wrap.appendChild(b);
 });
-// grammar / sentence builder
-const gt=document.createElement("div"); gt.style.gridColumn="1/-1"; gt.className="sectionTitle"; gt.textContent="✍️ Sentence Builder · Grammar";
-wrap.appendChild(gt);
+}
+function renderGrammarTiles(wrap){
 (typeof GRAMMAR!=="undefined"?GRAMMAR:[]).forEach(g=>{
 const b=document.createElement("button"); b.className="unit"+(state.done["grammar_"+g.id]?" mastered":""); b.onclick=()=>openGrammar(g.id);
 const gdone=state.done["grammar_"+g.id]?'<div class="prog">⭐ Done</div>':'<div class="prog">Build sentences</div>';
 b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</span>${gdone}`;
 wrap.appendChild(b);
+});
+}
+function renderUnits(){
+const wrap=$("unitsWrap"); wrap.innerHTML="";
+const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
+const sections=[
+{key:"words", emoji:"📚", name:"Learning Words", sub:UNITS.length+" topics · vocabulary", fn:renderTopicTiles},
+{key:"convos", emoji:"🎭", name:"Little Conversations", sub:CONVOS.length+" everyday chats", fn:renderConvoTiles},
+{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gN+" grammar lessons", fn:renderGrammarTiles},
+];
+sections.forEach(s=>{
+const open=(openSection===s.key);
+const hdr=document.createElement("button");
+hdr.className="sectionCard"+(open?" open":""); hdr.style.gridColumn="1/-1";
+hdr.onclick=()=>{ openSection=open?null:s.key; renderUnits(); };
+hdr.innerHTML=`<span class="scEmoji">${s.emoji}</span><span class="scText"><span class="scName">${s.name}</span><span class="scSub">${s.sub}</span></span><span class="scChev">${open?'▾':'▸'}</span>`;
+wrap.appendChild(hdr);
+if(open) s.fn(wrap);
 });
 }
 function goHome(){ renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
