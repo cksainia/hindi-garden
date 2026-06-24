@@ -492,7 +492,7 @@ u.pitch = 1.05;
 speechSynthesis.speak(u);
 }catch(e){}
 }
-function speakSlow(text){ speak(text, 0.5); }
+function speakSlow(text){ const base=(state&&typeof state.speed==="number")?state.speed:.85; speak(text, Math.max(0.3, base*0.5)); }
 
 /* ============ HELPERS ============ */
 const $ = id => document.getElementById(id);
@@ -980,8 +980,9 @@ speak(w.hi);
 }
 
 function finishActivity(){
-// stars: a base reward for finishing, plus a bonus star for each newly mastered word
-const earned = Math.max(2, lesson.correct) + (lesson.newMastered||0);
+// pace-friendly reward: ~1 star per 10 words, plus a small capped bonus for newly mastered words
+let earned = Math.max(1, Math.ceil(lesson.words.length/10));
+if(lesson.newMastered) earned += Math.min(2, Math.ceil(lesson.newMastered/8));
 state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
 if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
 logActivity(lesson.words);
@@ -1070,7 +1071,7 @@ function buildNext(){ gb.idx++; if(gb.idx>=gb.builds.length){ finishBuild(); ret
 function finishBuild(){
 state.done["grammar_"+gb.id]=(state.done["grammar_"+gb.id]||0)+1;
 logActivity([]);
-const earned=Math.max(3, gb.correct+1);
+const earned=Math.min(4, Math.max(2, gb.correct));
 const res=addStars(earned);
 showReward(earned, res.leveledUp, res.newLevel, 0);
 }
@@ -1130,7 +1131,7 @@ function gameMiss(type){ state.gameMiss=state.gameMiss||{}; state.gameMiss[type]
 function finishGame(){
 state.done["game_"+game.id]=(state.done["game_"+game.id]||0)+1;
 logActivity([]);
-const earned=Math.max(3, game.score);
+const earned=Math.min(5, Math.max(2, game.score));
 const res=addStars(earned);
 if(path&&path.active){ pathStepDone(earned); return; }
 checkAchievements();
@@ -1317,7 +1318,7 @@ const total=quiz.qs.length, score=quiz.score, pct=Math.round(score/total*100);
 state.quizzes=state.quizzes||[]; state.quizzes.push({date:todayKey(), score, total, pct, t:Date.now()});
 if(state.quizzes.length>50) state.quizzes.shift();
 logActivity([]);
-const earned=Math.max(3, Math.round(score/2));
+const earned=Math.min(6, Math.max(2, Math.round(score/4)));
 const res=addStars(earned);
 showQuizReward(score,total,pct,earned,res);
 }
@@ -1388,7 +1389,7 @@ setTimeout(()=>{ review.idx++; review.answered=false; review.pick=-1; if(review.
 }
 function finishReview(){
 logActivity([]);
-const earned=Math.max(2, review.score);
+const earned=Math.min(5, Math.max(1, Math.ceil(review.score/3)));
 const res=addStars(earned); saveState(); renderTop();
 if(path&&path.active){ pathStepDone(earned); return; }
 checkAchievements();
