@@ -292,7 +292,17 @@ background:rgba(0,0,0,.22);transition:transform .12s, border-color .15s, box-sha
 .setBtn.on{border-color:var(--magenta);background:linear-gradient(150deg,rgba(255,45,149,.28),rgba(155,60,255,.28));box-shadow:0 0 14px rgba(255,45,149,.28);}
 
 /* Script mode: Devanagari-only hides romanization helpers */
-body.deva-only .roman, body.deva-only .wro, body.deva-only .gro{display:none!important;}
+body.deva-only .roman, body.deva-only .wro, body.deva-only .gro, body.deva-only .slRo{display:none!important;}
+
+/* Story Mode lines */
+.sline{display:flex;align-items:center;gap:14px;background:linear-gradient(155deg,var(--cardGlass),rgba(16,10,32,.78));border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px;cursor:pointer;box-shadow:0 4px 14px var(--shadowS);transition:transform .12s;}
+.sline:active{transform:translateY(2px);}
+.sline .slIc{font-size:34px;flex:0 0 auto;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
+.sline .slText{min-width:0;}
+.sline .slHi{font-size:20px;font-weight:900;color:#fff;}
+.sline .slRo{font-size:13px;color:var(--magenta);font-weight:800;}
+.sline .slEn{font-size:13px;color:var(--muted);font-weight:700;}
+.sline .slHear{margin-left:auto;font-size:18px;flex:0 0 auto;}
 
 /* Daily Path hero card */
 .pathCard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid rgba(54,230,255,.5);border-radius:18px;
@@ -448,6 +458,7 @@ const ACHIEVEMENTS = [
 {id:"potionMaster", emoji:"⚗️", name:"Potion Master", desc:"Clear Potion Lab (postpositions)", got:s=>!!(s.done||{})["game_potion"]},
 {id:"sentenceSmith", emoji:"✍️", name:"Sentence Smith", desc:"Finish 5 Sentence Builder lessons", got:s=>(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).filter(g=>(s.done||{})["grammar_"+g.id]).length>=5},
 {id:"convoActor", emoji:"🎭", name:"Conversation Actor", desc:"Act out 3 conversations", got:s=>(typeof CONVOS!=="undefined"?CONVOS:[]).filter(c=>(s.done||{})["convo_"+c.id]).length>=3},
+{id:"storyReader", emoji:"📖", name:"Story Reader", desc:"Read 3 little stories", got:s=>(typeof STORIES!=="undefined"?STORIES:[]).filter(x=>(s.done||{})["story_"+x.id]).length>=3},
 {id:"onFire", emoji:"🔥", name:"On Fire", desc:"Practice on 3 different days", got:s=>Object.keys(s.log||{}).length>=3},
 {id:"memoryMaster", emoji:"🧠", name:"Memory Master", desc:"Lock 10 words into long-term memory", got:s=>srsLongTermCount()>=10},
 {id:"pathWalker", emoji:"🗺️", name:"Path Walker", desc:"Finish a Daily Path", got:s=>Object.keys(s.pathDone||{}).length>=1},
@@ -877,10 +888,12 @@ const learnedCount=(typeof learnedWords==="function"?learnedWords().length:0);
 const gamesN=(typeof GAMES!=="undefined"?GAMES.length:0);
 const gamesDoneN=(typeof GAMES!=="undefined"?GAMES:[]).filter(g=>state.done["game_"+g.id]).length;
 const cultN=(typeof CULTURE!=="undefined"?CULTURE.length:0), cultS=Object.keys(state.cultureSeen||{}).length;
+const storiesN=(typeof STORIES!=="undefined"?STORIES.length:0), storiesD=(typeof STORIES!=="undefined"?STORIES:[]).filter(s=>state.done["story_"+s.id]).length;
 const badgeN=Object.keys(state.achievements||{}).length;
 return [
 {key:"words", emoji:"📚", name:"Learning Words", sub:wp+"% complete", pct:wp},
 {key:"convos", emoji:"🎭", name:"Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100)},
+{key:"stories", emoji:"📖", name:"Story Mode", sub:storiesD+"/"+storiesN+" read", pct:(storiesN?Math.round(100*storiesD/storiesN):0)},
 {key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons", pct:(gN?Math.round(gd/gN*100):0)},
 {key:"games", emoji:"🕹️", name:"Grammar Arena", sub:gamesDoneN+"/"+gamesN+" played", pct:(gamesN?Math.round(gamesDoneN/gamesN*100):0)},
 {key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?"best "+qb+"%":(learnedCount<4?"learn to unlock":"ready to play")), pct:qb},
@@ -948,6 +961,7 @@ currentCat=key;
 const C={
 words:{emoji:"📚",name:"Learning Words",sub:UNITS.length+" topics to discover",fn:renderTopicTiles},
 convos:{emoji:"🎭",name:"Little Conversations",sub:CONVOS.length+" to act out",fn:renderConvoTiles},
+stories:{emoji:"📖",name:"Story Mode",sub:(typeof STORIES!=="undefined"?STORIES.length:0)+" little illustrated stories",fn:renderStoryTiles},
 grammar:{emoji:"✍️",name:"Sentence Builder",sub:(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0)+" grammar lessons",fn:renderGrammarTiles},
 games:{emoji:"🕹️",name:"Grammar Arena",sub:(typeof GAMES!=="undefined"?GAMES.length:0)+" neon mini-games",fn:renderGameTiles},
 quiz:{emoji:"🎯",name:"Daily Quiz & Review",sub:"Practice your learned words",fn:renderQuizSection},
@@ -1153,6 +1167,58 @@ const res = addStars(3);
 if(path&&path.active){ pathStepDone(3); return; }
 checkAchievements();
 showReward(3, res.leveledUp, res.newLevel, 0);
+}
+
+/* ============ STORY MODE ============ */
+let storyState=null;
+function renderStoryTiles(wrap){
+(typeof STORIES!=="undefined"?STORIES:[]).forEach(s=>{
+const b=document.createElement("button"); b.className="unit"+(state.done["story_"+s.id]?" mastered":""); b.onclick=function(){ openStory(s.id); };
+const d=state.done["story_"+s.id]?'<div class="prog"><span class="crown">⭐</span> Read</div>':'<div class="prog">Tap to read</div>';
+b.innerHTML=`<span class="emoji">${s.emoji}</span><span class="name">${s.title}</span>${d}`;
+wrap.appendChild(b);
+});
+}
+function openStory(id){
+const s=(typeof STORIES!=="undefined"?STORIES:[]).find(x=>x.id===id); if(!s) return;
+currentUnit=null; currentCat="stories";
+let html=`<div class="navRow"><button class="backBtn" onclick="openCategory('stories')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${s.emoji} ${s.title}</h1>
+<div class="sub">Tap each line to hear it, then answer the question!</div>`;
+s.lines.forEach(l=>{
+html+=`<div class="sline" onclick="speak('${l.hi.replace(/'/g,"\\'")}')"><span class="slIc">${l.ic}</span><span class="slText"><span class="slHi" lang="hi">${l.hi}</span><br><span class="slRo" aria-hidden="true">${l.ro}</span><br><span class="slEn">${l.en}</span></span><span class="slHear">🔊</span></div>`;
+});
+html+=`<button class="footerBtn" style="position:static;margin-top:16px" onclick="startStoryQuestion('${id}')">📖 I read it — question time! ❓</button>`;
+const ms=$("menuScreen"); ms.innerHTML=html; show("menuScreen"); ms.scrollTop=0;
+}
+function startStoryQuestion(id){ storyState={id, answered:false, pick:-1, firstTry:true}; renderStoryQuestion(); }
+function renderStoryQuestion(){
+const s=(typeof STORIES!=="undefined"?STORIES:[]).find(x=>x.id===storyState.id); if(!s) return;
+const q=s.question;
+const opts=q.opts.map((o,i)=>{ let cls="qopt"; if(storyState.answered){ if(i===q.ans) cls+=" correct"; else if(i===storyState.pick) cls+=" wrong"; } return `<button class="${cls}" onclick="answerStory(${i})">${o}</button>`; }).join("");
+let enc=""; if(storyState.answered){ enc = (storyState.pick===q.ans)?`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</div>`:`<div class="encourage" style="color:var(--bad)">Not quite — peek back at the story for a clue 🌟</div>`; }
+const ms=$("menuScreen");
+ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openStory('${s.id}')">⬅️ Back to story</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${s.emoji} ${s.title}</h1>
+<div class="card" style="padding:18px"><div style="font-size:13px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">Question time</div><div style="font-size:19px;font-weight:900;margin-top:6px">❓ ${q.q}</div></div>
+<div class="qopts">${opts}</div>${enc}`;
+show("menuScreen"); ms.scrollTop=0;
+}
+function answerStory(i){
+const s=(typeof STORIES!=="undefined"?STORIES:[]).find(x=>x.id===storyState.id); const q=s.question;
+if(storyState.answered && storyState.pick===q.ans) return;
+storyState.answered=true; storyState.pick=i;
+if(i===q.ans){ renderStoryQuestion(); setTimeout(()=>finishStory(s.id, storyState.firstTry), 1100); }
+else { storyState.firstTry=false; renderStoryQuestion(); setTimeout(()=>{ if(storyState){ storyState.answered=false; renderStoryQuestion(); } }, 1300); }
+}
+function finishStory(id, firstTry){
+storyState=null;
+if(!state.done["story_"+id]) state.done["story_"+id]=1; else state.done["story_"+id]++;
+logActivity([]);
+const earned=firstTry?4:3;
+const res=addStars(earned);
+checkAchievements();
+showReward(earned, res.leveledUp, res.newLevel, 0);
 }
 
 /* ============ GRAMMAR / SENTENCE BUILDER ============ */

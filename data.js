@@ -974,4 +974,61 @@ const CULTURE = [
   { emoji:"🍞", title:"Everyday food words", hi:"रोटी", ro:"roti", en:"flatbread",
     body:"At dinner you'll hear roti (soft flatbread), daal (lentils), sabzi (vegetables) and chaaval (rice). Try naming them in Hindi at your next meal!" },
 ];
-if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; }
+// Story Mode — tiny illustrated stories built from learned words (Aria is the girl narrator)
+const STORIES = [
+  { id:"nani", emoji:"🏡", title:"At Nani's House",
+    lines:[
+      { ic:"🚗", hi:"हम नानी के घर जाते हैं।", ro:"ham naani ke ghar jaate hain.", en:"We go to Nani's house." },
+      { ic:"👵", hi:"नानी कहती हैं, “नमस्ते बेटा!”", ro:"naani kehti hain, “namaste beta!”", en:"Nani says, “Hello, child!”" },
+      { ic:"☕", hi:"नानी मुझे चाय देती हैं।", ro:"naani mujhe chaay deti hain.", en:"Nani gives me tea." },
+      { ic:"🍪", hi:"हम साथ बिस्किट खाते हैं।", ro:"ham saath biskit khaate hain.", en:"We eat biscuits together." },
+      { ic:"😊", hi:"मैं बहुत खुश हूँ।", ro:"main bahut khush hoon.", en:"I am very happy." },
+    ],
+    question:{ q:"What does Nani give Aria to drink?", opts:["Tea","Water","Milk","Juice"], ans:0 } },
+  { id:"market", emoji:"🛒", title:"Aria Goes to the Market",
+    lines:[
+      { ic:"🧺", hi:"माँ और मैं बाज़ार जाते हैं।", ro:"maa aur main baazaar jaate hain.", en:"Mom and I go to the market." },
+      { ic:"🍎", hi:"हम पाँच सेब खरीदते हैं।", ro:"ham paanch seb khareedte hain.", en:"We buy five apples." },
+      { ic:"🍌", hi:"मैं केले भी लेती हूँ।", ro:"main kele bhi leti hoon.", en:"I also take bananas." },
+      { ic:"💰", hi:"माँ पैसे देती हैं।", ro:"maa paise deti hain.", en:"Mom gives money." },
+      { ic:"🏠", hi:"हम घर वापस आते हैं।", ro:"ham ghar waapas aate hain.", en:"We come back home." },
+    ],
+    question:{ q:"How many apples did they buy?", opts:["Five","Two","Ten","Three"], ans:0 } },
+  { id:"school", emoji:"🏫", title:"School Morning",
+    lines:[
+      { ic:"☀️", hi:"सुबह हो गई है।", ro:"subah ho gayi hai.", en:"It is morning." },
+      { ic:"🪥", hi:"मैं दाँत साफ़ करती हूँ।", ro:"main daant saaf karti hoon.", en:"I brush my teeth." },
+      { ic:"👗", hi:"मैं कपड़े पहनती हूँ।", ro:"main kapde pehenti hoon.", en:"I put on my clothes." },
+      { ic:"🎒", hi:"मैं बैग लेती हूँ।", ro:"main bag leti hoon.", en:"I take my bag." },
+      { ic:"🚌", hi:"मैं स्कूल जाती हूँ।", ro:"main school jaati hoon.", en:"I go to school." },
+    ],
+    question:{ q:"Where does Aria go at the end?", opts:["School","Market","Park","Home"], ans:0 } },
+  { id:"rain", emoji:"🌧️", title:"A Rainy Day",
+    lines:[
+      { ic:"🌧️", hi:"आज बारिश हो रही है।", ro:"aaj baarish ho rahi hai.", en:"Today it is raining." },
+      { ic:"🏠", hi:"हम घर के अंदर हैं।", ro:"ham ghar ke andar hain.", en:"We are inside the house." },
+      { ic:"☕", hi:"माँ गरम चाय बनाती हैं।", ro:"maa garam chaay banaati hain.", en:"Mom makes hot tea." },
+      { ic:"📖", hi:"मैं एक किताब पढ़ती हूँ।", ro:"main ek kitaab padhti hoon.", en:"I read a book." },
+      { ic:"😴", hi:"फिर मैं सो जाती हूँ।", ro:"phir main so jaati hoon.", en:"Then I fall asleep." },
+    ],
+    question:{ q:"What is the weather like?", opts:["Rainy","Sunny","Snowy","Windy"], ans:0 } },
+  { id:"dinner", emoji:"🍽️", title:"Dinner Time",
+    lines:[
+      { ic:"🌙", hi:"रात हो गई है।", ro:"raat ho gayi hai.", en:"It is night." },
+      { ic:"👨‍👩‍👧", hi:"पूरा परिवार साथ बैठता है।", ro:"poora parivaar saath baithta hai.", en:"The whole family sits together." },
+      { ic:"🍲", hi:"हम दाल और चावल खाते हैं।", ro:"ham daal aur chaawal khaate hain.", en:"We eat dal and rice." },
+      { ic:"💧", hi:"मैं पानी पीती हूँ।", ro:"main paani peeti hoon.", en:"I drink water." },
+      { ic:"😋", hi:"खाना बहुत अच्छा है।", ro:"khaana bahut accha hai.", en:"The food is very good." },
+    ],
+    question:{ q:"What does the family eat?", opts:["Dal and rice","Bread","Apples","Biscuits"], ans:0 } },
+  { id:"room", emoji:"🎨", title:"My Colorful Room",
+    lines:[
+      { ic:"🚪", hi:"यह मेरा कमरा है।", ro:"yeh mera kamra hai.", en:"This is my room." },
+      { ic:"🛏️", hi:"मेरा बिस्तर नीला है।", ro:"mera bistar neela hai.", en:"My bed is blue." },
+      { ic:"🪟", hi:"खिड़की बड़ी है।", ro:"khidki badi hai.", en:"The window is big." },
+      { ic:"🧸", hi:"मेरे पास एक टेडी है।", ro:"mere paas ek teddy hai.", en:"I have a teddy bear." },
+      { ic:"❤️", hi:"मुझे मेरा कमरा पसंद है।", ro:"mujhe mera kamra pasand hai.", en:"I like my room." },
+    ],
+    question:{ q:"What color is Aria's bed?", opts:["Blue","Red","Green","Yellow"], ans:0 } },
+];
+if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; window.STORIES = STORIES; }
