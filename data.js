@@ -756,4 +756,143 @@ const CONVOS = [
   ]},
 ];
 
-if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; }
+/* ===== GRAMMAR: build-the-sentence lessons ===== */
+const GRAMMAR = [
+  { id:"order", name:"Verb Goes Last", emoji:"🔤",
+    tip:"In Hindi the verb comes LAST. English: I eat an apple. Hindi: I — apple — eat (मैं सेब खाती हूँ).",
+    examples:[
+      {hi:"मैं सेब खाती हूँ", ro:"main seb khaati hoon", en:"I eat an apple"},
+      {hi:"वह पानी पीता है", ro:"vah paani peeta hai", en:"He drinks water"},
+      {hi:"हम खेल खेलते हैं", ro:"hum khel khelte hain", en:"We play a game"},
+    ],
+    builds:[
+      {en:"I eat an apple", words:["मैं","सेब","खाती","हूँ"], ro:"main seb khaati hoon"},
+      {en:"He drinks water", words:["वह","पानी","पीता","है"], ro:"vah paani peeta hai"},
+      {en:"I read a book", words:["मैं","किताब","पढ़ती","हूँ"], ro:"main kitaab padhti hoon"},
+    ]},
+  { id:"tobe", name:"I am / You are", emoji:"🙋",
+    tip:"To say 'am/is/are' use होना: मैं हूँ (I am), तुम हो (you are), वह है (he/she is), हम हैं (we are).",
+    examples:[
+      {hi:"मैं खुश हूँ", ro:"main khush hoon", en:"I am happy"},
+      {hi:"तुम अच्छे हो", ro:"tum achhe ho", en:"You are good"},
+      {hi:"हम तैयार हैं", ro:"hum taiyaar hain", en:"We are ready"},
+    ],
+    builds:[
+      {en:"I am happy", words:["मैं","खुश","हूँ"], ro:"main khush hoon"},
+      {en:"You are my friend", words:["तुम","मेरे","दोस्त","हो"], ro:"tum mere dost ho"},
+      {en:"We are ready", words:["हम","तैयार","हैं"], ro:"hum taiyaar hain"},
+    ]},
+  { id:"thisthat", name:"This is / That is", emoji:"👉",
+    tip:"यह = this, वह = that. Add है at the end: यह सेब है (This is an apple).",
+    examples:[
+      {hi:"यह सेब है", ro:"yeh seb hai", en:"This is an apple"},
+      {hi:"वह बिल्ली है", ro:"vah billi hai", en:"That is a cat"},
+      {hi:"यह मेरी किताब है", ro:"yeh meri kitaab hai", en:"This is my book"},
+    ],
+    builds:[
+      {en:"This is a dog", words:["यह","कुत्ता","है"], ro:"yeh kutta hai"},
+      {en:"That is my house", words:["वह","मेरा","घर","है"], ro:"vah mera ghar hai"},
+    ]},
+  { id:"present", name:"Doing It Now", emoji:"🏃",
+    tip:"For things you do, add ती (girl) or ता (boy) to the verb, then हूँ/है. Aria is a girl, so she uses ती: मैं खाती हूँ (I eat).",
+    examples:[
+      {hi:"मैं पढ़ती हूँ", ro:"main padhti hoon", en:"I study"},
+      {hi:"मैं गाती हूँ", ro:"main gaati hoon", en:"I sing"},
+      {hi:"तुम खेलते हो", ro:"tum khelte ho", en:"You play"},
+    ],
+    builds:[
+      {en:"I study", words:["मैं","पढ़ती","हूँ"], ro:"main padhti hoon"},
+      {en:"I drink milk", words:["मैं","दूध","पीती","हूँ"], ro:"main doodh peeti hoon"},
+      {en:"I go to school", words:["मैं","स्कूल","जाती","हूँ"], ro:"main school jaati hoon"},
+    ]},
+  { id:"poss", name:"My / Your", emoji:"🫳",
+    tip:"मेरा/मेरी = my, तुम्हारा/तुम्हारी = your. Match girl-words with मेरी: मेरी माँ (my mom), मेरा भाई (my brother).",
+    examples:[
+      {hi:"मेरी माँ", ro:"meri maa", en:"my mom"},
+      {hi:"मेरा दोस्त", ro:"mera dost", en:"my friend"},
+      {hi:"तुम्हारा नाम", ro:"tumhara naam", en:"your name"},
+    ],
+    builds:[
+      {en:"This is my mom", words:["यह","मेरी","माँ","है"], ro:"yeh meri maa hai"},
+      {en:"What is your name?", words:["तुम्हारा","नाम","क्या","है"], ro:"tumhara naam kya hai"},
+    ]},
+  { id:"post", name:"In / On / To", emoji:"📍",
+    tip:"Hindi puts these AFTER the word: में = in, पर = on, को = to. घर में (in the house), मेज़ पर (on the table).",
+    examples:[
+      {hi:"घर में", ro:"ghar mein", en:"in the house"},
+      {hi:"मेज़ पर", ro:"mez par", en:"on the table"},
+      {hi:"मैं स्कूल को जाती हूँ", ro:"main school ko jaati hoon", en:"I go to school"},
+    ],
+    builds:[
+      {en:"The book is on the table", words:["किताब","मेज़","पर","है"], ro:"kitaab mez par hai"},
+      {en:"Mom is in the house", words:["माँ","घर","में","है"], ro:"maa ghar mein hai"},
+    ]},
+  { id:"quest", name:"Asking Questions", emoji:"❓",
+    tip:"Put क्या at the start for yes/no questions: क्या तुम खुश हो? Use कहाँ (where), क्या (what), कौन (who).",
+    examples:[
+      {hi:"क्या तुम खुश हो?", ro:"kya tum khush ho?", en:"Are you happy?"},
+      {hi:"तुम कहाँ हो?", ro:"tum kahaan ho?", en:"Where are you?"},
+      {hi:"यह क्या है?", ro:"yeh kya hai?", en:"What is this?"},
+    ],
+    builds:[
+      {en:"Are you ready?", words:["क्या","तुम","तैयार","हो"], ro:"kya tum taiyaar ho"},
+      {en:"Where is mom?", words:["माँ","कहाँ","है"], ro:"maa kahaan hai"},
+    ]},
+  { id:"neg", name:"Saying No", emoji:"🙅",
+    tip:"Add नहीं before the verb to say 'not'. यह बिल्ली नहीं है (This is not a cat). मैं उदास नहीं हूँ (I am not sad).",
+    examples:[
+      {hi:"यह मेरा नहीं है", ro:"yeh mera nahin hai", en:"This is not mine"},
+      {hi:"मुझे यह पसंद नहीं है", ro:"mujhe yeh pasand nahin hai", en:"I don't like this"},
+      {hi:"मैं नहीं जाती", ro:"main nahin jaati", en:"I don't go"},
+    ],
+    builds:[
+      {en:"This is not a cat", words:["यह","बिल्ली","नहीं","है"], ro:"yeh billi nahin hai"},
+      {en:"I am not sad", words:["मैं","उदास","नहीं","हूँ"], ro:"main udaas nahin hoon"},
+    ]},
+  { id:"plural", name:"More Than One", emoji:"🔢",
+    tip:"Many boy-words change ा→े: लड़का→लड़के (boys). Many girl-words add ें: किताब→किताबें (books).",
+    examples:[
+      {hi:"दो लड़के", ro:"do ladke", en:"two boys"},
+      {hi:"तीन किताबें", ro:"teen kitaabein", en:"three books"},
+      {hi:"बहुत फूल", ro:"bahut phool", en:"many flowers"},
+    ],
+    builds:[
+      {en:"two boys", words:["दो","लड़के"], ro:"do ladke"},
+      {en:"three books", words:["तीन","किताबें"], ro:"teen kitaabein"},
+    ]},
+  { id:"gender", name:"Boy & Girl Words", emoji:"⚖️",
+    tip:"Words are 'boy' or 'girl', and the describing word matches: अच्छा लड़का (good boy), अच्छी लड़की (good girl).",
+    examples:[
+      {hi:"अच्छा लड़का", ro:"achha ladka", en:"good boy"},
+      {hi:"अच्छी लड़की", ro:"achhi ladki", en:"good girl"},
+      {hi:"बड़ा घर", ro:"bada ghar", en:"big house"},
+    ],
+    builds:[
+      {en:"good girl", words:["अच्छी","लड़की"], ro:"achhi ladki"},
+      {en:"big house", words:["बड़ा","घर"], ro:"bada ghar"},
+    ]},
+  { id:"past", name:"What Happened", emoji:"⏪",
+    tip:"For the past, the verb changes: जाना→गई (a girl went). मैं स्कूल गई (I went to school).",
+    examples:[
+      {hi:"मैं स्कूल गई", ro:"main school gayi", en:"I went to school"},
+      {hi:"हम पार्क गए", ro:"hum park gaye", en:"We went to the park"},
+      {hi:"उसने खाना खाया", ro:"usne khaana khaaya", en:"He ate food"},
+    ],
+    builds:[
+      {en:"I went to school", words:["मैं","स्कूल","गई"], ro:"main school gayi"},
+      {en:"We went to the park", words:["हम","पार्क","गए"], ro:"hum park gaye"},
+    ]},
+  { id:"want", name:"I Want / I Need", emoji:"🙏",
+    tip:"To say 'I want' use मुझे … चाहिए. मुझे पानी चाहिए (I want water). मुझे मदद चाहिए (I need help).",
+    examples:[
+      {hi:"मुझे पानी चाहिए", ro:"mujhe paani chahiye", en:"I want water"},
+      {hi:"मुझे मदद चाहिए", ro:"mujhe madad chahiye", en:"I need help"},
+      {hi:"मुझे यह चाहिए", ro:"mujhe yeh chahiye", en:"I want this"},
+    ],
+    builds:[
+      {en:"I want milk", words:["मुझे","दूध","चाहिए"], ro:"mujhe doodh chahiye"},
+      {en:"I need help", words:["मुझे","मदद","चाहिए"], ro:"mujhe madad chahiye"},
+    ]},
+];
+
+if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; }

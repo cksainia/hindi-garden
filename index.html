@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Hindi Hop">
+<meta name="apple-mobile-web-app-title" content="Hindi Slayer">
 <meta name="theme-color" content="#0d0a1f">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Hindi Hop · Star Stage</title>
+<title>Huntrix Aria · Hindi Slayer</title>
 <style>
 * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
 :root{
@@ -191,6 +191,20 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:
 .cal .dl{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
 .wordChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
 .chip{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink);}
+/* Grammar / Sentence Builder */
+.gtip{background:linear-gradient(150deg, rgba(255,45,149,.16), rgba(155,60,255,.20));border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;font-size:15px;font-weight:700;line-height:1.55;color:var(--ink);}
+.gex{display:flex;align-items:center;gap:10px;background:linear-gradient(155deg,var(--cardGlass),rgba(18,11,36,.7));border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;}
+.gex .ghi{font-size:19px;font-weight:900;color:#fff;}
+.gex .gro{font-size:14px;color:var(--magenta);font-weight:800;}
+.gex .gen{font-size:13px;color:var(--muted);font-weight:700;}
+.gex .ghear{margin-left:auto;font-size:18px;}
+.tray{min-height:58px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:12px;border-radius:14px;border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.22);margin:6px 0 14px;}
+.tray.empty::before{content:"tap the words below, in order";color:var(--muted);font-size:13px;font-weight:700;opacity:.7;}
+.tray.good{border-style:solid;border-color:var(--good);box-shadow:0 0 22px rgba(63,227,160,.30);}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:6px;}
+.wtile{font-size:20px;font-weight:900;color:#fff;background:linear-gradient(145deg,rgba(255,45,149,.30),rgba(155,60,255,.34));border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 14px;cursor:pointer;box-shadow:0 4px 14px var(--shadowS);transition:transform .1s;}
+.wtile:active{transform:translateY(2px);}
+.tray .wtile{background:linear-gradient(145deg,rgba(54,230,255,.24),rgba(155,60,255,.30));}
 </style>
 </head>
 <body>
@@ -205,8 +219,8 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:
 
 <!-- HOME -->
 <div class="screen" id="homeScreen">
-<h1>Hindi Hop</h1>
-<div class="sub" id="welcomeLine">✨ Star Stage · shine brighter with every word 💜</div>
+<h1>Huntrix Aria</h1>
+<div class="sub" id="welcomeLine">🗡️ Hindi Slayer · slay a word, level up 💜</div>
 
 <div class="topRow">
 <button id="wotd" class="wotd"></button>
@@ -406,6 +420,15 @@ const done=state.done["convo_"+c.id]?'<div class="prog">⭐ Practiced</div>':'<d
 b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span>${done}`;
 wrap.appendChild(b);
 });
+// grammar / sentence builder
+const gt=document.createElement("div"); gt.style.gridColumn="1/-1"; gt.className="sectionTitle"; gt.textContent="✍️ Sentence Builder · Grammar";
+wrap.appendChild(gt);
+(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).forEach(g=>{
+const b=document.createElement("button"); b.className="unit"+(state.done["grammar_"+g.id]?" mastered":""); b.onclick=()=>openGrammar(g.id);
+const gdone=state.done["grammar_"+g.id]?'<div class="prog">⭐ Done</div>':'<div class="prog">Build sentences</div>';
+b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</span>${gdone}`;
+wrap.appendChild(b);
+});
 }
 function goHome(){ renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
 
@@ -575,6 +598,80 @@ function finishConvo(id){
 if(!state.done["convo_"+id]){ state.done["convo_"+id]=1; }
 const c=CONVOS.find(x=>x.id===id); logActivity(c?c.lines:[]);
 const res = addStars(3); showReward(3, res.leveledUp, res.newLevel, 0);
+}
+
+/* ============ GRAMMAR / SENTENCE BUILDER ============ */
+let gb=null;
+function openGrammar(id){
+const g=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).find(x=>x.id===id); if(!g) return;
+currentUnit=null;
+const ex=g.examples.map(e=>`<div class="gex" onclick="speak('${e.hi.replace(/'/g,"\\'")}')"><span><span class="ghi">${e.hi}</span><br><span class="gro">${e.ro}</span> — <span class="gen">${e.en}</span></span><span class="ghear">🔊</span></div>`).join("");
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
+<h1 style="margin-top:10px">${g.emoji} ${g.name}</h1>
+<div class="gtip">${g.tip}</div>
+<div class="sectionTitle">Examples · tap to hear</div>
+${ex}
+<button class="footerBtn" style="margin-top:14px" onclick="startBuild('${g.id}')">✍️ Build Sentences ▶</button>`;
+show("menuScreen"); ms.scrollTop=0;
+}
+function startBuild(id){
+const g=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).find(x=>x.id===id); if(!g) return;
+gb={ id, builds:g.builds, idx:0, correct:0 };
+loadBuild();
+}
+function loadBuild(){
+const b=gb.builds[gb.idx];
+let order;
+do{ order=shuffle(b.words.map((w,i)=>({id:i,w}))); }while(b.words.length>1 && order.map(t=>t.w).join("|")===b.words.join("|"));
+gb.tiles=order; gb.tray=[]; gb.checked=false; gb.ok=false;
+renderBuild();
+}
+function buildTap(id){
+if(gb.checked&&gb.ok) return;
+const i=gb.tray.indexOf(id);
+if(i>=0) gb.tray.splice(i,1); else gb.tray.push(id);
+gb.checked=false; renderBuild();
+}
+function buildReset(){ if(gb.checked&&gb.ok) return; gb.tray=[]; gb.checked=false; renderBuild(); }
+function buildCheck(){
+const b=gb.builds[gb.idx];
+const made=gb.tray.map(id=>gb.tiles.find(t=>t.id===id).w);
+gb.checked=true; gb.ok=(made.join("|")===b.words.join("|"));
+if(gb.ok){ gb.correct++; speak(b.words.join(" ")); setTimeout(buildNext,1500); }
+renderBuild();
+}
+function buildNext(){ gb.idx++; if(gb.idx>=gb.builds.length){ finishBuild(); return; } loadBuild(); }
+function finishBuild(){
+state.done["grammar_"+gb.id]=(state.done["grammar_"+gb.id]||0)+1;
+logActivity([]);
+const earned=Math.max(3, gb.correct+1);
+const res=addStars(earned);
+showReward(earned, res.leveledUp, res.newLevel, 0);
+}
+function renderBuild(){
+const b=gb.builds[gb.idx];
+const dots=gb.builds.map((_,i)=>`<div class="dot${i<gb.idx?' done':i===gb.idx?' now':''}"></div>`).join("");
+const trayTiles=gb.tray.map(id=>`<button class="wtile" onclick="buildTap(${id})">${gb.tiles.find(t=>t.id===id).w}</button>`).join("");
+const bankTiles=gb.tiles.filter(t=>gb.tray.indexOf(t.id)<0).map(t=>`<button class="wtile" onclick="buildTap(${t.id})">${t.w}</button>`).join("");
+const trayCls="tray"+(gb.tray.length?"":" empty")+(gb.checked&&gb.ok?" good":"");
+const full=(gb.tray.length===b.words.length);
+let msg="";
+if(gb.checked&&gb.ok) msg=`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</div>`;
+else if(gb.checked&&!gb.ok) msg=`<div class="encourage" style="color:var(--bad)">Not quite — tap tiles to fix the order ✨</div>`;
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="openGrammar('${gb.id}')">⬅️ Back</button>
+<div class="dots" style="margin-top:14px">${dots}</div>
+<div class="prompt">Build: “${b.en}”</div>
+<div class="${trayCls}">${trayTiles}</div>
+<div class="bank">${bankTiles}</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:4px">
+<button class="backBtn" onclick="buildReset()">↺ Reset</button>
+<button class="speakBtn" style="margin-top:0" onclick="speak('${b.words.join(' ')}')">🔊 Hint</button>
+</div>
+${msg}
+<button class="footerBtn" ${full?'':'disabled'} onclick="buildCheck()">${(gb.checked&&gb.ok)?'Yay! ✨':'Check ✅'}</button>`;
+show("menuScreen"); ms.scrollTop=0;
 }
 
 /* ============ REWARD ============ */
