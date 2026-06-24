@@ -360,6 +360,9 @@ const CONGRATS = ["शाबाश! Shabash!","बहुत अच्छा! Won
 const LEVEL_NAMES = ["Rookie Star","Rising Star","Spark","Stage Star","Headliner","Star Hunter","Neon Idol","Superstar","Diamond Idol","Legend"];
 const LEVEL_BADGES = ["🌟","✨","💫","⭐","🩷","💜","🗡️","👑","💎","🏆"];
 const STARS_PER_LEVEL = 12;
+// Spaced repetition: a word's review interval grows each time it's recalled correctly.
+const SRS_STEPS = [1,3,7,16,35]; // days until next review, by step
+const SKILL_OF = {aura:"gender endings", combo:"word order", respect:"polite speech", runes:"verb tenses", potion:"postpositions"};
 
 /* ============ STATE ============ */
 const SAVE_KEY = "ariaHindiGarden_v1";
@@ -399,6 +402,10 @@ if(typeof s.speed !== "number") s.speed = 0.85;
 if(s.scriptMode!=="deva" && s.scriptMode!=="both") s.scriptMode = "both";
 // Grammar Arena mistake counters by game type (for parent "needs practice")
 if(!s.gameMiss || typeof s.gameMiss!=="object") s.gameMiss = {};
+// Spaced repetition schedule per word: { ro: {step, due:"YYYY-MM-DD", reps, lapses} }
+if(!s.srs || typeof s.srs!=="object") s.srs = {};
+// Backfill SRS for already-learned words, spacing them by how well she knows them
+for(const ro in s.seen){ if(!s.srs[ro]){ const lvl=(s.wordLevel&&s.wordLevel[ro])||1; const step=Math.max(0,Math.min(SRS_STEPS.length-1, lvl-1)); const base=(s.seenDate&&s.seenDate[ro])||todayKey(); s.srs[ro]={step, due:addDaysKey(base, SRS_STEPS[step]), reps:0, lapses:0}; } }
 // backfill seenDate for already-learned words (so review has something to work with)
 for(const ro in s.seen){ if(!s.seenDate[ro]) s.seenDate[ro]=todayKey(); if(!s.wordLevel[ro]) s.wordLevel[ro]=(s.mastered&&s.mastered[ro])?3:1; }
 // keep legacy keys (sun, plants) untouched so nothing is wiped
@@ -430,10 +437,25 @@ function speakSlow(text){ speak(text, 0.5); }
 const $ = id => document.getElementById(id);
 function show(screen){ clearToast(); ["homeScreen","menuScreen","actScreen","parentScreen"].forEach(s=>$(s).classList.add("hidden")); $(screen).classList.remove("hidden"); $(screen).scrollTop=0; }
 function todayKey(d){ d=d||new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function addDaysKey(key,days){ const p=(key||todayKey()).split("-"); const d=new Date(+p[0],(+p[1])-1,+p[2]); d.setDate(d.getDate()+days); return todayKey(d); }
+function dateAdd(days){ return addDaysKey(todayKey(),days); }
+// schedule a word's first review when she first meets it
+function srsInit(ro){ if(!ro) return; state.srs=state.srs||{}; if(!state.srs[ro]) state.srs[ro]={step:0, due:dateAdd(1), reps:0, lapses:0}; }
+// update a word's schedule after a recall attempt (correct grows the interval; wrong resets it)
+function srsReview(ro, correct){
+if(!ro) return; state.srs=state.srs||{};
+const s = state.srs[ro] || {step:0, due:todayKey(), reps:0, lapses:0};
+if(correct){ s.reps=(s.reps||0)+1; s.step=Math.min((s.step||0)+1, SRS_STEPS.length-1); s.due=dateAdd(SRS_STEPS[s.step]); }
+else { s.lapses=(s.lapses||0)+1; s.step=0; s.due=dateAdd(1); }
+state.srs[ro]=s;
+}
+function srsDuePool(){ const t=todayKey(); state.srs=state.srs||{}; return ALL_WORDS.filter(w=> state.seen&&state.seen[w.ro] && state.srs[w.ro] && state.srs[w.ro].due<=t); }
+function srsLongTermCount(){ let c=0; for(const ro in (state.srs||{})){ if(state.seen&&state.seen[ro] && (state.srs[ro].step||0)>=SRS_STEPS.length-1) c++; } return c; }
+function daysSinceActive(){ for(let i=0;i<90;i++){ if((state.log||{})[addDaysKey(todayKey(),-i)]) return i; } return 99; }
 function logActivity(words){
 const k=todayKey(); state.log=state.log||{}; state.log[k]=(state.log[k]||0)+1;
 state.seen=state.seen||{}; state.seenDate=state.seenDate||{}; state.wordLevel=state.wordLevel||{};
-(words||[]).forEach(w=>{ if(w&&w.ro){ state.seen[w.ro]=w.en; if(!state.seenDate[w.ro]) state.seenDate[w.ro]=k; state.wordLevel[w.ro]=Math.max(state.wordLevel[w.ro]||0,1); } });
+(words||[]).forEach(w=>{ if(w&&w.ro){ state.seen[w.ro]=w.en; if(!state.seenDate[w.ro]) state.seenDate[w.ro]=k; state.wordLevel[w.ro]=Math.max(state.wordLevel[w.ro]||0,1); srsInit(w.ro); } });
 }
 // bump a word up the mastery ladder (never down) — 1 Seen·2 Heard·3 Recognized·4 Slayed
 function setLevel(ro,lvl){ if(!ro) return; state.wordLevel=state.wordLevel||{}; state.wordLevel[ro]=Math.max(state.wordLevel[ro]||0,lvl); }
@@ -541,11 +563,11 @@ function grammarDoneCount(){ return (typeof GRAMMAR!=="undefined"?GRAMMAR:[]).fi
 function quizBest(){ const l=state.quizzes||[]; return l.length?Math.max(...l.map(q=>q.pct)):0; }
 function renderReviewButtons(wrap){
 const missedN=Object.keys(state.missed||{}).length;
-const spacedN=spacedPool().length;
-if(missedN<1 && spacedN<1) return;
+const dueN=srsDuePool().length;
+if(missedN<1 && dueN<1) return;
 const row=document.createElement("div"); row.style.gridColumn="1/-1"; row.style.display="flex"; row.style.gap="8px"; row.style.flexWrap="wrap"; row.style.margin="2px 0 8px";
 if(missedN>0){ const b=document.createElement("button"); b.className="reviewBtn winback"; b.innerHTML="⚔️ Win back "+missedN+" word"+(missedN>1?"s":""); b.onclick=()=>startReview('missed'); row.appendChild(b); }
-if(spacedN>0){ const b=document.createElement("button"); b.className="reviewBtn"; b.innerHTML="🔁 Review earlier words"; b.onclick=()=>startReview('spaced'); row.appendChild(b); }
+if(dueN>0){ const b=document.createElement("button"); b.className="reviewBtn"; b.innerHTML="🔁 Review "+dueN+" due today"; b.onclick=()=>startReview('due'); row.appendChild(b); }
 wrap.appendChild(row);
 }
 function renderQuizSection(wrap){
@@ -582,15 +604,28 @@ b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</
 wrap.appendChild(b);
 });
 }
-// pick the single best "do this next" action for the child
+// the grammar game she's struggling with most (by mistakes), if any
+function topGrammarWeakness(){
+const gs=(typeof GAMES!=="undefined"?GAMES:[]); const miss=state.gameMiss||{};
+let best=null; gs.forEach(g=>{ const m=miss[g.id]||0; if(m>0 && (best===null||m>(miss[best.id]||0))) best=g; });
+return best;
+}
+// pick the single best "do this next" action — adapts to recent mistakes, what's due, and time away
 function recommendNext(){
+const dueN=srsDuePool().length;
 const missedN=Object.keys(state.missed||{}).length;
+const idle=daysSinceActive();
+if(idle>=2 && (dueN>0||missedN>0)){ const n=dueN||missedN; return {ico:"🔁", label:"Quick review — "+n+" word"+(n>1?"s":""), sub:"Welcome back! Ease in with a review", run:function(){ startReview(dueN>0?'due':'missed'); }}; }
 if(missedN>=3) return {ico:"⚔️", label:"Win back "+missedN+" words", sub:"Practice the ones that slipped off", run:function(){ startReview('missed'); }};
+if(dueN>=5) return {ico:"🔁", label:"Review "+dueN+" words due", sub:"Spaced practice locks them in", run:function(){ startReview('due'); }};
+const weak=topGrammarWeakness();
+if(weak && (state.gameMiss[weak.id]||0)>=3) return {ico:weak.emoji, label:"Sharpen "+(SKILL_OF[weak.id]||"grammar"), sub:weak.name+" could use a little work", run:function(){ openGame(weak.id); }};
 const inProg=UNITS.find(u=>{const t=u.words.length*2;const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));return d>0&&d<t;});
 if(inProg) return {ico:"▶", label:"Continue "+inProg.name, sub:"Pick up where she left off", run:function(){ openUnit(inProg.id); }};
 const fresh=UNITS.find(u=>!state.done[u.id+"_learn"]);
 if(fresh) return {ico:"✨", label:"Start "+fresh.name, sub:"A fresh topic to explore", run:function(){ openUnit(fresh.id); }};
 if(missedN>0) return {ico:"⚔️", label:"Win back "+missedN+" word"+(missedN>1?"s":""), sub:"Practice the ones that slipped off", run:function(){ startReview('missed'); }};
+if(dueN>0) return {ico:"🔁", label:"Review "+dueN+" word"+(dueN>1?"s":""), sub:"A few are ready for review", run:function(){ startReview('due'); }};
 if((typeof learnedWords==="function"?learnedWords().length:0)>=4) return {ico:"🎯", label:"Take today's quiz", sub:"Review what she's learned", run:function(){ openSection='quiz'; renderUnits(); startQuiz(); }};
 return {ico:"📚", label:"Explore the topics", sub:"Tap a topic to begin", run:function(){ openSection='words'; renderUnits(); }};
 }
@@ -709,6 +744,7 @@ speak(w.hi);
 
 function renderListen(){
 const w=lesson.words[lesson.idx];
+lesson.cardMissed=false;
 const pool=shuffle(UNITS.find(x=>x.id===lesson.unitId).words.filter(x=>x.en!==w.en)).slice(0,3);
 const opts=shuffle([w,...pool]);
 $("actBody").innerHTML=`
@@ -732,13 +768,17 @@ function checkListen(btn, chosen, correct){
 if(btn.dataset.locked) return;
 if(chosen.en===correct.en){
 btn.classList.add("correct"); lesson.correct++;
-if(state.missed) delete state.missed[correct.ro]; // got it right → not on the win-back list
-if(markMastered(correct.ro)){ lesson.newMastered++; } // first correct in Listen & Find = mastered
+if(!lesson.cardMissed){ // clean first-try recall → advance her schedule & win it off the list
+if(state.missed) delete state.missed[correct.ro];
+srsReview(correct.ro, true);
+if(markMastered(correct.ro)){ lesson.newMastered++; }
+} // if she'd missed it first, it stays flagged for a future win-back
 $("enc").textContent=CONGRATS[Math.floor(Math.random()*CONGRATS.length)]+" — "+correct.hi+" ("+correct.ro+")";
 [...$("opts").children].forEach(c=>c.dataset.locked=1);
 setTimeout(nextStep,1000);
 }else{
 btn.classList.add("wrong"); btn.dataset.locked=1;
+if(!lesson.cardMissed){ lesson.cardMissed=true; srsReview(correct.ro, false); state.missed=state.missed||{}; state.missed[correct.ro]={en:correct.en, t:Date.now()}; saveState(); }
 $("enc").textContent="Almost! Listen again and try 🌟"; // no penalty, ever
 speakSlow(correct.hi);
 }
@@ -1072,7 +1112,7 @@ quiz.answered=true; quiz.pick=i;
 const Q=quiz.qs[quiz.idx];
 if(i===Q.ans){
 quiz.score++;
-if(Q.wordRo){ setLevel(Q.wordRo,4); if(state.missed) delete state.missed[Q.wordRo]; saveState(); } // recalled correctly = Slayed
+if(Q.wordRo){ setLevel(Q.wordRo,4); srsReview(Q.wordRo, true); if(state.missed) delete state.missed[Q.wordRo]; saveState(); } // recalled correctly = Slayed
 }
 else if(Q.wordRo){
 // missed it → no longer "learned"; remove, flag to win back, update progress
@@ -1080,6 +1120,7 @@ const w=ALL_WORDS.find(x=>x.ro===Q.wordRo);
 if(state.seen) delete state.seen[Q.wordRo];
 if(state.mastered) delete state.mastered[Q.wordRo];
 if(state.wordLevel) state.wordLevel[Q.wordRo]=1;
+srsReview(Q.wordRo, false);
 state.missed=state.missed||{}; state.missed[Q.wordRo]={en:w?w.en:"", t:Date.now()};
 quiz.demoted=(quiz.demoted||0)+1;
 saveState();
@@ -1121,26 +1162,22 @@ burstConfetti(pct>=70);
 /* ============ REVIEW (Win-back + Spaced) ============ */
 let review=null;
 function missedPool(){ return Object.keys(state.missed||{}).map(ro=>ALL_WORDS.find(w=>w.ro===ro)).filter(Boolean); }
-function spacedPool(){
-const today=todayKey();
-return ALL_WORDS.filter(w=> state.seen&&state.seen[w.ro] && state.seenDate&&state.seenDate[w.ro] && state.seenDate[w.ro]<today);
-}
 function buildReviewQs(pool, max){
 const allW=ALL_WORDS;
 function distinct(key,ex,n){ const s=new Set([ex]); const o=[]; for(const x of shuffle(allW)){ const v=x[key]; if(v&&!s.has(v)){ s.add(v); o.push(v); if(o.length>=n)break; } } return o; }
 return shuffle(pool).slice(0,max).map(w=>{ const opts=shuffle([w.en,...distinct("en",w.en,3)]); return {w, q:w.hi, sub:w.ro, ic:w.ic, opts, ans:opts.indexOf(w.en)}; });
 }
 function startReview(mode){
-const pool = mode==="missed"?missedPool():spacedPool();
-if(pool.length<1){ toast(mode==="missed"?"Nothing to win back — amazing! 🌟":"Come back tomorrow to review ✨"); return; }
-review={ mode, qs:buildReviewQs(pool, mode==="missed"?12:8), idx:0, score:0, answered:false, pick:-1, wonBack:0 };
+const pool = mode==="missed"?missedPool():srsDuePool();
+if(pool.length<1){ toast(mode==="missed"?"Nothing to win back — amazing! 🌟":"No words due — come back tomorrow ✨"); return; }
+review={ mode, qs:buildReviewQs(pool, mode==="missed"?12:10), idx:0, score:0, answered:false, pick:-1, wonBack:0 };
 renderReview();
 }
 function renderReview(){
 const Q=review.qs[review.idx];
 const opts=Q.opts.map((o,i)=>{ let cls="qopt"; if(review.answered){ if(o===Q.w.en) cls+=" correct"; else if(i===review.pick) cls+=" wrong"; } return `<button class="${cls}" ${review.answered?'':`onclick="answerReview(${i})"`}>${o}</button>`; }).join("");
 let enc=""; if(review.answered){ enc = (review.pick===Q.ans)?`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]} — ${Q.w.hi} (${Q.w.ro})</div>`:`<div class="encourage" style="color:var(--bad)">It's ${Q.w.en} 💜 — ${Q.w.hi} (${Q.w.ro}). Keep going!</div>`; }
-const title=review.mode==="missed"?"⚔️ Win-Back Arena":"🔁 Review Earlier Words";
+const title=review.mode==="missed"?"⚔️ Win-Back Arena":"🔁 Spaced Review";
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave review? Progress is saved as you go.')) goHome();">⬅️ Quit</button>
 <div class="prompt" style="margin-top:14px">${title} · ${review.idx+1} of ${review.qs.length} · Score ${review.score}</div>
@@ -1153,11 +1190,14 @@ if(review.answered) return; review.answered=true; review.pick=i;
 const Q=review.qs[review.idx];
 if(i===Q.ans){
 review.score++;
+srsReview(Q.w.ro, true);
 if(review.mode==="missed"){ if(state.missed) delete state.missed[Q.w.ro]; state.seen=state.seen||{}; state.seen[Q.w.ro]=Q.w.en; state.seenDate=state.seenDate||{}; if(!state.seenDate[Q.w.ro]) state.seenDate[Q.w.ro]=todayKey(); setLevel(Q.w.ro,3); review.wonBack++; }
 else { setLevel(Q.w.ro,3); }
 saveState();
-} else if(review.mode!=="missed"){
-state.missed=state.missed||{}; state.missed[Q.w.ro]={en:Q.w.en, t:Date.now()}; saveState();
+} else {
+srsReview(Q.w.ro, false);
+if(review.mode!=="missed"){ state.missed=state.missed||{}; state.missed[Q.w.ro]={en:Q.w.en, t:Date.now()}; }
+saveState();
 }
 renderReview();
 setTimeout(()=>{ review.idx++; review.answered=false; review.pick=-1; if(review.idx>=review.qs.length) finishReview(); else renderReview(); }, 1150);
@@ -1284,6 +1324,9 @@ const wkQ=(state.quizzes||[]).filter(q=>q.date>=wk); const wkAcc=wkQ.length?Math
 let wkDays=0; for(let i=0;i<7;i++){ const d=new Date(today.getTime()-i*86400000); if((state.log||{})[todayKey(d)]) wkDays++; }
 const touched=new Set(); UNITS.forEach(u=>{ if(state.done[u.id+"_learn"]||state.done[u.id+"_listen"]||state.done[u.id+"_say"]) touched.add(u.id); });
 return `<div class="pcard"><div style="font-weight:900;font-size:17px">This week 📅</div><div class="statRow" style="grid-template-columns:repeat(4,1fr);margin-top:10px"><div class="stat"><div class="n">${wkWords}</div><div class="l">new words</div></div><div class="stat"><div class="n">${wkDays}/7</div><div class="l">days practiced</div></div><div class="stat"><div class="n">${touched.size}</div><div class="l">topics touched</div></div><div class="stat"><div class="n">${wkAcc===null?'—':wkAcc+'%'}</div><div class="l">quiz accuracy</div></div></div></div>`; })()}
+${(()=>{ const srs=state.srs||{}; const t=todayKey(); let due=0,learning=0,longterm=0;
+for(const ro in srs){ if(!state.seen||!state.seen[ro]) continue; const s=srs[ro]; if((s.step||0)>=SRS_STEPS.length-1) longterm++; else learning++; if(s.due<=t) due++; }
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">Memory &amp; review 🧠</div><div style="font-size:13px;opacity:.78;font-weight:700;margin-top:2px">Spaced practice brings each word back right before she'd forget it — that's what makes it stick.</div><div class="statRow" style="grid-template-columns:repeat(3,1fr);margin-top:10px"><div class="stat"><div class="n">${due}</div><div class="l">ready to review</div></div><div class="stat"><div class="n">${learning}</div><div class="l">still learning</div></div><div class="stat"><div class="n">${longterm}</div><div class="l">long-term 🌟</div></div></div></div>`; })()}
 ${(()=>{ const gs=(typeof GAMES!=="undefined"?GAMES:[]); if(!gs.length) return "";
 const miss=state.gameMiss||{};
 const played=gs.filter(g=>state.done["game_"+g.id]); const tried=played.length;
@@ -1377,6 +1420,10 @@ for(const k in (local.seenDate||{})){ if(!sd[k] || local.seenDate[k] < sd[k]) sd
 out.seenDate = sd;
 // missed words: union (a word stays "to win back" until practiced on the device that fixes it)
 out.missed = Object.assign({}, remote.missed||{}, local.missed||{});
+// spaced-repetition schedule: keep the more-advanced step and the later due date per word
+const sr = Object.assign({}, remote.srs||{});
+for(const k in (local.srs||{})){ const a=sr[k], b=local.srs[k]; if(!a){ sr[k]=b; } else { sr[k]={ step:Math.max(a.step||0,b.step||0), due:((a.due||"")>(b.due||"")?a.due:b.due), reps:Math.max(a.reps||0,b.reps||0), lapses:Math.max(a.lapses||0,b.lapses||0) }; } }
+out.srs = sr;
 // settings stay device-local (out===local already keeps speed/scriptMode)
 return out;
 }
