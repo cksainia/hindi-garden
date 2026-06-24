@@ -293,6 +293,13 @@ background:rgba(0,0,0,.22);transition:transform .12s, border-color .15s, box-sha
 .setBtn:active{transform:translateY(2px);}
 .setBtn.on{border-color:var(--magenta);background:linear-gradient(150deg,rgba(255,45,149,.28),rgba(155,60,255,.28));box-shadow:0 0 14px rgba(255,45,149,.28);}
 
+/* Level 1 / Level 2 tabs (unit menu) */
+.lvlTabs{display:flex;gap:8px;margin-top:12px;}
+.lvlTab{flex:1;border:1px solid var(--line);border-radius:13px;padding:11px 8px;font-size:13.5px;font-weight:800;color:var(--ink);cursor:pointer;background:rgba(0,0,0,.22);transition:transform .12s, border-color .15s, box-shadow .15s;text-align:center;}
+.lvlTab:active{transform:translateY(2px);}
+.lvlTab.on{border-color:var(--magenta);background:linear-gradient(150deg,rgba(255,45,149,.28),rgba(155,60,255,.28));box-shadow:0 0 14px rgba(255,45,149,.28);}
+.lvlTab.locked{opacity:.55;}
+
 /* Script mode: Devanagari-only hides romanization helpers */
 body.deva-only .roman, body.deva-only .wro, body.deva-only .gro, body.deva-only .slRo{display:none!important;}
 
@@ -674,8 +681,10 @@ UNITS.forEach(u=>{
 const total=u.words.length*2;
 const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));
 const pct=Math.round(done/total*100);
+const u2=level2Unlocked(u);
 const b=document.createElement("button"); b.className="unit"+(pct>=100?" mastered":""); b.onclick=()=>openUnit(u.id);
-b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>${pct>=100?'<div class="prog"><span class="crown">👑</span> Mastered!</div>':`<div class="prog">${pct}% complete</div>`}<div class="bar"><i style="width:${pct}%"></i></div>`;
+const prog = pct>=100 ? (u2?'<div class="prog"><span class="crown">👑</span> Lv 2 ready ✨</div>':'<div class="prog"><span class="crown">👑</span> Mastered!</div>') : `<div class="prog">${pct}% complete</div>`;
+b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>${prog}<div class="bar"><i style="width:${pct}%"></i></div>`;
 wrap.appendChild(b);
 });
 }
@@ -935,7 +944,7 @@ $("hubWrap").innerHTML=`
 </main>
 </div>`;
 const ep=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/86400000);
-const w=ALL_WORDS[ep%ALL_WORDS.length];
+const w=WOTD_WORDS[ep%WOTD_WORDS.length];
 const wotd=$("hubWotd");
 wotd.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div><div class="row"><span class="wic">${w.ic}</span><span><span class="whi" lang="hi">${w.hi}</span><br><span class="wro" aria-hidden="true">${w.ro}</span> — <span class="wen">${w.en}</span></span><span class="hear">🔊</span></div>`;
 wotd.onclick=()=>speak(w.hi);
@@ -978,7 +987,10 @@ show("catScreen"); cs.scrollTop=0;
 }
 
 /* ============ WORD OF THE DAY ============ */
-const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]);
+const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words, u.words2||[]),[]);
+const WOTD_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]); // Word of the Day stays on Level 1
+// Level 2 unlocks for a topic once every Level 1 word has been mastered (recalled in Listen & Find)
+function level2Unlocked(u){ return !!(u && u.words2 && u.words2.length && u.words.every(w=>state.mastered && state.mastered[w.ro])); }
 function renderWOTD(){
 // deterministic by calendar day, changes each morning, same all day
 const epochDay = Math.floor((Date.now() - new Date().getTimezoneOffset()*60000)/86400000);
@@ -994,34 +1006,45 @@ el.onclick=()=>speak(w.hi);
 }
 
 /* ============ UNIT MENU ============ */
-function openUnit(id){
+function openUnit(id, level){
 const u=UNITS.find(x=>x.id===id);
 if(!u){ goHome(); return; }
-currentUnit=id;
+currentUnit=id; currentCat="words";
+const unlocked=level2Unlocked(u);
+level = (level===2 && unlocked) ? 2 : 1;
+const words = level===2 ? u.words2 : u.words;
+const suf = level===2 ? "2" : "";
 const acts=[
 {k:"learn", big:"📖", t:"Learn the Words", d:"See, hear & say each word"},
 {k:"listen", big:"👂", t:"Listen & Find", d:"Hear Hindi, tap the right picture"},
 {k:"say", big:"🎤", t:"Say It!", d:"Hear it, then say it out loud"},
 ];
 const actHtml = acts.map(a=>{
-const seen = a.k==="listen" ? (state.done[id+"_listen"]?" ✓":"") : (state.done[id+"_"+a.k]?" ✓":"");
-return `<button class="actBtn" onclick="startActivity('${id}','${a.k}')"><span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span></button>`;
+const seen = a.k==="listen" ? (state.done[id+"_listen"+suf]?" ✓":"") : (state.done[id+"_"+a.k+suf]?" ✓":"");
+return `<button class="actBtn" onclick="startActivity('${id}','${a.k}',null,${level})"><span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span></button>`;
 }).join("");
-currentCat="words";
+const toggle=`<div class="lvlTabs">
+<button class="lvlTab${level===1?' on':''}" onclick="openUnit('${id}',1)">⭐ Level 1 · ${u.words.length}</button>
+<button class="lvlTab${level===2?' on':''}${unlocked?'':' locked'}" onclick="${unlocked?`openUnit('${id}',2)`:`toast('Master every Level 1 word to unlock Level 2 ✨')`}">${unlocked?'🔥 ':'🔒 '}Level 2 · ${u.words2.length}</button>
+</div>`;
 const ms=$("menuScreen");
 ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('words')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
 <h1 style="margin-top:8px">${u.emoji} ${u.name}</h1>
-<div class="sub">${u.words.length} words to discover</div>
-<div style="margin-top:8px">${actHtml}</div>`;
+<div class="sub">${level===2?'Level 2 · advanced words':words.length+' words to discover'}</div>
+${toggle}
+<div style="margin-top:10px">${actHtml}</div>
+${(!unlocked)?`<div class="qpEmpty" style="text-align:center;margin-top:10px">✨ Get every Level 1 word right in Listen &amp; Find to unlock 25 more advanced words!</div>`:''}`;
 show("menuScreen"); ms.scrollTop=0;
 }
 
 /* ============ ACTIVITIES ============ */
 let lesson = null;
-function startActivity(unitId, kind, limit){
+function startActivity(unitId, kind, limit, level){
 const u=UNITS.find(x=>x.id===unitId);
-let words=shuffle(u.words); if(limit) words=words.slice(0, limit);
-lesson={unitId, kind, words, idx:0, correct:0, newMastered:0};
+level = (level===2 && u.words2 && u.words2.length) ? 2 : 1;
+const src = level===2 ? u.words2 : u.words;
+let words=shuffle(src); if(limit) words=words.slice(0, limit);
+lesson={unitId, kind, level, words, idx:0, correct:0, newMastered:0};
 renderDots();
 if(kind==="learn") renderLearn();
 else if(kind==="listen") renderListen();
@@ -1064,7 +1087,7 @@ speak(w.hi);
 function renderListen(){
 const w=lesson.words[lesson.idx];
 lesson.cardMissed=false;
-const pool=shuffle(UNITS.find(x=>x.id===lesson.unitId).words.filter(x=>x.en!==w.en)).slice(0,3);
+const pool=shuffle(lesson.words.filter(x=>x.en!==w.en)).slice(0,3);
 const opts=shuffle([w,...pool]);
 $("actBody").innerHTML=`
 <div class="prompt">Tap the word you hear 👂</div>
@@ -1125,8 +1148,9 @@ function finishActivity(){
 // pace-friendly reward: ~1 star per 10 words, plus a small capped bonus for newly mastered words
 let earned = Math.max(1, Math.ceil(lesson.words.length/10));
 if(lesson.newMastered) earned += Math.min(2, Math.ceil(lesson.newMastered/8));
-state.done[lesson.unitId+"_"+lesson.kind] = (state.done[lesson.unitId+"_"+lesson.kind]||0)+1;
-if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.length;
+const suf = lesson.level===2 ? "2" : "";
+state.done[lesson.unitId+"_"+lesson.kind+suf] = (state.done[lesson.unitId+"_"+lesson.kind+suf]||0)+1;
+if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"+suf]=lesson.words.length;
 logActivity(lesson.words);
 if(lesson.kind==="say"){ lesson.words.forEach(w=>setLevel(w.ro,2)); } // heard & repeated
 const res = addStars(earned);
