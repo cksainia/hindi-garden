@@ -463,14 +463,21 @@ function convosDone(){ return CONVOS.filter(c=>state.done["convo_"+c.id]).length
 function grammarDoneCount(){ return (typeof GRAMMAR!=="undefined"?GRAMMAR:[]).filter(g=>state.done["grammar_"+g.id]).length; }
 function quizBest(){ const l=state.quizzes||[]; return l.length?Math.max(...l.map(q=>q.pct)):0; }
 function renderQuizSection(wrap){
+const learnedCount = learnedWords().length;
 const list=(state.quizzes||[]);
+if(learnedCount < 4){
+const note=document.createElement("div"); note.style.gridColumn="1/-1"; note.className="qpanel";
+note.innerHTML=`<div class="qpHead">Daily Quiz 🎯</div><div class="qpEmpty">The quiz only uses words she's already learned. Open “Learning Words” and finish a lesson or two to unlock it!</div>`;
+wrap.appendChild(note); return;
+}
+const n=Math.min(25,learnedCount);
 const start=document.createElement("button");
 start.className="footerBtn"; start.style.position="static"; start.style.gridColumn="1/-1"; start.style.margin="2px 0 8px";
-start.textContent="🎯 Start Quiz · 25 questions ▶"; start.onclick=startQuiz;
+start.textContent="🎯 Start Quiz · "+n+" questions ▶"; start.onclick=startQuiz;
 wrap.appendChild(start);
 const panel=document.createElement("div"); panel.style.gridColumn="1/-1"; panel.className="qpanel";
 if(!list.length){
-panel.innerHTML=`<div class="qpHead">Quiz scores</div><div class="qpEmpty">No quizzes yet — take the first one to start tracking her progress! Each quiz mixes words, conversations &amp; grammar.</div>`;
+panel.innerHTML=`<div class="qpHead">Quiz scores</div><div class="qpEmpty">No quizzes yet. It reviews the ${learnedCount} words she's learned so far — miss one and it drops off her learned list until she practices it again.</div>`;
 }else{
 const best=Math.max(...list.map(q=>q.pct));
 const avg=Math.round(list.reduce((a,q)=>a+q.pct,0)/list.length);
@@ -485,11 +492,12 @@ const wrap=$("unitsWrap"); wrap.innerHTML="";
 const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
 const wp=pctWords(), cv=convosDone(), gd=grammarDoneCount(), qb=quizBest();
 const qList=state.quizzes||[];
+const learnedCount=(typeof learnedWords==="function"?learnedWords().length:0);
 const sections=[
 {key:"words", emoji:"📚", name:"Learning Words", sub:UNITS.length+" topics · "+wp+"% complete", pct:wp, fn:renderTopicTiles},
 {key:"convos", emoji:"🎭", name:"Little Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100), fn:renderConvoTiles},
 {key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons done", pct:(gN?Math.round(gd/gN*100):0), fn:renderGrammarTiles},
-{key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?qList.length+" taken · best "+qb+"%":"25 mixed questions"), pct:qb, fn:renderQuizSection},
+{key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?qList.length+" taken · best "+qb+"%":(learnedCount<4?"learn words to unlock":Math.min(25,learnedCount)+" Qs from learned words")), pct:qb, fn:renderQuizSection},
 ];
 sections.forEach(s=>{
 const open=(openSection===s.key);
@@ -749,37 +757,33 @@ show("menuScreen"); ms.scrollTop=0;
 
 /* ============ DAILY QUIZ ============ */
 let quiz=null;
+function learnedWords(){ return ALL_WORDS.filter(w=>state.seen && state.seen[w.ro]); }
 function buildQuiz(){
-const words = ALL_WORDS.slice();
-const sentences=[];
-CONVOS.forEach(c=>c.lines.forEach(l=>sentences.push({hi:l.hi,ro:l.ro,en:l.en})));
-(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).forEach(g=>g.examples.forEach(e=>sentences.push({hi:e.hi,ro:e.ro,en:e.en})));
-const usedW=new Set(), usedS=new Set();
+const learned = learnedWords();
+const allW = ALL_WORDS; // decoys can come from anywhere
 function distinct(pool,key,exclude,n){
 const seen=new Set([exclude]); const out=[];
 for(const x of shuffle(pool)){ const v=x[key]; if(v&&!seen.has(v)){ seen.add(v); out.push(v); if(out.length>=n)break; } }
 return out;
 }
-function wordQ(){
-let w,tries=0; do{ w=words[Math.floor(Math.random()*words.length)]; tries++; }while(usedW.has(w.ro)&&tries<60); usedW.add(w.ro);
+function makeQ(w){
 if(Math.random()<0.5){
-const opts=shuffle([w.en,...distinct(words,"en",w.en,3)]);
-return {prompt:"What does this mean?", q:w.hi, sub:w.ro, ic:w.ic, audio:w.hi, opts, ans:opts.indexOf(w.en)};
+const opts=shuffle([w.en,...distinct(allW,"en",w.en,3)]);
+return {prompt:"What does this mean?", q:w.hi, sub:w.ro, ic:w.ic, audio:w.hi, opts, ans:opts.indexOf(w.en), wordRo:w.ro};
 }else{
-const opts=shuffle([w.hi,...distinct(words,"hi",w.hi,3)]);
-return {prompt:"Pick the Hindi word", q:w.en, sub:"", ic:w.ic, audio:null, opts, ans:opts.indexOf(w.hi)};
+const opts=shuffle([w.hi,...distinct(allW,"hi",w.hi,3)]);
+return {prompt:"Pick the Hindi word", q:w.en, sub:"", ic:w.ic, audio:null, opts, ans:opts.indexOf(w.hi), wordRo:w.ro};
 }
 }
-function sentQ(){
-let s,tries=0; do{ s=sentences[Math.floor(Math.random()*sentences.length)]; tries++; }while(usedS.has(s.hi)&&tries<60); usedS.add(s.hi);
-const opts=shuffle([s.en,...distinct(sentences,"en",s.en,3)]);
-return {prompt:"What does this sentence mean?", q:s.hi, sub:s.ro, ic:"💬", audio:s.hi, opts, ans:opts.indexOf(s.en)};
+// only words she's already learned, distinct, up to 25
+const chosen = shuffle(learned).slice(0, Math.min(25, learned.length));
+return chosen.map(makeQ);
 }
-const qs=[];
-for(let i=0;i<25;i++){ qs.push((sentences.length>=4 && Math.random()<0.35)?sentQ():wordQ()); }
-return qs;
+function startQuiz(){
+if(learnedWords().length < 4){ toast("Learn a few words first! ✨"); return; }
+quiz={ qs:buildQuiz(), idx:0, score:0, answered:false, pick:-1, demoted:0 };
+renderQuiz();
 }
-function startQuiz(){ quiz={ qs:buildQuiz(), idx:0, score:0, answered:false, pick:-1 }; renderQuiz(); }
 function renderQuiz(){
 const Q=quiz.qs[quiz.idx];
 const opts=Q.opts.map((o,i)=>{
@@ -802,7 +806,15 @@ if(Q.audio) speak(Q.audio);
 function answerQuiz(i){
 if(quiz.answered) return;
 quiz.answered=true; quiz.pick=i;
-if(i===quiz.qs[quiz.idx].ans) quiz.score++;
+const Q=quiz.qs[quiz.idx];
+if(i===Q.ans){ quiz.score++; }
+else if(Q.wordRo){
+// missed it → no longer "learned"; remove and update progress
+if(state.seen) delete state.seen[Q.wordRo];
+if(state.mastered) delete state.mastered[Q.wordRo];
+quiz.demoted=(quiz.demoted||0)+1;
+saveState();
+}
 renderQuiz();
 setTimeout(()=>{ quiz.idx++; quiz.answered=false; quiz.pick=-1; if(quiz.idx>=quiz.qs.length){ finishQuiz(); } else { renderQuiz(); } }, 1100);
 }
@@ -819,6 +831,8 @@ function showQuizReward(score,total,pct,earned,res){
 saveState(); renderTop();
 const li=levelInfo();
 const msg = pct>=90?"Superstar! 🌟" : pct>=70?"Awesome work! ✨" : pct>=50?"Nice — keep going! 💜" : "Good try — practice makes a slayer! 🗡️";
+const demoted=(quiz&&quiz.demoted)||0;
+const demoteLine = demoted>0 ? `<div style="font-size:13px;font-weight:800;color:var(--bad);margin:4px 0">${demoted} word${demoted>1?'s':''} slipped off her learned list — practice to win ${demoted>1?'them':'it'} back!</div>` : "";
 const lvlLine = res.leveledUp ? `<div class="lvlUpTag">⬆️ LEVEL UP! Level ${res.newLevel} · ${li.name} ${li.badge}</div>` : "";
 const ov=document.createElement("div"); ov.className="overlay";
 ov.innerHTML=`<div class="rewardCard">
@@ -826,6 +840,7 @@ ov.innerHTML=`<div class="rewardCard">
 <h2>${score}/${total} · ${pct}%</h2>
 <div style="font-size:16px;font-weight:800;color:var(--good);margin:4px 0">${msg}</div>
 <div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars</div>
+${demoteLine}
 ${lvlLine}
 <br>
 <button class="footerBtn" style="margin-top:14px" onclick="this.closest('.overlay').remove(); openSection='quiz'; goHome();">See my scores ▶</button>
