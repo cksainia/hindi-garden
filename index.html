@@ -293,6 +293,32 @@ background:rgba(0,0,0,.22);transition:transform .12s, border-color .15s, box-sha
 
 /* Script mode: Devanagari-only hides romanization helpers */
 body.deva-only .roman, body.deva-only .wro, body.deva-only .gro{display:none!important;}
+
+/* Daily Path hero card */
+.pathCard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid rgba(54,230,255,.5);border-radius:18px;
+background:linear-gradient(120deg, rgba(54,230,255,.24), rgba(155,60,255,.26) 60%, rgba(255,45,149,.20));
+padding:14px 18px;margin-bottom:12px;box-shadow:0 0 22px rgba(54,230,255,.26), 0 6px 18px var(--shadowS);cursor:pointer;color:var(--ink);transition:transform .12s;}
+.pathCard:active{transform:translateY(2px);}
+.pathCard.done{border-color:rgba(63,227,160,.5);background:linear-gradient(120deg, rgba(63,227,160,.20), rgba(54,230,255,.16));box-shadow:0 0 18px rgba(63,227,160,.22), 0 6px 18px var(--shadowS);}
+.pathCard .pathIco{font-size:28px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:rgba(0,0,0,.26);flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+
+/* Trophies / badges (kid-facing grid) */
+.badgeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:10px;}
+.badge{border:1px solid var(--line);border-radius:15px;padding:12px 8px;text-align:center;background:rgba(0,0,0,.28);opacity:.55;filter:grayscale(.6);}
+.badge.got{opacity:1;filter:none;border-color:rgba(255,210,74,.5);background:linear-gradient(155deg,rgba(255,210,74,.16),rgba(155,60,255,.20));box-shadow:0 0 16px rgba(255,210,74,.22);}
+.badge .bIco{font-size:30px;line-height:1.1;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));}
+.badge .bName{font-weight:900;font-size:12.5px;margin-top:5px;color:var(--ink);}
+.badge .bDesc{font-size:10.5px;color:var(--muted);font-weight:700;margin-top:3px;line-height:1.25;}
+
+/* Skill map bars (parent dashboard) */
+.skrow{display:flex;align-items:center;gap:10px;padding:5px 0;}
+.skrow .skname{font-size:12.5px;font-weight:800;color:var(--ink);width:130px;flex:0 0 auto;}
+.skrow .skbar{flex:1;height:9px;background:rgba(0,0,0,.3);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.07);}
+.skrow .skbar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--magenta));box-shadow:0 0 8px var(--glowPurple);}
+.skrow .skpct{font-size:12.5px;font-weight:900;color:var(--muted);width:40px;text-align:right;flex:0 0 auto;}
+.badgeChips{display:flex;flex-wrap:wrap;gap:7px;}
+.badgeChip{font-size:12px;font-weight:800;border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:rgba(0,0,0,.24);color:var(--muted);opacity:.6;}
+.badgeChip.got{opacity:1;color:var(--ink);border-color:rgba(255,210,74,.45);background:linear-gradient(150deg,rgba(255,210,74,.16),rgba(155,60,255,.18));}
 </style>
 </head>
 <body>
@@ -363,6 +389,22 @@ const STARS_PER_LEVEL = 12;
 // Spaced repetition: a word's review interval grows each time it's recalled correctly.
 const SRS_STEPS = [1,3,7,16,35]; // days until next review, by step
 const SKILL_OF = {aura:"gender endings", combo:"word order", respect:"polite speech", runes:"verb tenses", potion:"postpositions"};
+// Achievements tied to real skills, not just time spent. got(state) derives earned status from progress.
+const ACHIEVEMENTS = [
+{id:"firstWords", emoji:"🌱", name:"First Words", desc:"Learn 10 words", got:s=>Object.keys(s.seen||{}).length>=10},
+{id:"wordCollector", emoji:"📚", name:"Word Collector", desc:"Learn 50 words", got:s=>Object.keys(s.seen||{}).length>=50},
+{id:"listener", emoji:"👂", name:"Sharp Ears", desc:"Master 15 words in Listen & Find", got:s=>Object.keys(s.mastered||{}).length>=15},
+{id:"auraAdept", emoji:"🩷", name:"Aura Adept", desc:"Clear Aura Match (gender endings)", got:s=>!!(s.done||{})["game_aura"]},
+{id:"verbNinja", emoji:"🥷", name:"Verb-Last Ninja", desc:"Win Combo Chains (word order)", got:s=>!!(s.done||{})["game_combo"]},
+{id:"politePro", emoji:"🛡️", name:"Politeness Pro", desc:"Clear Respect Shield (aap/tum)", got:s=>!!(s.done||{})["game_respect"]},
+{id:"timeBender", emoji:"⏳", name:"Time-Bender", desc:"Clear Time Runes (tenses)", got:s=>!!(s.done||{})["game_runes"]},
+{id:"potionMaster", emoji:"⚗️", name:"Potion Master", desc:"Clear Potion Lab (postpositions)", got:s=>!!(s.done||{})["game_potion"]},
+{id:"sentenceSmith", emoji:"✍️", name:"Sentence Smith", desc:"Finish 5 Sentence Builder lessons", got:s=>(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).filter(g=>(s.done||{})["grammar_"+g.id]).length>=5},
+{id:"convoActor", emoji:"🎭", name:"Conversation Actor", desc:"Act out 3 conversations", got:s=>(typeof CONVOS!=="undefined"?CONVOS:[]).filter(c=>(s.done||{})["convo_"+c.id]).length>=3},
+{id:"onFire", emoji:"🔥", name:"On Fire", desc:"Practice on 3 different days", got:s=>Object.keys(s.log||{}).length>=3},
+{id:"memoryMaster", emoji:"🧠", name:"Memory Master", desc:"Lock 10 words into long-term memory", got:s=>srsLongTermCount()>=10},
+{id:"pathWalker", emoji:"🗺️", name:"Path Walker", desc:"Finish a Daily Path", got:s=>Object.keys(s.pathDone||{}).length>=1},
+];
 
 /* ============ STATE ============ */
 const SAVE_KEY = "ariaHindiGarden_v1";
@@ -404,6 +446,9 @@ if(s.scriptMode!=="deva" && s.scriptMode!=="both") s.scriptMode = "both";
 if(!s.gameMiss || typeof s.gameMiss!=="object") s.gameMiss = {};
 // Spaced repetition schedule per word: { ro: {step, due:"YYYY-MM-DD", reps, lapses} }
 if(!s.srs || typeof s.srs!=="object") s.srs = {};
+// Daily Learning Path completion per day, and earned achievement badges
+if(!s.pathDone || typeof s.pathDone!=="object") s.pathDone = {};
+if(!s.achievements || typeof s.achievements!=="object") s.achievements = {};
 // Backfill SRS for already-learned words, spacing them by how well she knows them
 for(const ro in s.seen){ if(!s.srs[ro]){ const lvl=(s.wordLevel&&s.wordLevel[ro])||1; const step=Math.max(0,Math.min(SRS_STEPS.length-1, lvl-1)); const base=(s.seenDate&&s.seenDate[ro])||todayKey(); s.srs[ro]={step, due:addDaysKey(base, SRS_STEPS[step]), reps:0, lapses:0}; } }
 // backfill seenDate for already-learned words (so review has something to work with)
@@ -452,6 +497,34 @@ state.srs[ro]=s;
 function srsDuePool(){ const t=todayKey(); state.srs=state.srs||{}; return ALL_WORDS.filter(w=> state.seen&&state.seen[w.ro] && state.srs[w.ro] && state.srs[w.ro].due<=t); }
 function srsLongTermCount(){ let c=0; for(const ro in (state.srs||{})){ if(state.seen&&state.seen[ro] && (state.srs[ro].step||0)>=SRS_STEPS.length-1) c++; } return c; }
 function daysSinceActive(){ for(let i=0;i<90;i++){ if((state.log||{})[addDaysKey(todayKey(),-i)]) return i; } return 99; }
+// award any newly-earned badges and gently announce them
+function checkAchievements(){
+state.achievements=state.achievements||{};
+const newly=[];
+ACHIEVEMENTS.forEach(a=>{ try{ if(!state.achievements[a.id] && a.got(state)){ state.achievements[a.id]=todayKey(); newly.push(a); } }catch(e){} });
+if(newly.length){ saveState(); if(newly.length>2){ setTimeout(()=>toast("🏆 "+newly.length+" new badges earned!"), 500); } else { newly.forEach((a,i)=> setTimeout(()=>toast("🏆 New badge: "+a.name+"!"), 600*(i+1))); } }
+return newly;
+}
+// 0-100 score per skill, derived from word levels + game performance
+function skillScores(){
+const seen=Math.max(1, Object.keys(state.seen||{}).length);
+const lv=state.wordLevel||{}; const atLeast=(n)=>Object.values(lv).filter(v=>v>=n).length;
+const masteredW=Object.keys(state.mastered||{}).length;
+const miss=state.gameMiss||{}; const gdone=(id)=>!!(state.done||{})["game_"+id];
+const gscore=(id)=> gdone(id)? Math.max(20, 100-(miss[id]||0)*8) : 0;
+const gr=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]); const sbDone=gr.filter(x=>(state.done||{})["grammar_"+x.id]).length;
+const sbScore=gr.length?Math.round(100*sbDone/gr.length):0;
+return [
+{name:"Vocabulary", emoji:"📚", pct:Math.min(100,Math.round(100*atLeast(3)/seen))},
+{name:"Listening", emoji:"👂", pct:Math.min(100,Math.round(100*masteredW/seen))},
+{name:"Speaking", emoji:"🎤", pct:Math.min(100,Math.round(100*atLeast(2)/seen))},
+{name:"Sentence order", emoji:"🥷", pct:Math.round((gscore("combo")+sbScore)/2)},
+{name:"Gender agreement", emoji:"🩷", pct:gscore("aura")},
+{name:"Politeness", emoji:"🛡️", pct:gscore("respect")},
+{name:"Tense / time", emoji:"⏳", pct:gscore("runes")},
+{name:"Postpositions", emoji:"⚗️", pct:gscore("potion")},
+];
+}
 function logActivity(words){
 const k=todayKey(); state.log=state.log||{}; state.log[k]=(state.log[k]||0)+1;
 state.seen=state.seen||{}; state.seenDate=state.seenDate||{}; state.wordLevel=state.wordLevel||{};
@@ -629,8 +702,82 @@ if(dueN>0) return {ico:"🔁", label:"Review "+dueN+" word"+(dueN>1?"s":""), sub
 if((typeof learnedWords==="function"?learnedWords().length:0)>=4) return {ico:"🎯", label:"Take today's quiz", sub:"Review what she's learned", run:function(){ openSection='quiz'; renderUnits(); startQuiz(); }};
 return {ico:"📚", label:"Explore the topics", sub:"Tap a topic to begin", run:function(){ openSection='words'; renderUnits(); }};
 }
+/* ============ DAILY LEARNING PATH (5-min guided session) ============ */
+let path=null;
+function pathDoneToday(){ return !!(state.pathDone||{})[todayKey()]; }
+function startDailyPath(){
+const steps=[];
+// 1) warm up with a short review (due words, else missed) — skipped gracefully if none
+const reviewMode = srsDuePool().length?'due':(Object.keys(state.missed||{}).length?'missed':null);
+if(reviewMode) steps.push({label:"Warm-up review", ico:"🔁", run:function(){ startReview(reviewMode,3); }});
+// 2) learn 2 new words from a fresh or in-progress topic
+const fresh = UNITS.find(u=>!state.done[u.id+"_learn"]);
+const inProg = UNITS.find(u=>{const t=u.words.length*2;const d=Math.min(t,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));return d>0&&d<t;});
+const topic = fresh || inProg || UNITS[Math.floor(Math.random()*UNITS.length)];
+steps.push({label:"Learn 2 new words", ico:"📖", run:function(){ startActivity(topic.id,"learn",2); }});
+// 3) one grammar game — her weakest, else one she hasn't played, else any
+const weak = topGrammarWeakness();
+const game1 = weak || GAMES.find(g=>!state.done["game_"+g.id]) || GAMES[Math.floor(Math.random()*GAMES.length)];
+steps.push({label:"Grammar game", ico:game1.emoji, run:function(){ startGame(game1.id); }});
+// 4) finish with a little conversation
+const convo = CONVOS.find(c=>!state.done["convo_"+c.id]) || CONVOS[Math.floor(Math.random()*CONVOS.length)];
+steps.push({label:"Act out a conversation", ico:"🎭", run:function(){ playConvo(convo.id); }});
+path={active:true, steps, idx:0, earned:0};
+pathRun();
+}
+function pathRun(){ const s=path.steps[path.idx]; s.run(); }
+function pathStepDone(earned){
+if(!path) return;
+path.earned += (earned||0);
+path.idx++;
+if(path.idx>=path.steps.length){ finishPath(); return; }
+showPathStep();
+}
+function showPathStep(){
+const next=path.steps[path.idx];
+const ov=document.createElement("div"); ov.className="overlay";
+const dots=path.steps.map((_,i)=>`<span style="font-size:18px">${i<path.idx?'🟢':i===path.idx?'🔵':'⚪'}</span>`).join(" ");
+ov.innerHTML=`<div class="rewardCard">
+<div class="grow" style="font-size:54px">${next.ico}</div>
+<h2>Step ${path.idx+1} of ${path.steps.length}</h2>
+<div style="font-size:16px;font-weight:800;color:var(--good);margin:4px 0">Next: ${next.label}</div>
+<div style="margin:10px 0;letter-spacing:3px">${dots}</div>
+<button class="footerBtn" style="margin-top:10px" onclick="this.closest('.overlay').remove(); pathRun();">Continue ▶</button>
+<button class="backBtn" style="margin-top:10px" onclick="this.closest('.overlay').remove(); path=null; goHome();">Finish later</button>
+</div>`;
+document.body.appendChild(ov);
+}
+function finishPath(){
+const earned=path.earned||0;
+state.pathDone=state.pathDone||{}; state.pathDone[todayKey()]=true; saveState();
+path=null;
+checkAchievements();
+const li=levelInfo();
+const ov=document.createElement("div"); ov.className="overlay";
+ov.innerHTML=`<div class="rewardCard">
+<div class="grow" style="font-size:64px">🗺️</div>
+<h2>Daily Path complete! ✨</h2>
+<div style="font-size:15px;font-weight:800;color:var(--good);margin:4px 0">Review · Learn · Grammar · Talk — all done today!</div>
+<div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars total</div>
+<br>
+<button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Stage ✨</button>
+</div>`;
+document.body.appendChild(ov); burstConfetti(true);
+}
+function renderTrophies(wrap){
+const earned=state.achievements||{};
+const grid=document.createElement("div"); grid.style.gridColumn="1/-1"; grid.className="badgeGrid";
+ACHIEVEMENTS.forEach(a=>{ const got=!!earned[a.id]; const b=document.createElement("div"); b.className="badge"+(got?" got":""); b.innerHTML=`<div class="bIco">${got?a.emoji:'🔒'}</div><div class="bName">${a.name}</div><div class="bDesc">${a.desc}</div>`; grid.appendChild(b); });
+wrap.appendChild(grid);
+}
 function renderUnits(){
 const wrap=$("unitsWrap"); wrap.innerHTML="";
+// Daily Path hero
+const done=pathDoneToday();
+const pcard=document.createElement("button"); pcard.type="button"; pcard.className="pathCard"+(done?" done":""); pcard.style.gridColumn="1/-1";
+pcard.innerHTML=`<span class="pathIco">${done?'✅':'🗺️'}</span><span class="ctaText"><span class="ctaLab" style="color:var(--cyan)">Daily Path · ~5 min</span><span class="ctaMain">${done?"Today's path is done! 🎉":"Start today's guided session"}</span><span class="ctaSub">${done?"Come back tomorrow for a fresh path":"Review → Learn → Grammar game → Talk"}</span></span><span class="ctaGo">${done?'↻':'▶'}</span>`;
+pcard.onclick=function(){ startDailyPath(); };
+wrap.appendChild(pcard);
 const rec=recommendNext();
 const cta=document.createElement("button"); cta.type="button"; cta.className="ctaCard"; cta.style.gridColumn="1/-1";
 cta.innerHTML=`<span class="ctaIco">${rec.ico}</span><span class="ctaText"><span class="ctaLab">Recommended next</span><span class="ctaMain">${rec.label}</span><span class="ctaSub">${rec.sub}</span></span><span class="ctaGo">▶</span>`;
@@ -647,6 +794,7 @@ const sections=[
 {key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons done", pct:(gN?Math.round(gd/gN*100):0), fn:renderGrammarTiles},
 {key:"games", emoji:"🕹️", name:"Grammar Arena", sub:gamesN+" mini-games · "+gamesDoneN+"/"+gamesN+" played", pct:(gamesN?Math.round(gamesDoneN/gamesN*100):0), fn:renderGameTiles},
 {key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?qList.length+" taken · best "+qb+"%":(learnedCount<4?"learn words to unlock":Math.min(25,learnedCount)+" Qs from learned words")), pct:qb, fn:renderQuizSection},
+{key:"trophies", emoji:"🏆", name:"Trophies", sub:Object.keys(state.achievements||{}).length+"/"+ACHIEVEMENTS.length+" badges earned", pct:Math.round(100*Object.keys(state.achievements||{}).length/ACHIEVEMENTS.length), fn:renderTrophies},
 ];
 sections.forEach(s=>{
 const open=(openSection===s.key);
@@ -658,7 +806,7 @@ wrap.appendChild(hdr);
 if(open) s.fn(wrap);
 });
 }
-function goHome(){ renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
+function goHome(){ path=null; checkAchievements(); renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
 
 /* ============ WORD OF THE DAY ============ */
 const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]);
@@ -700,9 +848,10 @@ show("menuScreen"); ms.scrollTop=0;
 
 /* ============ ACTIVITIES ============ */
 let lesson = null;
-function startActivity(unitId, kind){
+function startActivity(unitId, kind, limit){
 const u=UNITS.find(x=>x.id===unitId);
-lesson={unitId, kind, words:shuffle(u.words), idx:0, correct:0, newMastered:0};
+let words=shuffle(u.words); if(limit) words=words.slice(0, limit);
+lesson={unitId, kind, words, idx:0, correct:0, newMastered:0};
 renderDots();
 if(kind==="learn") renderLearn();
 else if(kind==="listen") renderListen();
@@ -810,6 +959,8 @@ if(lesson.kind==="listen") state.done[lesson.unitId+"_listen"]=lesson.words.leng
 logActivity(lesson.words);
 if(lesson.kind==="say"){ lesson.words.forEach(w=>setLevel(w.ro,2)); } // heard & repeated
 const res = addStars(earned);
+if(path&&path.active){ pathStepDone(earned); return; }
+checkAchievements();
 showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
 }
 
@@ -840,7 +991,10 @@ ms.scrollTop=0;
 function finishConvo(id){
 if(!state.done["convo_"+id]){ state.done["convo_"+id]=1; }
 const c=CONVOS.find(x=>x.id===id); logActivity(c?c.lines:[]);
-const res = addStars(3); showReward(3, res.leveledUp, res.newLevel, 0);
+const res = addStars(3);
+if(path&&path.active){ pathStepDone(3); return; }
+checkAchievements();
+showReward(3, res.leveledUp, res.newLevel, 0);
 }
 
 /* ============ GRAMMAR / SENTENCE BUILDER ============ */
@@ -950,6 +1104,8 @@ state.done["game_"+game.id]=(state.done["game_"+game.id]||0)+1;
 logActivity([]);
 const earned=Math.max(3, game.score);
 const res=addStars(earned);
+if(path&&path.active){ pathStepDone(earned); return; }
+checkAchievements();
 showReward(earned, res.leveledUp, res.newLevel, 0);
 }
 function gameShell(inner){
@@ -1167,10 +1323,10 @@ const allW=ALL_WORDS;
 function distinct(key,ex,n){ const s=new Set([ex]); const o=[]; for(const x of shuffle(allW)){ const v=x[key]; if(v&&!s.has(v)){ s.add(v); o.push(v); if(o.length>=n)break; } } return o; }
 return shuffle(pool).slice(0,max).map(w=>{ const opts=shuffle([w.en,...distinct("en",w.en,3)]); return {w, q:w.hi, sub:w.ro, ic:w.ic, opts, ans:opts.indexOf(w.en)}; });
 }
-function startReview(mode){
+function startReview(mode, max){
 const pool = mode==="missed"?missedPool():srsDuePool();
-if(pool.length<1){ toast(mode==="missed"?"Nothing to win back — amazing! 🌟":"No words due — come back tomorrow ✨"); return; }
-review={ mode, qs:buildReviewQs(pool, mode==="missed"?12:10), idx:0, score:0, answered:false, pick:-1, wonBack:0 };
+if(pool.length<1){ if(path&&path.active){ pathStepDone(0); return; } toast(mode==="missed"?"Nothing to win back — amazing! 🌟":"No words due — come back tomorrow ✨"); return; }
+review={ mode, qs:buildReviewQs(pool, max||(mode==="missed"?12:10)), idx:0, score:0, answered:false, pick:-1, wonBack:0 };
 renderReview();
 }
 function renderReview(){
@@ -1206,6 +1362,8 @@ function finishReview(){
 logActivity([]);
 const earned=Math.max(2, review.score);
 const res=addStars(earned); saveState(); renderTop();
+if(path&&path.active){ pathStepDone(earned); return; }
+checkAchievements();
 const li=levelInfo();
 const wb=review.wonBack||0;
 const wbLine = wb>0?`<div style="font-size:15px;font-weight:800;color:var(--good);margin:4px 0">🛡️ ${wb} word${wb>1?'s':''} won back onto her learned list!</div>`:"";
@@ -1327,6 +1485,12 @@ return `<div class="pcard"><div style="font-weight:900;font-size:17px">This week
 ${(()=>{ const srs=state.srs||{}; const t=todayKey(); let due=0,learning=0,longterm=0;
 for(const ro in srs){ if(!state.seen||!state.seen[ro]) continue; const s=srs[ro]; if((s.step||0)>=SRS_STEPS.length-1) longterm++; else learning++; if(s.due<=t) due++; }
 return `<div class="pcard"><div style="font-weight:900;font-size:17px">Memory &amp; review 🧠</div><div style="font-size:13px;opacity:.78;font-weight:700;margin-top:2px">Spaced practice brings each word back right before she'd forget it — that's what makes it stick.</div><div class="statRow" style="grid-template-columns:repeat(3,1fr);margin-top:10px"><div class="stat"><div class="n">${due}</div><div class="l">ready to review</div></div><div class="stat"><div class="n">${learning}</div><div class="l">still learning</div></div><div class="stat"><div class="n">${longterm}</div><div class="l">long-term 🌟</div></div></div></div>`; })()}
+${(()=>{ const sk=skillScores();
+const rows=sk.map(s=>`<div class="skrow"><span class="skname">${s.emoji} ${s.name}</span><span class="skbar"><i style="width:${s.pct}%"></i></span><span class="skpct">${s.pct}%</span></div>`).join("");
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">Skill map 🗺️</div><div style="font-size:13px;opacity:.78;font-weight:700;margin:2px 0 8px">Progress by skill, not just topic — so you can see what's strong and what needs love.</div>${rows}</div>`; })()}
+${(()=>{ const earned=state.achievements||{}; const n=Object.keys(earned).length;
+const chips=ACHIEVEMENTS.map(a=>`<span class="badgeChip ${earned[a.id]?'got':''}">${earned[a.id]?a.emoji:'🔒'} ${a.name}</span>`).join("");
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">Badges 🏆 · ${n}/${ACHIEVEMENTS.length}</div><div style="font-size:13px;opacity:.78;font-weight:700;margin:2px 0 8px">Earned for real skills, never just for time spent.</div><div class="badgeChips">${chips}</div></div>`; })()}
 ${(()=>{ const gs=(typeof GAMES!=="undefined"?GAMES:[]); if(!gs.length) return "";
 const miss=state.gameMiss||{};
 const played=gs.filter(g=>state.done["game_"+g.id]); const tried=played.length;
@@ -1424,6 +1588,11 @@ out.missed = Object.assign({}, remote.missed||{}, local.missed||{});
 const sr = Object.assign({}, remote.srs||{});
 for(const k in (local.srs||{})){ const a=sr[k], b=local.srs[k]; if(!a){ sr[k]=b; } else { sr[k]={ step:Math.max(a.step||0,b.step||0), due:((a.due||"")>(b.due||"")?a.due:b.due), reps:Math.max(a.reps||0,b.reps||0), lapses:Math.max(a.lapses||0,b.lapses||0) }; } }
 out.srs = sr;
+// badges & daily-path history: union (keep earliest earned date)
+const ach = Object.assign({}, remote.achievements||{});
+for(const k in (local.achievements||{})){ if(!ach[k] || local.achievements[k] < ach[k]) ach[k]=local.achievements[k]; }
+out.achievements = ach;
+out.pathDone = Object.assign({}, remote.pathDone||{}, local.pathDone||{});
 // settings stay device-local (out===local already keeps speed/scriptMode)
 return out;
 }
