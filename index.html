@@ -688,16 +688,18 @@ b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</
 wrap.appendChild(b);
 });
 }
-function renderConvoTiles(wrap){
-CONVOS.forEach(c=>{
+function renderConvoTiles(wrap, level){
+level=level||1;
+CONVOS.filter(c=>(c.lv||1)===level).forEach(c=>{
 const b=document.createElement("button"); b.className="unit"; b.onclick=()=>playConvo(c.id);
 const done=state.done["convo_"+c.id]?'<div class="prog">⭐ Practiced</div>':'<div class="prog">Tap to act it out</div>';
 b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span>${done}`;
 wrap.appendChild(b);
 });
 }
-function renderGrammarTiles(wrap){
-(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).forEach(g=>{
+function renderGrammarTiles(wrap, level){
+level=level||1;
+(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).filter(g=>(g.lv||1)===level).forEach(g=>{
 const b=document.createElement("button"); b.className="unit"+(state.done["grammar_"+g.id]?" mastered":""); b.onclick=()=>openGrammar(g.id);
 const gdone=state.done["grammar_"+g.id]?'<div class="prog">⭐ Done</div>':'<div class="prog">Build sentences</div>';
 b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</span>${gdone}`;
@@ -794,7 +796,7 @@ const weak = topGrammarWeakness();
 const game1 = weak || GAMES.find(g=>!state.done["game_"+g.id]) || GAMES[Math.floor(Math.random()*GAMES.length)];
 steps.push({label:"Grammar game", ico:game1.emoji, run:function(){ startGame(game1.id); }});
 // 4) finish with a little conversation
-const convo = CONVOS.find(c=>!state.done["convo_"+c.id]) || CONVOS[Math.floor(Math.random()*CONVOS.length)];
+const convoPool=CONVOS.filter(c=>(c.lv||1)===1); const convo = convoPool.find(c=>!state.done["convo_"+c.id]) || convoPool[Math.floor(Math.random()*convoPool.length)];
 steps.push({label:"Act out a conversation", ico:"🎭", run:function(){ playConvo(convo.id); }});
 path={active:true, steps, idx:0, earned:0};
 pathRun();
@@ -888,20 +890,21 @@ function showWelcome(){ renderTop(); renderWelcome(); show("welcomeScreen"); }
 
 /* ===== HOME HUB ===== */
 function hubChoices(){
-const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
-const wp=pctWords(), cv=convosDone(), gd=grammarDoneCount(), qb=quizBest();
+const wp=pctWords(), qb=quizBest();
+const cvN1=CONVOS.filter(c=>(c.lv||1)===1).length, cv1=CONVOS.filter(c=>(c.lv||1)===1&&state.done["convo_"+c.id]).length;
+const grN1=GRAMMAR.filter(g=>(g.lv||1)===1).length, gd1=GRAMMAR.filter(g=>(g.lv||1)===1&&state.done["grammar_"+g.id]).length;
+const stN1=STORIES.filter(s=>(s.lv||1)===1).length, st1=STORIES.filter(s=>(s.lv||1)===1&&state.done["story_"+s.id]).length;
 const qList=state.quizzes||[];
 const learnedCount=(typeof learnedWords==="function"?learnedWords().length:0);
 const gamesN=(typeof GAMES!=="undefined"?GAMES.length:0);
 const gamesDoneN=(typeof GAMES!=="undefined"?GAMES:[]).filter(g=>state.done["game_"+g.id]).length;
 const cultN=(typeof CULTURE!=="undefined"?CULTURE.length:0), cultS=Object.keys(state.cultureSeen||{}).length;
-const storiesN=(typeof STORIES!=="undefined"?STORIES.length:0), storiesD=(typeof STORIES!=="undefined"?STORIES:[]).filter(s=>state.done["story_"+s.id]).length;
 const badgeN=Object.keys(state.achievements||{}).length;
 return [
 {key:"words", emoji:"📚", name:"Learning Words", sub:wp+"% complete", pct:wp},
-{key:"convos", emoji:"🎭", name:"Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100)},
-{key:"stories", emoji:"📖", name:"Story Mode", sub:storiesD+"/"+storiesN+" read", pct:(storiesN?Math.round(100*storiesD/storiesN):0)},
-{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons", pct:(gN?Math.round(gd/gN*100):0)},
+{key:"convos", emoji:"🎭", name:"Conversations", sub:cv1+"/"+cvN1+" practiced", pct:Math.round(cv1/cvN1*100)},
+{key:"stories", emoji:"📖", name:"Story Mode", sub:st1+"/"+stN1+" read", pct:(stN1?Math.round(100*st1/stN1):0)},
+{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd1+"/"+grN1+" lessons", pct:(grN1?Math.round(gd1/grN1*100):0)},
 {key:"games", emoji:"🕹️", name:"Grammar Arena", sub:gamesDoneN+"/"+gamesN+" played", pct:(gamesN?Math.round(gamesDoneN/gamesN*100):0)},
 {key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?"best "+qb+"%":(learnedCount<4?"learn to unlock":"ready to play")), pct:qb},
 {key:"trophies", emoji:"🏆", name:"Trophies", sub:badgeN+"/"+ACHIEVEMENTS.length+" badges", pct:Math.round(100*badgeN/ACHIEVEMENTS.length)},
@@ -964,25 +967,45 @@ hubChoices().forEach(c=>{ const b=document.createElement("button"); b.className=
 function goHome(){ path=null; checkAchievements(); renderTop(); renderHub(); show("homeScreen"); }
 
 /* ===== CATEGORY ===== */
-function openCategory(key){
+// sections whose items carry their own lv:2 (unlock after all Level 1 done)
+function catLevelInfo(key){
+let items, doneKey, noun;
+if(key==="convos"){ items=CONVOS; doneKey=x=>state.done["convo_"+x.id]; noun="conversations"; }
+else if(key==="stories"){ items=STORIES; doneKey=x=>state.done["story_"+x.id]; noun="stories"; }
+else if(key==="grammar"){ items=GRAMMAR; doneKey=x=>state.done["grammar_"+x.id]; noun="lessons"; }
+else return null;
+const l1=items.filter(x=>(x.lv||1)===1), l2=items.filter(x=>x.lv===2);
+const unlocked = l1.length>0 && l2.length>0 && l1.every(doneKey);
+return {l1n:l1.length, l2n:l2.length, unlocked, noun};
+}
+function openCategory(key, level){
 currentCat=key;
+level = level===2?2:1;
 const C={
 words:{emoji:"📚",name:"Learning Words",sub:UNITS.length+" topics to discover",fn:renderTopicTiles},
-convos:{emoji:"🎭",name:"Little Conversations",sub:CONVOS.length+" to act out",fn:renderConvoTiles},
-stories:{emoji:"📖",name:"Story Mode",sub:(typeof STORIES!=="undefined"?STORIES.length:0)+" little illustrated stories",fn:renderStoryTiles},
-grammar:{emoji:"✍️",name:"Sentence Builder",sub:(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0)+" grammar lessons",fn:renderGrammarTiles},
+convos:{emoji:"🎭",name:"Little Conversations",sub:"Act out the dialogues",fn:renderConvoTiles},
+stories:{emoji:"📖",name:"Story Mode",sub:"Read & answer",fn:renderStoryTiles},
+grammar:{emoji:"✍️",name:"Sentence Builder",sub:"Build sentences",fn:renderGrammarTiles},
 games:{emoji:"🕹️",name:"Grammar Arena",sub:(typeof GAMES!=="undefined"?GAMES.length:0)+" neon mini-games",fn:renderGameTiles},
 quiz:{emoji:"🎯",name:"Daily Quiz & Review",sub:"Practice your learned words",fn:renderQuizSection},
 trophies:{emoji:"🏆",name:"Trophies",sub:Object.keys(state.achievements||{}).length+"/"+ACHIEVEMENTS.length+" badges earned",fn:renderTrophies},
 culture:{emoji:"🪔",name:"Culture Corner",sub:(typeof CULTURE!=="undefined"?CULTURE.length:0)+" Hindi-at-home notes",fn:renderCulture},
 };
 const c=C[key]; if(!c){ goHome(); return; }
+const li=catLevelInfo(key);
+let toggle="", hint="";
+if(li){
+if(level===2 && !li.unlocked) level=1;
+toggle=`<div class="lvlTabs"><button class="lvlTab${level===1?' on':''}" onclick="openCategory('${key}',1)">⭐ Level 1 · ${li.l1n}</button><button class="lvlTab${level===2?' on':''}${li.unlocked?'':' locked'}" onclick="${li.unlocked?`openCategory('${key}',2)`:`toast('Finish all of Level 1 to unlock Level 2 ✨')`}">${li.unlocked?'🔥 ':'🔒 '}Level 2 · ${li.l2n}</button></div>`;
+if(!li.unlocked) hint=`<div class="qpEmpty" style="text-align:center;margin-top:8px">✨ Finish every Level 1 ${li.noun.replace(/s$/,'')} to unlock ${li.l2n} advanced ones!</div>`;
+}
 const cs=$("catScreen");
 cs.innerHTML=`<div class="navRow"><button class="backBtn" onclick="goHome()">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
 <h1 style="margin-top:8px">${c.emoji} ${c.name}</h1>
-<div class="sub">${c.sub}</div>
+<div class="sub">${level===2?'Level 2 · advanced':c.sub}</div>
+${toggle}${hint}
 <div class="units" id="catWrap" style="margin-top:12px"></div>`;
-c.fn($("catWrap"));
+c.fn($("catWrap"), level);
 show("catScreen"); cs.scrollTop=0;
 }
 
@@ -1163,7 +1186,7 @@ showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
 function playConvo(id){
 const c=CONVOS.find(x=>x.id===id);
 currentUnit=null; currentCat="convos";
-let html=`<div class="navRow"><button class="backBtn" onclick="openCategory('convos')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+let html=`<div class="navRow"><button class="backBtn" onclick="openCategory('convos',${c.lv||1})">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
 <h1 style="margin-top:8px;">${c.emoji} ${c.name}</h1>
 <div class="sub">Tap each bubble to hear it, then say it back!</div>`;
 c.lines.forEach((l,i)=>{
@@ -1194,8 +1217,9 @@ showReward(3, res.leveledUp, res.newLevel, 0);
 
 /* ============ STORY MODE ============ */
 let storyState=null;
-function renderStoryTiles(wrap){
-(typeof STORIES!=="undefined"?STORIES:[]).forEach(s=>{
+function renderStoryTiles(wrap, level){
+level=level||1;
+(typeof STORIES!=="undefined"?STORIES:[]).filter(s=>(s.lv||1)===level).forEach(s=>{
 const b=document.createElement("button"); b.className="unit"+(state.done["story_"+s.id]?" mastered":""); b.onclick=function(){ openStory(s.id); };
 const d=state.done["story_"+s.id]?'<div class="prog"><span class="crown">⭐</span> Read</div>':'<div class="prog">Tap to read</div>';
 b.innerHTML=`<span class="emoji">${s.emoji}</span><span class="name">${s.title}</span>${d}`;
@@ -1205,7 +1229,7 @@ wrap.appendChild(b);
 function openStory(id){
 const s=(typeof STORIES!=="undefined"?STORIES:[]).find(x=>x.id===id); if(!s) return;
 currentUnit=null; currentCat="stories";
-let html=`<div class="navRow"><button class="backBtn" onclick="openCategory('stories')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+let html=`<div class="navRow"><button class="backBtn" onclick="openCategory('stories',${s.lv||1})">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
 <h1 style="margin-top:8px">${s.emoji} ${s.title}</h1>
 <div class="sub">Tap each line to hear it, then answer the question!</div>`;
 s.lines.forEach(l=>{
@@ -1251,7 +1275,7 @@ const g=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).find(x=>x.id===id); if(!g) ret
 currentUnit=null; currentCat="grammar";
 const ex=g.examples.map(e=>`<div class="gex" onclick="speak('${e.hi.replace(/'/g,"\\'")}')"><span><span class="ghi" lang="hi">${e.hi}</span><br><span class="gro" aria-hidden="true">${e.ro}</span> — <span class="gen">${e.en}</span></span><span class="ghear">🔊</span></div>`).join("");
 const ms=$("menuScreen");
-ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('grammar')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('grammar',${g.lv||1})">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
 <h1 style="margin-top:8px">${g.emoji} ${g.name}</h1>
 <div class="gtip">${g.tip}</div>
 <div class="sectionTitle">Examples · tap to hear</div>
@@ -1691,8 +1715,8 @@ return out;
 function printPracticeCard(){
 const words=practiceWords(5);
 const ep=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/86400000);
-const convo=CONVOS[ep%CONVOS.length];
-const gram=GRAMMAR[ep%GRAMMAR.length]; const build=(gram&&gram.builds&&gram.builds.length)?gram.builds[ep%gram.builds.length]:null;
+const cpool=CONVOS.filter(c=>(c.lv||1)===1); const convo=cpool[ep%cpool.length];
+const gpool=GRAMMAR.filter(g=>(g.lv||1)===1); const gram=gpool[ep%gpool.length]; const build=(gram&&gram.builds&&gram.builds.length)?gram.builds[ep%gram.builds.length]:null;
 const dw=words[0]||ALL_WORDS[0];
 const esc=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const wrows=words.map(w=>`<tr><td class="d">${esc(w.hi)}</td><td class="r">${esc(w.ro)}</td><td>${esc(w.en)}</td><td class="chk">☐</td></tr>`).join("");
