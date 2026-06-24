@@ -951,4 +951,27 @@ const GAMES = [
     ]},
 ];
 
-if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; }
+// Cultural Context Bites — tiny, warm "Hindi at home" notes
+const CULTURE = [
+  { emoji:"🙏", title:"Namaste", hi:"नमस्ते", ro:"namaste", en:"hello / goodbye",
+    body:"Press your palms together and say namaste — it works for both hello and goodbye, and it shows warmth and respect at the same time." },
+  { emoji:"🧓", title:"Aap vs Tum", hi:"आप", ro:"aap", en:"you (polite)",
+    body:"For elders, teachers and grandparents, use aap to show respect. With friends and younger kids, tum is friendly and fine. Same word 'you', two levels of politeness!" },
+  { emoji:"✨", title:"Add 'ji' for respect", hi:"जी", ro:"ji", en:"(polite touch)",
+    body:"Adding ji makes anything more polite — 'Nani-ji', or 'haan-ji' for a respectful yes. It's a tiny word that shows big manners." },
+  { emoji:"🦶", title:"Touching elders' feet", hi:"प्रणाम", ro:"pranaam", en:"respectful greeting",
+    body:"On special days, kids gently touch a grandparent's feet to say pranaam. The elder smiles and blesses them — 'खुश रहो', khush raho, 'stay happy!'" },
+  { emoji:"👵", title:"Every relative has a name", hi:"नानी", ro:"naani", en:"mom's mom",
+    body:"Hindi is very specific about family: Naani is mom's mother, Daadi is dad's mother, Maama is mom's brother, Chaacha is dad's younger brother. Each one is its own special word." },
+  { emoji:"🪔", title:"Diwali — festival of lights", hi:"दिवाली मुबारक", ro:"diwali mubaarak", en:"Happy Diwali",
+    body:"Families light little lamps called diye, share sweets, and wish each other 'Diwali mubaarak!' It celebrates light winning over darkness." },
+  { emoji:"🌈", title:"Holi — festival of colors", hi:"होली", ro:"holi", en:"Holi",
+    body:"In spring everyone throws bright colors and water, dances, and eats sweets. It's joyful and a little messy — that's the whole point!" },
+  { emoji:"🪢", title:"Raksha Bandhan", hi:"राखी", ro:"raakhi", en:"protective thread",
+    body:"A sister ties a pretty thread called a raakhi on her brother's wrist, and he promises to look out for her. A sweet day about family love." },
+  { emoji:"☕", title:"Chai means welcome", hi:"चाय", ro:"chaay", en:"tea",
+    body:"Spiced milk tea, chai, is offered to almost every guest. Saying 'chai piyo' (have some tea) is really a way of saying 'you're welcome here'." },
+  { emoji:"🍞", title:"Everyday food words", hi:"रोटी", ro:"roti", en:"flatbread",
+    body:"At dinner you'll hear roti (soft flatbread), daal (lentils), sabzi (vegetables) and chaaval (rice). Try naming them in Hindi at your next meal!" },
+];
+if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; }
