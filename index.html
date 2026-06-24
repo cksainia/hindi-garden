@@ -840,16 +840,38 @@ ov.innerHTML=`<div class="rewardCard">
 </div>`;
 document.body.appendChild(ov); burstConfetti(true);
 }
+// Culture Corner landing: theme tiles
 function renderCulture(wrap){
 const seen=state.cultureSeen||{};
-(typeof CULTURE!=="undefined"?CULTURE:[]).forEach((c,i)=>{
-const card=document.createElement("div"); card.className="cbite"+(seen[i]?" seen":""); card.style.gridColumn="1/-1";
+const themes=(typeof CULTURE_THEMES!=="undefined"?CULTURE_THEMES:[]);
+themes.forEach(t=>{
+const notes=(typeof CULTURE!=="undefined"?CULTURE:[]).filter(c=>c.theme===t.key);
+const s=notes.filter(c=>seen[c.id]).length;
+const b=document.createElement("button"); b.className="unit"; b.onclick=function(){ openCultureTheme(t.key); };
+b.innerHTML=`<span class="emoji">${t.emoji}</span><span class="name">${t.name}</span><div class="prog">${s}/${notes.length} explored</div><div class="bar"><i style="width:${notes.length?Math.round(100*s/notes.length):0}%"></i></div>`;
+wrap.appendChild(b);
+});
+}
+function openCultureTheme(key){
+const t=(typeof CULTURE_THEMES!=="undefined"?CULTURE_THEMES:[]).find(x=>x.key===key); if(!t){ openCategory('culture'); return; }
+currentCat="culture";
+const notes=(typeof CULTURE!=="undefined"?CULTURE:[]).filter(c=>c.theme===key);
+const cs=$("catScreen");
+cs.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('culture')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${t.emoji} ${t.name}</h1>
+<div class="sub">${notes.length} Hindi-at-home notes</div>
+<div style="margin-top:12px" id="cultWrap"></div>`;
+const wrap=$("cultWrap");
+notes.forEach(c=>{
+const seen=(state.cultureSeen||{})[c.id];
+const card=document.createElement("div"); card.className="cbite"+(seen?" seen":"");
 const hiPart = c.hi?`<div class="cbHi"><span lang="hi">${c.hi}</span> <span class="ro" aria-hidden="true">${c.ro||''}</span>${c.en?' — '+c.en:''}</div>`:"";
 const hear = c.hi?`<button class="cbHear" aria-label="Hear it" onclick="event.stopPropagation(); speak('${c.hi.replace(/'/g,"\\'")}')">🔊</button>`:"";
-card.innerHTML=`<div class="cbTop"><span class="cbIco">${c.emoji}</span><span class="cbTitle">${c.title}</span>${seen[i]?'<span class="cbChk">✓</span>':''}${hear}</div><div class="cbBody">${c.body}</div>${hiPart}`;
-card.onclick=function(){ const wasNew=!(state.cultureSeen||{})[i]; state.cultureSeen=state.cultureSeen||{}; state.cultureSeen[i]=1; if(wasNew){ saveState(); card.classList.add("seen"); } if(c.hi) speak(c.hi); };
+card.innerHTML=`<div class="cbTop"><span class="cbIco">${c.emoji}</span><span class="cbTitle">${c.title}</span>${seen?'<span class="cbChk">✓</span>':''}${hear}</div><div class="cbBody">${c.body}</div>${hiPart}`;
+card.onclick=function(){ const wasNew=!(state.cultureSeen||{})[c.id]; state.cultureSeen=state.cultureSeen||{}; state.cultureSeen[c.id]=1; if(wasNew){ saveState(); card.classList.add("seen"); } if(c.hi) speak(c.hi); };
 wrap.appendChild(card);
 });
+show("catScreen"); cs.scrollTop=0;
 }
 function renderTrophies(wrap){
 const earned=state.achievements||{};
@@ -898,7 +920,7 @@ const qList=state.quizzes||[];
 const learnedCount=(typeof learnedWords==="function"?learnedWords().length:0);
 const gamesN=(typeof GAMES!=="undefined"?GAMES.length:0);
 const gamesDoneN=(typeof GAMES!=="undefined"?GAMES:[]).filter(g=>state.done["game_"+g.id]).length;
-const cultN=(typeof CULTURE!=="undefined"?CULTURE.length:0), cultS=Object.keys(state.cultureSeen||{}).length;
+const cultN=(typeof CULTURE!=="undefined"?CULTURE.length:0), cultS=(typeof CULTURE!=="undefined"?CULTURE:[]).filter(c=>(state.cultureSeen||{})[c.id]).length;
 const badgeN=Object.keys(state.achievements||{}).length;
 return [
 {key:"words", emoji:"📚", name:"Learning Words", sub:wp+"% complete", pct:wp},
@@ -989,7 +1011,7 @@ grammar:{emoji:"✍️",name:"Sentence Builder",sub:"Build sentences",fn:renderG
 games:{emoji:"🕹️",name:"Grammar Arena",sub:(typeof GAMES!=="undefined"?GAMES.length:0)+" neon mini-games",fn:renderGameTiles},
 quiz:{emoji:"🎯",name:"Daily Quiz & Review",sub:"Practice your learned words",fn:renderQuizSection},
 trophies:{emoji:"🏆",name:"Trophies",sub:Object.keys(state.achievements||{}).length+"/"+ACHIEVEMENTS.length+" badges earned",fn:renderTrophies},
-culture:{emoji:"🪔",name:"Culture Corner",sub:(typeof CULTURE!=="undefined"?CULTURE.length:0)+" Hindi-at-home notes",fn:renderCulture},
+culture:{emoji:"🪔",name:"Culture Corner",sub:(typeof CULTURE!=="undefined"?CULTURE.length:0)+" notes across "+(typeof CULTURE_THEMES!=="undefined"?CULTURE_THEMES.length:0)+" themes",fn:renderCulture},
 };
 const c=C[key]; if(!c){ goHome(); return; }
 const li=catLevelInfo(key);

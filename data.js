@@ -952,27 +952,54 @@ const GAMES = [
 ];
 
 // Cultural Context Bites — tiny, warm "Hindi at home" notes
+const CULTURE_THEMES = [{"key": "respect", "emoji": "🙏", "name": "Respect & Manners"}, {"key": "festivals", "emoji": "🪔", "name": "Festivals"}, {"key": "food", "emoji": "🍽️", "name": "Food & Eating"}, {"key": "family", "emoji": "👪", "name": "Family Ties"}, {"key": "language", "emoji": "🗣️", "name": "Language & Names"}, {"key": "traditions", "emoji": "🎨", "name": "Traditions & Daily Life"}];
 const CULTURE = [
-  { emoji:"🙏", title:"Namaste", hi:"नमस्ते", ro:"namaste", en:"hello / goodbye",
-    body:"Press your palms together and say namaste — it works for both hello and goodbye, and it shows warmth and respect at the same time." },
-  { emoji:"🧓", title:"Aap vs Tum", hi:"आप", ro:"aap", en:"you (polite)",
-    body:"For elders, teachers and grandparents, use aap to show respect. With friends and younger kids, tum is friendly and fine. Same word 'you', two levels of politeness!" },
-  { emoji:"✨", title:"Add 'ji' for respect", hi:"जी", ro:"ji", en:"(polite touch)",
-    body:"Adding ji makes anything more polite — 'Nani-ji', or 'haan-ji' for a respectful yes. It's a tiny word that shows big manners." },
-  { emoji:"🦶", title:"Touching elders' feet", hi:"प्रणाम", ro:"pranaam", en:"respectful greeting",
-    body:"On special days, kids gently touch a grandparent's feet to say pranaam. The elder smiles and blesses them — 'खुश रहो', khush raho, 'stay happy!'" },
-  { emoji:"👵", title:"Every relative has a name", hi:"नानी", ro:"naani", en:"mom's mom",
-    body:"Hindi is very specific about family: Naani is mom's mother, Daadi is dad's mother, Maama is mom's brother, Chaacha is dad's younger brother. Each one is its own special word." },
-  { emoji:"🪔", title:"Diwali — festival of lights", hi:"दिवाली मुबारक", ro:"diwali mubaarak", en:"Happy Diwali",
-    body:"Families light little lamps called diye, share sweets, and wish each other 'Diwali mubaarak!' It celebrates light winning over darkness." },
-  { emoji:"🌈", title:"Holi — festival of colors", hi:"होली", ro:"holi", en:"Holi",
-    body:"In spring everyone throws bright colors and water, dances, and eats sweets. It's joyful and a little messy — that's the whole point!" },
-  { emoji:"🪢", title:"Raksha Bandhan", hi:"राखी", ro:"raakhi", en:"protective thread",
-    body:"A sister ties a pretty thread called a raakhi on her brother's wrist, and he promises to look out for her. A sweet day about family love." },
-  { emoji:"☕", title:"Chai means welcome", hi:"चाय", ro:"chaay", en:"tea",
-    body:"Spiced milk tea, chai, is offered to almost every guest. Saying 'chai piyo' (have some tea) is really a way of saying 'you're welcome here'." },
-  { emoji:"🍞", title:"Everyday food words", hi:"रोटी", ro:"roti", en:"flatbread",
-    body:"At dinner you'll hear roti (soft flatbread), daal (lentils), sabzi (vegetables) and chaaval (rice). Try naming them in Hindi at your next meal!" },
+  {"id": "r_namaste", "theme": "respect", "emoji": "🙏", "title": "Namaste", "hi": "नमस्ते", "ro": "namaste", "en": "hello / goodbye", "body": "Press your palms together and say namaste — it works for both hello and goodbye, and it shows warmth and respect at the same time."},
+  {"id": "r_aaptum", "theme": "respect", "emoji": "🧓", "title": "Aap vs Tum", "hi": "आप", "ro": "aap", "en": "you (polite)", "body": "For elders, teachers and grandparents, use aap to show respect. With friends and younger kids, tum is friendly and fine."},
+  {"id": "r_ji", "theme": "respect", "emoji": "✨", "title": "Add 'ji' for respect", "hi": "जी", "ro": "ji", "en": "(polite touch)", "body": "Adding ji makes anything more polite — 'Nani-ji', or 'haan-ji' for a respectful yes. A tiny word with big manners."},
+  {"id": "r_feet", "theme": "respect", "emoji": "🦶", "title": "Touching elders' feet", "hi": "प्रणाम", "ro": "pranaam", "en": "respectful greeting", "body": "On special days, kids gently touch a grandparent's feet to say pranaam. The elder smiles and blesses them — 'खुश रहो', khush raho!"},
+  {"id": "r_shoes", "theme": "respect", "emoji": "👟", "title": "Shoes off indoors", "body": "In most Indian homes — and always in temples — you take your shoes off at the door to keep the floor clean and special."},
+  {"id": "r_righthand", "theme": "respect", "emoji": "🤚", "title": "The right hand", "body": "People usually eat with, and give and receive things with, the right hand — it's considered the polite, clean hand."},
+  {"id": "r_eldersfirst", "theme": "respect", "emoji": "🍽️", "title": "Elders first", "body": "At meals and doorways, elders and guests are served first and go first. Letting them lead is a quiet way of showing respect."},
+  {"id": "r_blessings", "theme": "respect", "emoji": "🙌", "title": "Blessings, not just thanks", "hi": "जीते रहो", "ro": "jeete raho", "en": "live long!", "body": "Instead of only saying thanks, elders often bless you — 'jeete raho' (live long) or 'khush raho' (stay happy)."},
+  {"id": "f_diwali", "theme": "festivals", "emoji": "🪔", "title": "Diwali — festival of lights", "hi": "दिवाली मुबारक", "ro": "diwali mubaarak", "en": "Happy Diwali", "body": "Families light little lamps called diye, share sweets, wear new clothes, and wish each other 'Diwali mubaarak!' It celebrates light winning over darkness."},
+  {"id": "f_holi", "theme": "festivals", "emoji": "🌈", "title": "Holi — festival of colors", "hi": "होली", "ro": "holi", "en": "Holi", "body": "In spring everyone throws bright colors and water, dances, and eats sweets. It's joyful and a little messy — that's the whole point!"},
+  {"id": "f_rakhi", "theme": "festivals", "emoji": "🪢", "title": "Raksha Bandhan", "hi": "राखी", "ro": "raakhi", "en": "protective thread", "body": "A sister ties a pretty thread called a raakhi on her brother's wrist, and he promises to look out for her."},
+  {"id": "f_navratri", "theme": "festivals", "emoji": "💃", "title": "Navratri & Garba", "hi": "नवरात्रि", "ro": "navratri", "en": "nine nights", "body": "Nine festive nights of dancing the garba and dandiya in big colorful circles, celebrating the goddess Durga."},
+  {"id": "f_dussehra", "theme": "festivals", "emoji": "🏹", "title": "Dussehra", "hi": "दशहरा", "ro": "dussehra", "en": "Dussehra", "body": "Celebrates good winning over evil. Towns build giant effigies of the demon Ravan and burn them with fireworks."},
+  {"id": "f_janmashtami", "theme": "festivals", "emoji": "🦚", "title": "Janmashtami", "hi": "जन्माष्टमी", "ro": "janmaashtami", "en": "Krishna's birthday", "body": "Krishna's birthday! Kids dress up, and teams make tall human pyramids to reach a pot of butter hung high up (dahi-handi)."},
+  {"id": "f_ganesh", "theme": "festivals", "emoji": "🐘", "title": "Ganesh Chaturthi", "hi": "गणेश", "ro": "ganesh", "en": "Ganesha", "body": "Honors elephant-headed Ganesha, the cheerful remover of obstacles. Families bring home clay idols and sing together."},
+  {"id": "f_eid", "theme": "festivals", "emoji": "🌙", "title": "Eid", "hi": "ईद मुबारक", "ro": "eid mubaarak", "en": "Happy Eid", "body": "India is home to many faiths. Muslim families celebrate Eid with feasts, new clothes, and 'Eid mubaarak!' greetings."},
+  {"id": "f_sankranti", "theme": "festivals", "emoji": "🪁", "title": "Makar Sankranti", "hi": "पतंग", "ro": "patang", "en": "kite", "body": "A January harvest festival. Rooftops fill with families flying colorful kites and sharing sesame sweets."},
+  {"id": "fo_chai", "theme": "food", "emoji": "☕", "title": "Chai means welcome", "hi": "चाय", "ro": "chaay", "en": "tea", "body": "Spiced milk tea, chai, is offered to almost every guest. Saying 'chai piyo' is really a way of saying 'you're welcome here'."},
+  {"id": "fo_hands", "theme": "food", "emoji": "✋", "title": "Eating with hands", "body": "Many foods like roti and rice are scooped up with the right hand. It's traditional and skillful — not messy!"},
+  {"id": "fo_thali", "theme": "food", "emoji": "🍽️", "title": "The thali", "hi": "थाली", "ro": "thaali", "en": "platter", "body": "A round plate with lots of little bowls — daal, sabzi, rice, roti, pickle and a sweet — so you taste a bit of everything."},
+  {"id": "fo_staples", "theme": "food", "emoji": "🍞", "title": "Everyday food words", "hi": "रोटी", "ro": "roti", "en": "flatbread", "body": "At dinner you'll hear roti (flatbread), daal (lentils), sabzi (vegetables) and chaaval (rice) — the daily staples."},
+  {"id": "fo_mithai", "theme": "food", "emoji": "🍬", "title": "Sweets for happiness", "hi": "मिठाई", "ro": "mithaai", "en": "sweets", "body": "Good news? Share mithai! Sweets mark birthdays, festivals, and every happy moment."},
+  {"id": "fo_khaana", "theme": "food", "emoji": "🤝", "title": "\"Have you eaten?\"", "hi": "खाना खाया?", "ro": "khaana khaaya?", "en": "have you eaten?", "body": "Asking 'khaana khaaya?' is a warm, caring way of saying hello and showing you care."},
+  {"id": "fo_veg", "theme": "food", "emoji": "🥦", "title": "Lots of vegetarian food", "body": "Many Indians are vegetarian, so there are hundreds of delicious veggie dishes — including your greenhouse karela and bhindi!"},
+  {"id": "fo_masala", "theme": "food", "emoji": "🌶️", "title": "A box of spices", "hi": "मसाला", "ro": "masaala", "en": "spice mix", "body": "The masala dabba is a round tin of spices — haldi (turmeric), jeera (cumin) and dhania (coriander) — the heart of the kitchen."},
+  {"id": "fa_names", "theme": "family", "emoji": "👵", "title": "A name for every relative", "hi": "नानी", "ro": "naani", "en": "mom's mom", "body": "Hindi is very specific: Naani is mom's mother, Daadi is dad's mother, Maama is mom's brother, Chaacha is dad's younger brother."},
+  {"id": "fa_joint", "theme": "family", "emoji": "🏡", "title": "Joint families", "body": "Grandparents, aunts, uncles and cousins often live together or very close by, so the house is always full of family."},
+  {"id": "fa_cousins", "theme": "family", "emoji": "🧒", "title": "Cousins are like siblings", "body": "Cousins are often simply called bhai (brother) and behen (sister). Family bonds are close and warm."},
+  {"id": "fa_beta", "theme": "family", "emoji": "🧒", "title": "Beta & Beti", "hi": "बेटा", "ro": "beta", "en": "child / dear", "body": "Elders lovingly call any kid 'beta' (child/boy) or 'beti' (girl) — like saying 'sweetheart'."},
+  {"id": "fa_elders", "theme": "family", "emoji": "🧓", "title": "Elders are treasured", "body": "Grandparents tell bedtime stories, share blessings, and hold a place of deep love and respect in the family."},
+  {"id": "fa_atithi", "theme": "family", "emoji": "🙏", "title": "A guest is special", "hi": "अतिथि", "ro": "atithi", "en": "guest", "body": "There's a saying — 'atithi devo bhava', the guest is like a god. Guests are welcomed with food, chai, and lots of care."},
+  {"id": "fa_mehndi", "theme": "family", "emoji": "🌿", "title": "Mehndi", "hi": "मेहंदी", "ro": "mehndi", "en": "henna", "body": "On festivals and weddings, girls decorate their hands with pretty reddish-brown henna designs."},
+  {"id": "l_deva", "theme": "language", "emoji": "✍️", "title": "Devanagari script", "hi": "अ आ इ ई", "ro": "a aa i ee", "en": "vowels", "body": "Hindi is written in Devanagari, where each letter stands for a sound. It's neat and very logical to read!"},
+  {"id": "l_hinglish", "theme": "language", "emoji": "💬", "title": "Hinglish", "body": "People often mix Hindi and English in one sentence — 'Chalo, let's go!' — and that's totally normal."},
+  {"id": "l_wobble", "theme": "language", "emoji": "🙂", "title": "The head wobble", "body": "A gentle side-to-side tilt of the head can mean yes, okay, or 'I'm listening'. It takes practice to read!"},
+  {"id": "l_achha", "theme": "language", "emoji": "👍", "title": "Achha!", "hi": "अच्छा", "ro": "achha", "en": "good / okay / I see", "body": "One handy word with many meanings: good, okay, really?, or 'I see'. You'll hear it everywhere."},
+  {"id": "l_many", "theme": "language", "emoji": "🗺️", "title": "Many languages", "body": "India has 22 official languages and hundreds more! Hindi is one of the most widely spoken."},
+  {"id": "l_plural", "theme": "language", "emoji": "🧓", "title": "Big respect = plural", "body": "For elders, Hindi uses the polite plural — 'aap' and plural verbs — even for one person, to show respect."},
+  {"id": "l_names", "theme": "language", "emoji": "🌸", "title": "Names have meanings", "body": "Indian names usually mean something lovely — 'Aria' can mean a melody or song. What a perfect name for a Hindi Slayer!"},
+  {"id": "t_rangoli", "theme": "traditions", "emoji": "🎨", "title": "Rangoli", "hi": "रंगोली", "ro": "rangoli", "en": "floor art", "body": "Colorful patterns drawn on the floor with colored powders or flowers, to welcome guests and good luck."},
+  {"id": "t_diya", "theme": "traditions", "emoji": "🪔", "title": "The little diya", "hi": "दीया", "ro": "diya", "en": "oil lamp", "body": "A small clay oil lamp lit for festivals and prayers — its tiny flame is a symbol of hope and light."},
+  {"id": "t_bindi", "theme": "traditions", "emoji": "🔴", "title": "Bindi", "hi": "बिंदी", "ro": "bindi", "en": "forehead dot", "body": "A little dot worn on the forehead — sometimes for tradition, sometimes just because it looks pretty."},
+  {"id": "t_books", "theme": "traditions", "emoji": "📚", "title": "Books are respected", "body": "Books and learning are linked to Saraswati, the goddess of knowledge — so you never touch a book with your feet."},
+  {"id": "t_cows", "theme": "traditions", "emoji": "🐄", "title": "Cows are respected", "body": "In many parts of India cows are gently respected and you'll even see them strolling calmly down the street."},
+  {"id": "t_temple", "theme": "traditions", "emoji": "🛕", "title": "At the temple", "hi": "मंदिर", "ro": "mandir", "en": "temple", "body": "At a mandir you take off your shoes, speak softly, and may receive prasad — a little blessed sweet."},
+  {"id": "t_monsoon", "theme": "traditions", "emoji": "🌧️", "title": "The monsoon", "hi": "बारिश", "ro": "baarish", "en": "rain", "body": "After the hot summer, everyone cheers for the first monsoon rains — and the hot pakoras that come with them!"}
 ];
 // Story Mode — tiny illustrated stories built from learned words (Aria is the girl narrator)
 const STORIES = [
@@ -1583,4 +1610,4 @@ CONVOS.push.apply(CONVOS, CONVOS2);
 STORIES.push.apply(STORIES, STORIES2);
 GRAMMAR.push.apply(GRAMMAR, GRAMMAR2);
 
-if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; window.STORIES = STORIES; window.LEVEL2 = LEVEL2; }
+if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; window.CULTURE_THEMES = CULTURE_THEMES; window.STORIES = STORIES; window.LEVEL2 = LEVEL2; }
