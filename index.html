@@ -31,7 +31,7 @@ radial-gradient(circle at 50% 108%, rgba(54,230,255,.14), transparent 46%),
 linear-gradient(165deg,#0d0a1f 0%, #160d2e 52%, #1d0f33 100%);
 overflow:hidden;
 }
-#app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:760px;margin:0 auto;position:relative;}
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column;width:100%;margin:0 auto;position:relative;}
 .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 48px;}
 .hidden{display:none!important;}
 
@@ -333,52 +333,79 @@ background:linear-gradient(150deg, rgba(255,210,74,.10), rgba(155,60,255,.16));b
 .cbite .cbBody{font-size:13.5px;line-height:1.55;color:var(--ink);opacity:.92;font-weight:600;margin-top:8px;}
 .cbite .cbHi{margin-top:8px;font-size:15px;font-weight:800;color:#fff;}
 .cbite .cbHi .ro{color:var(--magenta);font-size:13px;}
+
+/* ===== Navigation + iPad-friendly widths ===== */
+.topbar{max-width:1120px;margin:0 auto;width:100%;}
+.screen{max-width:760px;margin-left:auto;margin-right:auto;width:100%;}
+#welcomeScreen,#homeScreen,#catScreen{max-width:1120px;}
+.navRow{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;}
+.navbtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:800;color:var(--ink);display:inline-flex;align-items:center;gap:6px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);}
+.navbtn:active{transform:scale(.96);}
+
+/* ===== Welcome hero ===== */
+.heroWrap{display:flex;gap:40px;align-items:center;justify-content:center;min-height:74vh;flex-wrap:wrap;padding:10px;}
+.heroRing{position:relative;flex:0 0 auto;margin-bottom:16px;}
+.ring{width:300px;height:300px;max-width:62vw;max-height:62vw;border-radius:50%;padding:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 55px rgba(255,45,149,.22);}
+.ringInner{width:100%;height:100%;border-radius:50%;background:rgba(12,8,26,.9);border:1px dashed rgba(255,255,255,.16);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--muted);padding:0;}
+.ringInner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.ringPlaceholder{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:700;text-align:center;opacity:.8;line-height:1.3;}
+.ringPill{position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);white-space:nowrap;background:linear-gradient(135deg,#ff2d95,#9b3cff);color:#fff;font-weight:800;font-size:14px;padding:9px 18px;border-radius:999px;box-shadow:0 6px 20px var(--glowPink);}
+.heroText{flex:0 1 440px;min-width:280px;}
+.heroTag{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,45,149,.5);background:rgba(255,45,149,.12);color:var(--magenta);font-weight:900;font-size:12px;letter-spacing:1.5px;padding:7px 15px;border-radius:999px;}
+h1.heroTitle{font-size:58px;text-align:left;line-height:1.02;margin:16px 0 0;letter-spacing:-1px;}
+.heroSub{font-size:18px;color:var(--muted);font-weight:600;margin:16px 0 0;max-width:430px;line-height:1.5;}
+.slayBtn{margin-top:24px;background:linear-gradient(135deg,#ff2d95,#9b3cff 70%,#7a3cff);color:#fff;border:none;border-radius:18px;padding:18px 30px;font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 14px 34px var(--glowPink);transition:transform .12s;display:inline-flex;align-items:center;gap:10px;}
+.slayBtn:active{transform:translateY(2px);}
+.heroStats{display:flex;gap:38px;margin-top:26px;}
+.heroStats .hsN{font-size:27px;font-weight:900;}
+.heroStats .hsL{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px;}
+
+/* ===== Home hub ===== */
+.hubGrid{display:grid;grid-template-columns:322px 1fr;gap:20px;align-items:start;padding-top:4px;}
+@media(max-width:860px){.hubGrid{grid-template-columns:1fr;}}
+.progPanel{display:flex;flex-direction:column;gap:12px;}
+.ppCard{background:linear-gradient(155deg,var(--cardGlass),rgba(16,10,32,.78));border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 6px 20px var(--shadowS);}
+.ppTop{display:flex;align-items:center;gap:12px;}
+.ppRing{width:62px;height:62px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;}
+.ppRing > span{width:48px;height:48px;border-radius:50%;background:rgba(12,8,26,.92);display:flex;align-items:center;justify-content:center;font-size:21px;}
+.ppLvlName{font-weight:900;font-size:16px;}
+.ppLvlSub{font-size:12px;color:var(--muted);font-weight:700;margin-top:3px;}
+.ppStats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;}
+.ppStat{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:13px;padding:11px;}
+.ppStat .n{font-size:20px;font-weight:900;}
+.ppStat .l{font-size:10.5px;color:var(--muted);font-weight:700;margin-top:3px;line-height:1.15;}
+.choiceArea{min-width:0;}
+.choiceGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+.hubCtas{display:grid;gap:12px;margin-bottom:14px;}
 </style>
 </head>
 <body>
 <div id="app">
+<input type="file" id="avatarInput" accept="image/*" style="display:none">
 <div class="topbar">
 <div class="pill star" aria-label="Stars earned"><span class="ico" aria-hidden="true">⭐</span><span id="starCount">0</span></div>
 <div class="pill lvl" aria-label="Current level"><span class="ico" aria-hidden="true">🩷</span>Lv <span id="levelCount">1</span></div>
 <div class="spacer"></div>
-<button class="iconbtn" id="parentBtn" title="grown-ups" aria-label="Open parent dashboard">👪</button>
 <button class="iconbtn" id="muteBtn" title="sound" aria-label="Toggle sound on or off">🔊</button>
+<button class="navbtn" id="parentBtn" aria-label="Open parent dashboard">👪 Parents</button>
 </div>
 
-<!-- HOME -->
-<div class="screen" id="homeScreen">
-<h1>Huntrix Aria</h1>
-<div class="sub" id="welcomeLine">🗡️ Hindi Slayer · slay a word, level up 💜</div>
+<!-- WELCOME -->
+<div class="screen" id="welcomeScreen"><div id="welcomeBody"></div></div>
 
-<div class="topRow">
-<button id="wotd" class="wotd"></button>
-<div id="levelBanner">
-<div class="lvlTop">
-<div class="lvlBadge" id="lvlBadge">🌟</div>
-<div>
-<div class="lvlTitle">Level <span id="lvlNum">1</span></div>
-<div class="lvlName" id="lvlName">Rookie Star</div>
-</div>
-</div>
-<div class="lvlBar"><i id="lvlFill"></i></div>
-<div class="lvlHint" id="lvlHint">Earn stars to level up! ⭐</div>
-</div>
-</div>
+<!-- HOME HUB -->
+<div class="screen hidden" id="homeScreen"><div id="hubWrap"></div></div>
 
-<div class="tiles" id="dashTiles"></div>
-<button class="progNote" id="progNote" type="button">📚 <b>Words Learned</b> = words she's met · 🌟 <b>Mastered</b> = answered right · ⭐ <b>Stars</b> add up after each set → level up. <u>What do these mean?</u></button>
-
-<div class="sectionTitle">Choose what to practice</div>
-<div class="units" id="unitsWrap"></div>
-</div>
+<!-- CATEGORY -->
+<div class="screen hidden" id="catScreen"></div>
 
 <!-- LESSON MENU (content is built dynamically by openUnit / openGrammar / quiz / games) -->
 <div class="screen hidden" id="menuScreen"></div>
 
 <!-- ACTIVITY -->
 <div class="screen hidden" id="actScreen">
-<button class="backBtn" onclick="openUnit(currentUnit)">⬅️ Back</button>
-<div class="dots" id="dots" style="margin-top:14px;"></div>
+<div class="navRow"><button class="backBtn" onclick="openUnit(currentUnit)">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<div class="dots" id="dots" style="margin-top:10px;"></div>
 <div id="actBody"></div>
 </div>
 
@@ -496,7 +523,14 @@ function speakSlow(text){ const base=(state&&typeof state.speed==="number")?stat
 
 /* ============ HELPERS ============ */
 const $ = id => document.getElementById(id);
-function show(screen){ clearToast(); ["homeScreen","menuScreen","actScreen","parentScreen"].forEach(s=>$(s).classList.add("hidden")); $(screen).classList.remove("hidden"); $(screen).scrollTop=0; }
+function show(screen){ clearToast(); ["welcomeScreen","homeScreen","catScreen","menuScreen","actScreen","parentScreen"].forEach(s=>$(s).classList.add("hidden")); $(screen).classList.remove("hidden"); $(screen).scrollTop=0; }
+/* ===== character art (device-local, not synced) ===== */
+function getAvatar(){ try{ return localStorage.getItem("ariaAvatar")||""; }catch(e){ return ""; } }
+function setAvatarFromFile(file){
+const r=new FileReader();
+r.onload=function(){ const img=new Image(); img.onload=function(){ try{ const S=320,c=document.createElement("canvas"); c.width=S;c.height=S; const ctx=c.getContext("2d"); const m=Math.min(img.width,img.height); ctx.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,S,S); localStorage.setItem("ariaAvatar", c.toDataURL("image/jpeg",0.85)); renderWelcome(); }catch(e){} }; img.src=r.result; };
+r.readAsDataURL(file);
+}
 function todayKey(d){ d=d||new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function addDaysKey(key,days){ const p=(key||todayKey()).split("-"); const d=new Date(+p[0],(+p[1])-1,+p[2]); d.setDate(d.getDate()+days); return todayKey(d); }
 function dateAdd(days){ return addDaysKey(todayKey(),days); }
@@ -715,8 +749,8 @@ const fresh=UNITS.find(u=>!state.done[u.id+"_learn"]);
 if(fresh) return {ico:"✨", label:"Start "+fresh.name, sub:"A fresh topic to explore", run:function(){ openUnit(fresh.id); }};
 if(missedN>0) return {ico:"⚔️", label:"Win back "+missedN+" word"+(missedN>1?"s":""), sub:"Practice the ones that slipped off", run:function(){ startReview('missed'); }};
 if(dueN>0) return {ico:"🔁", label:"Review "+dueN+" word"+(dueN>1?"s":""), sub:"A few are ready for review", run:function(){ startReview('due'); }};
-if((typeof learnedWords==="function"?learnedWords().length:0)>=4) return {ico:"🎯", label:"Take today's quiz", sub:"Review what she's learned", run:function(){ openSection='quiz'; renderUnits(); startQuiz(); }};
-return {ico:"📚", label:"Explore the topics", sub:"Tap a topic to begin", run:function(){ openSection='words'; renderUnits(); }};
+if((typeof learnedWords==="function"?learnedWords().length:0)>=4) return {ico:"🎯", label:"Take today's quiz", sub:"Review what she's learned", run:function(){ startQuiz(); }};
+return {ico:"📚", label:"Explore the topics", sub:"Tap a topic to begin", run:function(){ openCategory('words'); }};
 }
 /* ============ DAILY LEARNING PATH (5-min guided session) ============ */
 let path=null;
@@ -787,7 +821,7 @@ const card=document.createElement("div"); card.className="cbite"+(seen[i]?" seen
 const hiPart = c.hi?`<div class="cbHi"><span lang="hi">${c.hi}</span> <span class="ro" aria-hidden="true">${c.ro||''}</span>${c.en?' — '+c.en:''}</div>`:"";
 const hear = c.hi?`<button class="cbHear" aria-label="Hear it" onclick="event.stopPropagation(); speak('${c.hi.replace(/'/g,"\\'")}')">🔊</button>`:"";
 card.innerHTML=`<div class="cbTop"><span class="cbIco">${c.emoji}</span><span class="cbTitle">${c.title}</span>${seen[i]?'<span class="cbChk">✓</span>':''}${hear}</div><div class="cbBody">${c.body}</div>${hiPart}`;
-card.onclick=function(){ const wasNew=!(state.cultureSeen||{})[i]; state.cultureSeen=state.cultureSeen||{}; state.cultureSeen[i]=1; if(wasNew){ saveState(); renderUnits(); } if(c.hi) speak(c.hi); };
+card.onclick=function(){ const wasNew=!(state.cultureSeen||{})[i]; state.cultureSeen=state.cultureSeen||{}; state.cultureSeen[i]=1; if(wasNew){ saveState(); card.classList.add("seen"); } if(c.hi) speak(c.hi); };
 wrap.appendChild(card);
 });
 }
@@ -797,44 +831,132 @@ const grid=document.createElement("div"); grid.style.gridColumn="1/-1"; grid.cla
 ACHIEVEMENTS.forEach(a=>{ const got=!!earned[a.id]; const b=document.createElement("div"); b.className="badge"+(got?" got":""); b.innerHTML=`<div class="bIco">${got?a.emoji:'🔒'}</div><div class="bName">${a.name}</div><div class="bDesc">${a.desc}</div>`; grid.appendChild(b); });
 wrap.appendChild(grid);
 }
-function renderUnits(){
-const wrap=$("unitsWrap"); wrap.innerHTML="";
-// Daily Path hero
-const done=pathDoneToday();
-const pcard=document.createElement("button"); pcard.type="button"; pcard.className="pathCard"+(done?" done":""); pcard.style.gridColumn="1/-1";
-pcard.innerHTML=`<span class="pathIco">${done?'✅':'🗺️'}</span><span class="ctaText"><span class="ctaLab" style="color:var(--cyan)">Daily Path · ~5 min</span><span class="ctaMain">${done?"Today's path is done! 🎉":"Start today's guided session"}</span><span class="ctaSub">${done?"Come back tomorrow for a fresh path":"Review → Learn → Grammar game → Talk"}</span></span><span class="ctaGo">${done?'↻':'▶'}</span>`;
-pcard.onclick=function(){ startDailyPath(); };
-wrap.appendChild(pcard);
-const rec=recommendNext();
-const cta=document.createElement("button"); cta.type="button"; cta.className="ctaCard"; cta.style.gridColumn="1/-1";
-cta.innerHTML=`<span class="ctaIco">${rec.ico}</span><span class="ctaText"><span class="ctaLab">Recommended next</span><span class="ctaMain">${rec.label}</span><span class="ctaSub">${rec.sub}</span></span><span class="ctaGo">▶</span>`;
-cta.onclick=rec.run; wrap.appendChild(cta);
+let currentCat=null;
+/* ===== WELCOME (landing) ===== */
+function renderWelcome(){
+const li=levelInfo();
+const wl=Object.keys(state.seen||{}).length;
+const masteredW=Object.keys(state.mastered||{}).length;
+const av=getAvatar();
+const p=Math.max(4, li.pct);
+const ring=`conic-gradient(from -90deg, #ff2d95 0%, #ffb14a ${Math.round(p*0.6)}%, #9b3cff ${p}%, rgba(255,255,255,.08) ${p}% 100%)`;
+$("welcomeBody").innerHTML=`
+<div class="heroWrap">
+<div class="heroRing">
+<div class="ring" style="background:${ring}">
+<button class="ringInner" onclick="document.getElementById('avatarInput').click()" aria-label="Add Aria's character art">${av?`<img src="${av}" alt="Aria">`:`<span class="ringPlaceholder"><span style="font-size:34px">🌟</span><span>Tap to add<br>Aria's art</span></span>`}</button>
+<div class="ringPill">${li.badge} Level ${li.level} · ${li.name}</div>
+</div>
+</div>
+<div class="heroText">
+<div class="heroTag">🗡️ HINDI SLAYER</div>
+<h1 class="heroTitle">Huntrix Aria</h1>
+<div class="heroSub">Slay a word, level up. <b style="color:var(--gold)">${li.toNext} star${li.toNext>1?'s':''}</b> to your next level 💜</div>
+<button class="slayBtn" onclick="goHome()">🗡️ Let's slay! →</button>
+<div class="heroStats">
+<div><div class="hsN" style="color:var(--cyan)">${wl}</div><div class="hsL">Words learned</div></div>
+<div><div class="hsN" style="color:var(--gold)">${masteredW}</div><div class="hsL">Mastered 🌟</div></div>
+</div>
+</div>
+</div>`;
+}
+function showWelcome(){ renderTop(); renderWelcome(); show("welcomeScreen"); }
+
+/* ===== HOME HUB ===== */
+function hubChoices(){
 const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
 const wp=pctWords(), cv=convosDone(), gd=grammarDoneCount(), qb=quizBest();
 const qList=state.quizzes||[];
 const learnedCount=(typeof learnedWords==="function"?learnedWords().length:0);
 const gamesN=(typeof GAMES!=="undefined"?GAMES.length:0);
 const gamesDoneN=(typeof GAMES!=="undefined"?GAMES:[]).filter(g=>state.done["game_"+g.id]).length;
-const sections=[
-{key:"words", emoji:"📚", name:"Learning Words", sub:UNITS.length+" topics · "+wp+"% complete", pct:wp, fn:renderTopicTiles},
-{key:"convos", emoji:"🎭", name:"Little Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100), fn:renderConvoTiles},
-{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons done", pct:(gN?Math.round(gd/gN*100):0), fn:renderGrammarTiles},
-{key:"games", emoji:"🕹️", name:"Grammar Arena", sub:gamesN+" mini-games · "+gamesDoneN+"/"+gamesN+" played", pct:(gamesN?Math.round(gamesDoneN/gamesN*100):0), fn:renderGameTiles},
-{key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?qList.length+" taken · best "+qb+"%":(learnedCount<4?"learn words to unlock":Math.min(25,learnedCount)+" Qs from learned words")), pct:qb, fn:renderQuizSection},
-{key:"trophies", emoji:"🏆", name:"Trophies", sub:Object.keys(state.achievements||{}).length+"/"+ACHIEVEMENTS.length+" badges earned", pct:Math.round(100*Object.keys(state.achievements||{}).length/ACHIEVEMENTS.length), fn:renderTrophies},
-{key:"culture", emoji:"🪔", name:"Culture Corner", sub:(function(){const n=(typeof CULTURE!=="undefined"?CULTURE.length:0);const s=Object.keys(state.cultureSeen||{}).length;return s+"/"+n+" explored";})(), pct:(function(){const n=(typeof CULTURE!=="undefined"?CULTURE.length:0);const s=Object.keys(state.cultureSeen||{}).length;return n?Math.round(100*s/n):0;})(), fn:renderCulture},
+const cultN=(typeof CULTURE!=="undefined"?CULTURE.length:0), cultS=Object.keys(state.cultureSeen||{}).length;
+const badgeN=Object.keys(state.achievements||{}).length;
+return [
+{key:"words", emoji:"📚", name:"Learning Words", sub:wp+"% complete", pct:wp},
+{key:"convos", emoji:"🎭", name:"Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100)},
+{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons", pct:(gN?Math.round(gd/gN*100):0)},
+{key:"games", emoji:"🕹️", name:"Grammar Arena", sub:gamesDoneN+"/"+gamesN+" played", pct:(gamesN?Math.round(gamesDoneN/gamesN*100):0)},
+{key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?"best "+qb+"%":(learnedCount<4?"learn to unlock":"ready to play")), pct:qb},
+{key:"trophies", emoji:"🏆", name:"Trophies", sub:badgeN+"/"+ACHIEVEMENTS.length+" badges", pct:Math.round(100*badgeN/ACHIEVEMENTS.length)},
+{key:"culture", emoji:"🪔", name:"Culture Corner", sub:cultS+"/"+cultN+" explored", pct:(cultN?Math.round(100*cultS/cultN):0)},
 ];
-sections.forEach(s=>{
-const open=(openSection===s.key);
-const hdr=document.createElement("button");
-hdr.className="sectionCard"+(open?" open":""); hdr.style.gridColumn="1/-1";
-hdr.onclick=()=>{ openSection=open?null:s.key; renderUnits(); };
-hdr.innerHTML=`<span class="scEmoji">${s.emoji}</span><span class="scText"><span class="scName">${s.name}</span><span class="scSub">${s.sub}</span><span class="scBar"><i style="width:${s.pct}%"></i></span></span><span class="scChev">${open?'▾':'▸'}</span>`;
-wrap.appendChild(hdr);
-if(open) s.fn(wrap);
-});
 }
-function goHome(){ path=null; checkAchievements(); renderTop(); renderWOTD(); renderLevelBanner(); renderDashboard(); renderUnits(); show("homeScreen"); }
+function renderHub(){
+const li=levelInfo();
+const wl=Object.keys(state.seen||{}).length;
+const mt=masteredTodayCount();
+const topics=topicsMastered();
+const dueN=srsDuePool().length;
+const longterm=srsLongTermCount();
+const p=Math.max(4, li.pct);
+const ring=`conic-gradient(from -90deg, #ff2d95 0%, #9b3cff ${p}%, rgba(255,255,255,.08) ${p}% 100%)`;
+$("hubWrap").innerHTML=`
+<div class="hubGrid">
+<aside class="progPanel">
+<div class="ppCard">
+<div class="ppTop">
+<div class="ppRing" style="background:${ring}"><span>${li.badge}</span></div>
+<div><div class="ppLvlName">Level ${li.level} · ${li.name}</div><div class="ppLvlSub">${li.inLevel}/${STARS_PER_LEVEL} stars · ${li.toNext} to level ${li.level+1}</div></div>
+</div>
+<div class="ppStats">
+<div class="ppStat"><div class="n" style="color:var(--gold)">${li.stars}</div><div class="l">stars ⭐</div></div>
+<div class="ppStat"><div class="n" style="color:var(--cyan)">${wl}</div><div class="l">words learned</div></div>
+<div class="ppStat"><div class="n" style="color:var(--good)">${mt}</div><div class="l">mastered today</div></div>
+<div class="ppStat"><div class="n" style="color:var(--magenta)">${topics}/${UNITS.length}</div><div class="l">topics mastered</div></div>
+<div class="ppStat"><div class="n">${dueN}</div><div class="l">due to review</div></div>
+<div class="ppStat"><div class="n">${longterm}</div><div class="l">long-term 🧠</div></div>
+</div>
+<button onclick="explainProgress()" style="margin-top:10px;background:none;border:none;color:var(--cyan);font-size:11.5px;font-weight:800;cursor:pointer;text-decoration:underline;padding:0">What do the stats mean?</button>
+</div>
+<button class="wotd" id="hubWotd"></button>
+</aside>
+<main class="choiceArea">
+<div class="hubCtas" id="hubCtas"></div>
+<div class="choiceGrid" id="choiceGrid"></div>
+</main>
+</div>`;
+const ep=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/86400000);
+const w=ALL_WORDS[ep%ALL_WORDS.length];
+const wotd=$("hubWotd");
+wotd.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div><div class="row"><span class="wic">${w.ic}</span><span><span class="whi" lang="hi">${w.hi}</span><br><span class="wro" aria-hidden="true">${w.ro}</span> — <span class="wen">${w.en}</span></span><span class="hear">🔊</span></div>`;
+wotd.onclick=()=>speak(w.hi);
+const ctas=$("hubCtas");
+const doneP=pathDoneToday();
+const pc=document.createElement("button"); pc.type="button"; pc.className="pathCard"+(doneP?" done":"");
+pc.innerHTML=`<span class="pathIco">${doneP?'✅':'🗺️'}</span><span class="ctaText"><span class="ctaLab" style="color:var(--cyan)">Daily Path · ~5 min</span><span class="ctaMain">${doneP?"Today's path is done! 🎉":"Start today's guided session"}</span><span class="ctaSub">${doneP?"Come back tomorrow for a fresh path":"Review → Learn → Grammar game → Talk"}</span></span><span class="ctaGo">${doneP?'↻':'▶'}</span>`;
+pc.onclick=function(){ startDailyPath(); };
+ctas.appendChild(pc);
+const rec=recommendNext();
+const cta=document.createElement("button"); cta.type="button"; cta.className="ctaCard";
+cta.innerHTML=`<span class="ctaIco">${rec.ico}</span><span class="ctaText"><span class="ctaLab">Recommended next</span><span class="ctaMain">${rec.label}</span><span class="ctaSub">${rec.sub}</span></span><span class="ctaGo">▶</span>`;
+cta.onclick=rec.run; ctas.appendChild(cta);
+const grid=$("choiceGrid");
+hubChoices().forEach(c=>{ const b=document.createElement("button"); b.className="unit"; b.onclick=function(){ openCategory(c.key); }; b.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${c.name}</span><div class="prog">${c.sub}</div><div class="bar"><i style="width:${c.pct}%"></i></div>`; grid.appendChild(b); });
+}
+function goHome(){ path=null; checkAchievements(); renderTop(); renderHub(); show("homeScreen"); }
+
+/* ===== CATEGORY ===== */
+function openCategory(key){
+currentCat=key;
+const C={
+words:{emoji:"📚",name:"Learning Words",sub:UNITS.length+" topics to discover",fn:renderTopicTiles},
+convos:{emoji:"🎭",name:"Little Conversations",sub:CONVOS.length+" to act out",fn:renderConvoTiles},
+grammar:{emoji:"✍️",name:"Sentence Builder",sub:(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0)+" grammar lessons",fn:renderGrammarTiles},
+games:{emoji:"🕹️",name:"Grammar Arena",sub:(typeof GAMES!=="undefined"?GAMES.length:0)+" neon mini-games",fn:renderGameTiles},
+quiz:{emoji:"🎯",name:"Daily Quiz & Review",sub:"Practice your learned words",fn:renderQuizSection},
+trophies:{emoji:"🏆",name:"Trophies",sub:Object.keys(state.achievements||{}).length+"/"+ACHIEVEMENTS.length+" badges earned",fn:renderTrophies},
+culture:{emoji:"🪔",name:"Culture Corner",sub:(typeof CULTURE!=="undefined"?CULTURE.length:0)+" Hindi-at-home notes",fn:renderCulture},
+};
+const c=C[key]; if(!c){ goHome(); return; }
+const cs=$("catScreen");
+cs.innerHTML=`<div class="navRow"><button class="backBtn" onclick="goHome()">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${c.emoji} ${c.name}</h1>
+<div class="sub">${c.sub}</div>
+<div class="units" id="catWrap" style="margin-top:12px"></div>`;
+c.fn($("catWrap"));
+show("catScreen"); cs.scrollTop=0;
+}
 
 /* ============ WORD OF THE DAY ============ */
 const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]);
@@ -866,9 +988,10 @@ const actHtml = acts.map(a=>{
 const seen = a.k==="listen" ? (state.done[id+"_listen"]?" ✓":"") : (state.done[id+"_"+a.k]?" ✓":"");
 return `<button class="actBtn" onclick="startActivity('${id}','${a.k}')"><span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span></button>`;
 }).join("");
+currentCat="words";
 const ms=$("menuScreen");
-ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-<h1 style="margin-top:10px">${u.emoji} ${u.name}</h1>
+ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('words')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${u.emoji} ${u.name}</h1>
 <div class="sub">${u.words.length} words to discover</div>
 <div style="margin-top:8px">${actHtml}</div>`;
 show("menuScreen"); ms.scrollTop=0;
@@ -996,9 +1119,9 @@ showReward(earned, res.leveledUp, res.newLevel, lesson.newMastered||0);
 /* ============ CONVERSATIONS ============ */
 function playConvo(id){
 const c=CONVOS.find(x=>x.id===id);
-currentUnit=null;
-let html=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-<h1 style="margin-top:10px;">${c.emoji} ${c.name}</h1>
+currentUnit=null; currentCat="convos";
+let html=`<div class="navRow"><button class="backBtn" onclick="openCategory('convos')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px;">${c.emoji} ${c.name}</h1>
 <div class="sub">Tap each bubble to hear it, then say it back!</div>`;
 c.lines.forEach((l,i)=>{
 const left = l.sp==="A";
@@ -1030,11 +1153,11 @@ showReward(3, res.leveledUp, res.newLevel, 0);
 let gb=null;
 function openGrammar(id){
 const g=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).find(x=>x.id===id); if(!g) return;
-currentUnit=null;
+currentUnit=null; currentCat="grammar";
 const ex=g.examples.map(e=>`<div class="gex" onclick="speak('${e.hi.replace(/'/g,"\\'")}')"><span><span class="ghi" lang="hi">${e.hi}</span><br><span class="gro" aria-hidden="true">${e.ro}</span> — <span class="gen">${e.en}</span></span><span class="ghear">🔊</span></div>`).join("");
 const ms=$("menuScreen");
-ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-<h1 style="margin-top:10px">${g.emoji} ${g.name}</h1>
+ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('grammar')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${g.emoji} ${g.name}</h1>
 <div class="gtip">${g.tip}</div>
 <div class="sectionTitle">Examples · tap to hear</div>
 ${ex}
@@ -1105,10 +1228,10 @@ let game=null;
 function gameDots(){ return '<div class="dots" style="margin-top:14px">'+game.rounds.map((_,i)=>`<div class="dot${i<game.idx?' done':i===game.idx?' now':''}"></div>`).join("")+'</div>'; }
 function openGame(id){
 const g=(typeof GAMES!=="undefined"?GAMES:[]).find(x=>x.id===id); if(!g) return;
-currentUnit=null;
+currentUnit=null; currentCat="games";
 const ms=$("menuScreen");
-ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-<h1 style="margin-top:10px">${g.emoji} ${g.name}</h1>
+ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('games')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${g.emoji} ${g.name}</h1>
 <div class="gtip">${g.intro}</div>
 <button class="footerBtn" style="margin-top:14px" onclick="startGame('${id}')">⚔️ Enter the Arena ▶</button>`;
 show("menuScreen"); ms.scrollTop=0;
@@ -1338,7 +1461,7 @@ ov.innerHTML=`<div class="rewardCard">
 ${demoteLine}
 ${lvlLine}
 <br>
-<button class="footerBtn" style="margin-top:14px" onclick="this.closest('.overlay').remove(); openSection='quiz'; goHome();">See my scores ▶</button>
+<button class="footerBtn" style="margin-top:14px" onclick="this.closest('.overlay').remove(); openCategory('quiz');">See my scores ▶</button>
 </div>`;
 document.body.appendChild(ov);
 burstConfetti(pct>=70);
@@ -1724,18 +1847,21 @@ ov.innerHTML=`<div class="rewardCard" style="text-align:left;max-width:380px">
 </div>`;
 document.body.appendChild(ov);
 }
-$("progNote").onclick=explainProgress;
+/* progress explainer is reachable from the parent dashboard / hub help affordance */
 
 /* ============ MUTE ============ */
 $("muteBtn").onclick=()=>{ muted=!muted; $("muteBtn").textContent=muted?"🔇":"🔊"; if(muted) speechSynthesis.cancel(); else toast("Sound on 🔊"); };
+
+/* ============ CHARACTER ART INPUT ============ */
+$("avatarInput").onchange=function(e){ const f=e.target.files&&e.target.files[0]; if(f) setAvatarFromFile(f); e.target.value=""; };
 
 /* ============ BOOT ============ */
 // warm up speech on first touch (iOS needs a user gesture)
 let warmed=false;
 document.addEventListener("touchstart",()=>{ if(!warmed && 'speechSynthesis' in window){ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); warmed=true; pickVoice(); } },{once:false});
 applySettings();
-goHome();
-if(syncCode){ syncPull().then(ok=>{ if(ok) goHome(); }); }
+showWelcome();
+if(syncCode){ syncPull().then(ok=>{ if(ok) showWelcome(); }); }
 </script>
 <script>
 if('serviceWorker' in navigator){
