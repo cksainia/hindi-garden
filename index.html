@@ -450,22 +450,24 @@ el.onclick=()=>speak(w.hi);
 
 /* ============ UNIT MENU ============ */
 function openUnit(id){
-currentUnit=id; const u=UNITS.find(x=>x.id===id);
-$("menuTitle").innerHTML=`${u.emoji} ${u.name}`;
-$("menuSub").textContent=`${u.words.length} words to discover`;
-const m=$("menuActs"); m.innerHTML="";
+const u=UNITS.find(x=>x.id===id);
+if(!u){ goHome(); return; }
+currentUnit=id;
 const acts=[
 {k:"learn", big:"📖", t:"Learn the Words", d:"See, hear & say each word"},
 {k:"listen", big:"👂", t:"Listen & Find", d:"Hear Hindi, tap the right picture"},
 {k:"say", big:"🎤", t:"Say It!", d:"Hear it, then say it out loud"},
 ];
-acts.forEach(a=>{
-const b=document.createElement("button"); b.className="actBtn"; b.onclick=()=>startActivity(id,a.k);
+const actHtml = acts.map(a=>{
 const seen = a.k==="listen" ? (state.done[id+"_listen"]?" ✓":"") : (state.done[id+"_"+a.k]?" ✓":"");
-b.innerHTML=`<span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span>`;
-m.appendChild(b);
-});
-show("menuScreen");
+return `<button class="actBtn" onclick="startActivity('${id}','${a.k}')"><span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span></button>`;
+}).join("");
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="goHome()">⬅️ Home</button>
+<h1 style="margin-top:10px">${u.emoji} ${u.name}</h1>
+<div class="sub">${u.words.length} words to discover</div>
+<div style="margin-top:8px">${actHtml}</div>`;
+show("menuScreen"); ms.scrollTop=0;
 }
 
 /* ============ ACTIVITIES ============ */
