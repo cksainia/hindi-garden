@@ -216,6 +216,25 @@ background:linear-gradient(150deg, rgba(255,45,149,.18), rgba(155,60,255,.22));p
 .sectionCard .scName{font-weight:900;font-size:18px;}
 .sectionCard .scSub{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:2px;}
 .sectionCard .scChev{margin-left:auto;font-size:15px;color:var(--muted);font-weight:900;}
+.scBar{height:5px;background:rgba(0,0,0,.3);border-radius:6px;margin-top:8px;overflow:hidden;}
+.scBar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--magenta));border-radius:6px;transition:width .5s;}
+
+/* Daily Quiz */
+.qopts{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+.qopt{width:100%;text-align:left;font-size:17px;font-weight:800;color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:14px 16px;
+background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));box-shadow:0 4px 14px var(--shadowS);cursor:pointer;transition:transform .12s, border-color .15s, box-shadow .15s;}
+.qopt:active{transform:translateY(2px);}
+.qopt.correct{border-color:var(--good);box-shadow:0 0 20px rgba(63,227,160,.45);}
+.qopt.wrong{border-color:var(--bad);opacity:.75;}
+.qpanel{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 4px 16px var(--shadowS);}
+.qpHead{font-weight:900;font-size:14px;margin-bottom:8px;}
+.qpEmpty{font-size:13px;color:var(--muted);font-weight:700;line-height:1.5;}
+.qrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);}
+.qrow .qd{font-size:12.5px;color:var(--muted);font-weight:700;width:92px;flex:0 0 auto;}
+.qrow .qbar{flex:1;height:7px;background:rgba(0,0,0,.3);border-radius:6px;overflow:hidden;}
+.qrow .qbar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:6px;}
+.qrow .qsc{font-size:14px;font-weight:900;width:56px;text-align:right;flex:0 0 auto;}
+.qsc.g{color:var(--good);} .qsc.m{color:var(--gold);} .qsc.b{color:var(--bad);}
 </style>
 </head>
 <body>
@@ -313,6 +332,8 @@ s.seen = s.seen || {};
 if(typeof s.stars !== "number"){ s.stars = (typeof s.sun==="number") ? s.sun : 0; }
 // mastered words: { ro: "YYYY-MM-DD" } — date a word was first nailed in Listen & Find
 if(!s.mastered || typeof s.mastered!=="object") s.mastered = {};
+// quiz history: [{date, score, total, pct, t}]
+if(!Array.isArray(s.quizzes)) s.quizzes = [];
 // keep legacy keys (sun, plants) untouched so nothing is wiped
 return s;
 }
@@ -437,20 +458,45 @@ b.innerHTML=`<span class="emoji">${g.emoji}</span><span class="name">${g.name}</
 wrap.appendChild(b);
 });
 }
+function pctWords(){ let d=0,t=0; UNITS.forEach(u=>{const tot=u.words.length*2; t+=tot; d+=Math.min(tot,(state.done[u.id+"_learn"]?u.words.length:0)+(state.done[u.id+"_listen"]||0));}); return t?Math.round(d/t*100):0; }
+function convosDone(){ return CONVOS.filter(c=>state.done["convo_"+c.id]).length; }
+function grammarDoneCount(){ return (typeof GRAMMAR!=="undefined"?GRAMMAR:[]).filter(g=>state.done["grammar_"+g.id]).length; }
+function quizBest(){ const l=state.quizzes||[]; return l.length?Math.max(...l.map(q=>q.pct)):0; }
+function renderQuizSection(wrap){
+const list=(state.quizzes||[]);
+const start=document.createElement("button");
+start.className="footerBtn"; start.style.position="static"; start.style.gridColumn="1/-1"; start.style.margin="2px 0 8px";
+start.textContent="🎯 Start Quiz · 25 questions ▶"; start.onclick=startQuiz;
+wrap.appendChild(start);
+const panel=document.createElement("div"); panel.style.gridColumn="1/-1"; panel.className="qpanel";
+if(!list.length){
+panel.innerHTML=`<div class="qpHead">Quiz scores</div><div class="qpEmpty">No quizzes yet — take the first one to start tracking her progress! Each quiz mixes words, conversations &amp; grammar.</div>`;
+}else{
+const best=Math.max(...list.map(q=>q.pct));
+const avg=Math.round(list.reduce((a,q)=>a+q.pct,0)/list.length);
+const recent=list.slice(-8).reverse();
+const rows=recent.map(q=>`<div class="qrow"><span class="qd">${q.date}</span><span class="qbar"><i style="width:${q.pct}%"></i></span><span class="qsc ${q.pct>=80?'g':q.pct>=50?'m':'b'}">${q.score}/${q.total}</span></div>`).join("");
+panel.innerHTML=`<div class="qpHead">Quiz scores · best ${best}% · avg ${avg}% · ${list.length} taken</div>${rows}`;
+}
+wrap.appendChild(panel);
+}
 function renderUnits(){
 const wrap=$("unitsWrap"); wrap.innerHTML="";
 const gN=(typeof GRAMMAR!=="undefined"?GRAMMAR.length:0);
+const wp=pctWords(), cv=convosDone(), gd=grammarDoneCount(), qb=quizBest();
+const qList=state.quizzes||[];
 const sections=[
-{key:"words", emoji:"📚", name:"Learning Words", sub:UNITS.length+" topics · vocabulary", fn:renderTopicTiles},
-{key:"convos", emoji:"🎭", name:"Little Conversations", sub:CONVOS.length+" everyday chats", fn:renderConvoTiles},
-{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gN+" grammar lessons", fn:renderGrammarTiles},
+{key:"words", emoji:"📚", name:"Learning Words", sub:UNITS.length+" topics · "+wp+"% complete", pct:wp, fn:renderTopicTiles},
+{key:"convos", emoji:"🎭", name:"Little Conversations", sub:cv+"/"+CONVOS.length+" practiced", pct:Math.round(cv/CONVOS.length*100), fn:renderConvoTiles},
+{key:"grammar", emoji:"✍️", name:"Sentence Builder", sub:gd+"/"+gN+" lessons done", pct:(gN?Math.round(gd/gN*100):0), fn:renderGrammarTiles},
+{key:"quiz", emoji:"🎯", name:"Daily Quiz", sub:(qList.length?qList.length+" taken · best "+qb+"%":"25 mixed questions"), pct:qb, fn:renderQuizSection},
 ];
 sections.forEach(s=>{
 const open=(openSection===s.key);
 const hdr=document.createElement("button");
 hdr.className="sectionCard"+(open?" open":""); hdr.style.gridColumn="1/-1";
 hdr.onclick=()=>{ openSection=open?null:s.key; renderUnits(); };
-hdr.innerHTML=`<span class="scEmoji">${s.emoji}</span><span class="scText"><span class="scName">${s.name}</span><span class="scSub">${s.sub}</span></span><span class="scChev">${open?'▾':'▸'}</span>`;
+hdr.innerHTML=`<span class="scEmoji">${s.emoji}</span><span class="scText"><span class="scName">${s.name}</span><span class="scSub">${s.sub}</span><span class="scBar"><i style="width:${s.pct}%"></i></span></span><span class="scChev">${open?'▾':'▸'}</span>`;
 wrap.appendChild(hdr);
 if(open) s.fn(wrap);
 });
@@ -701,6 +747,93 @@ ${msg}
 show("menuScreen"); ms.scrollTop=0;
 }
 
+/* ============ DAILY QUIZ ============ */
+let quiz=null;
+function buildQuiz(){
+const words = ALL_WORDS.slice();
+const sentences=[];
+CONVOS.forEach(c=>c.lines.forEach(l=>sentences.push({hi:l.hi,ro:l.ro,en:l.en})));
+(typeof GRAMMAR!=="undefined"?GRAMMAR:[]).forEach(g=>g.examples.forEach(e=>sentences.push({hi:e.hi,ro:e.ro,en:e.en})));
+const usedW=new Set(), usedS=new Set();
+function distinct(pool,key,exclude,n){
+const seen=new Set([exclude]); const out=[];
+for(const x of shuffle(pool)){ const v=x[key]; if(v&&!seen.has(v)){ seen.add(v); out.push(v); if(out.length>=n)break; } }
+return out;
+}
+function wordQ(){
+let w,tries=0; do{ w=words[Math.floor(Math.random()*words.length)]; tries++; }while(usedW.has(w.ro)&&tries<60); usedW.add(w.ro);
+if(Math.random()<0.5){
+const opts=shuffle([w.en,...distinct(words,"en",w.en,3)]);
+return {prompt:"What does this mean?", q:w.hi, sub:w.ro, ic:w.ic, audio:w.hi, opts, ans:opts.indexOf(w.en)};
+}else{
+const opts=shuffle([w.hi,...distinct(words,"hi",w.hi,3)]);
+return {prompt:"Pick the Hindi word", q:w.en, sub:"", ic:w.ic, audio:null, opts, ans:opts.indexOf(w.hi)};
+}
+}
+function sentQ(){
+let s,tries=0; do{ s=sentences[Math.floor(Math.random()*sentences.length)]; tries++; }while(usedS.has(s.hi)&&tries<60); usedS.add(s.hi);
+const opts=shuffle([s.en,...distinct(sentences,"en",s.en,3)]);
+return {prompt:"What does this sentence mean?", q:s.hi, sub:s.ro, ic:"💬", audio:s.hi, opts, ans:opts.indexOf(s.en)};
+}
+const qs=[];
+for(let i=0;i<25;i++){ qs.push((sentences.length>=4 && Math.random()<0.35)?sentQ():wordQ()); }
+return qs;
+}
+function startQuiz(){ quiz={ qs:buildQuiz(), idx:0, score:0, answered:false, pick:-1 }; renderQuiz(); }
+function renderQuiz(){
+const Q=quiz.qs[quiz.idx];
+const opts=Q.opts.map((o,i)=>{
+let cls="qopt";
+if(quiz.answered){ if(i===Q.ans) cls+=" correct"; else if(i===quiz.pick) cls+=" wrong"; }
+return `<button class="${cls}" ${quiz.answered?'':`onclick="answerQuiz(${i})"`}>${o}</button>`;
+}).join("");
+const audioBtn = Q.audio ? `<button class="speakBtn" style="margin-top:12px" onclick="speak('${Q.audio.replace(/'/g,"\\'")}')">🔊 Hear it</button>` : "";
+let enc="";
+if(quiz.answered){ enc = (quiz.pick===Q.ans) ? `<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</div>` : `<div class="encourage" style="color:var(--bad)">The right answer is in green 💜</div>`; }
+const ms=$("menuScreen");
+ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave the quiz? This score won\\'t be saved.')) goHome();">⬅️ Quit</button>
+<div class="prompt" style="margin-top:14px">🎯 Question ${quiz.idx+1} of ${quiz.qs.length} · Score ${quiz.score}</div>
+<div class="card"><div class="bigEmoji" style="font-size:58px">${Q.ic||"❓"}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman">${Q.sub}</div>`:""}${audioBtn}</div>
+<div class="qopts">${opts}</div>
+${enc}`;
+show("menuScreen"); ms.scrollTop=0;
+if(Q.audio) speak(Q.audio);
+}
+function answerQuiz(i){
+if(quiz.answered) return;
+quiz.answered=true; quiz.pick=i;
+if(i===quiz.qs[quiz.idx].ans) quiz.score++;
+renderQuiz();
+setTimeout(()=>{ quiz.idx++; quiz.answered=false; quiz.pick=-1; if(quiz.idx>=quiz.qs.length){ finishQuiz(); } else { renderQuiz(); } }, 1100);
+}
+function finishQuiz(){
+const total=quiz.qs.length, score=quiz.score, pct=Math.round(score/total*100);
+state.quizzes=state.quizzes||[]; state.quizzes.push({date:todayKey(), score, total, pct, t:Date.now()});
+if(state.quizzes.length>50) state.quizzes.shift();
+logActivity([]);
+const earned=Math.max(3, Math.round(score/2));
+const res=addStars(earned);
+showQuizReward(score,total,pct,earned,res);
+}
+function showQuizReward(score,total,pct,earned,res){
+saveState(); renderTop();
+const li=levelInfo();
+const msg = pct>=90?"Superstar! 🌟" : pct>=70?"Awesome work! ✨" : pct>=50?"Nice — keep going! 💜" : "Good try — practice makes a slayer! 🗡️";
+const lvlLine = res.leveledUp ? `<div class="lvlUpTag">⬆️ LEVEL UP! Level ${res.newLevel} · ${li.name} ${li.badge}</div>` : "";
+const ov=document.createElement("div"); ov.className="overlay";
+ov.innerHTML=`<div class="rewardCard">
+<div class="grow">🎯</div>
+<h2>${score}/${total} · ${pct}%</h2>
+<div style="font-size:16px;font-weight:800;color:var(--good);margin:4px 0">${msg}</div>
+<div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars</div>
+${lvlLine}
+<br>
+<button class="footerBtn" style="margin-top:14px" onclick="this.closest('.overlay').remove(); openSection='quiz'; goHome();">See my scores ▶</button>
+</div>`;
+document.body.appendChild(ov);
+burstConfetti(pct>=70);
+}
+
 /* ============ REWARD ============ */
 function showReward(earned, leveledUp, newLevel, newMastered){
 saveState(); renderTop();
@@ -798,6 +931,15 @@ ${ syncCode
 <div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
 </div>
 </div>
+${(()=>{ const l=state.quizzes||[];
+if(!l.length) return `<div class="pcard"><div style="font-weight:900;font-size:17px">Quiz scores 🎯</div><div style="font-size:14px;opacity:.78;font-weight:700;margin-top:4px">No quizzes yet. Have her take a Daily Quiz to start tracking how much she's actually learning over time.</div></div>`;
+const best=Math.max(...l.map(q=>q.pct)), avg=Math.round(l.reduce((a,q)=>a+q.pct,0)/l.length);
+const first=l.slice(0,Math.min(3,l.length)), last=l.slice(-3);
+const fa=Math.round(first.reduce((a,q)=>a+q.pct,0)/first.length), la=Math.round(last.reduce((a,q)=>a+q.pct,0)/last.length);
+const trend = l.length>=4 ? (la>fa? `📈 Improving — up ${la-fa}% since her first quizzes` : la<fa? `A little dip (${fa-la}%) — more practice will help` : `📊 Holding steady`) : `Take a few more to see her trend`;
+const rows=l.slice(-8).reverse().map(q=>`<div class="qrow"><span class="qd">${q.date}</span><span class="qbar"><i style="width:${q.pct}%"></i></span><span class="qsc ${q.pct>=80?'g':q.pct>=50?'m':'b'}">${q.score}/${q.total}</span></div>`).join("");
+return `<div class="pcard"><div style="font-weight:900;font-size:17px">Quiz scores 🎯 · best ${best}% · avg ${avg}%</div><div style="font-size:13px;opacity:.8;font-weight:700;margin:4px 0 8px">${trend}</div>${rows}</div>`;
+})()}
 <div class="pcard">
 <div style="font-weight:900;font-size:17px">Last 2 weeks</div>
 <div style="font-size:14px;opacity:.8;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
@@ -838,6 +980,10 @@ out.done = d;
 const lg = Object.assign({}, remote.log||{});
 for(const k in (local.log||{})){ lg[k] = Math.max(lg[k]||0, local.log[k]||0); }
 out.log = lg;
+// quiz history: union by timestamp, keep last 50
+const qmap={};
+(remote.quizzes||[]).concat(local.quizzes||[]).forEach(q=>{ if(q&&q.t) qmap[q.t]=q; });
+out.quizzes = Object.values(qmap).sort((a,b)=>a.t-b.t).slice(-50);
 return out;
 }
 async function syncPull(){
