@@ -180,6 +180,8 @@ display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:
 
 /* Parent screen */
 .pcard{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 20px var(--shadowS);margin-bottom:14px;}
+.pcTitle{font-weight:900;font-size:17px;color:var(--ink);}
+.pcSub{font-size:13px;opacity:.78;font-weight:700;margin-top:3px;line-height:1.45;color:var(--ink);}
 .statRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .stat{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center;}
 .stat .n{font-size:25px;font-weight:900;color:var(--magenta);text-shadow:0 0 14px var(--glowPink);}
@@ -426,13 +428,8 @@ h1.heroTitle{font-size:58px;text-align:left;line-height:1.02;margin:16px 0 0;let
 <div id="actBody"></div>
 </div>
 
-<!-- PARENT -->
-<div class="screen hidden" id="parentScreen">
-<button class="backBtn" onclick="goHome()">⬅️ Home</button>
-<h1 style="margin-top:10px;">Parent Dashboard</h1>
-<div class="sub">Aria's Hindi progress — encouragement only, no pressure</div>
-<div id="parentBody"></div>
-</div>
+<!-- PARENT (tiled landing + sub-screens built dynamically) -->
+<div class="screen hidden" id="parentScreen"><div id="parentBody"></div></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1705,125 +1702,132 @@ const win=window.open("","_blank");
 if(!win){ toast("Allow pop-ups to print 🖨️"); return; }
 win.document.open(); win.document.write(html); win.document.close(); win.focus();
 }
-function openParent(){
+/* ===== Parent dashboard: tiled landing + focused sub-screens ===== */
+let parentView=null;
+function openParent(){ parentView=null; renderParentLanding(); show("parentScreen"); }
+function openParentSection(key){ parentView=key; renderParentSection(key); show("parentScreen"); }
+function parentRefresh(){ if(parentView) renderParentSection(parentView); else renderParentLanding(); }
+
+function renderParentLanding(){
+const li=levelInfo();
 const learned=Object.keys(state.seen||{}).length;
 const masteredWords=Object.keys(state.mastered||{}).length;
-const mastered=topicsMastered();
+let wkDays=0; const today=new Date(); for(let i=0;i<7;i++){ const d=new Date(today.getTime()-i*86400000); if((state.log||{})[todayKey(d)]) wkDays++; }
+const missedN=Object.keys(state.missed||{}).length;
+const badgeN=Object.keys(state.achievements||{}).length;
+const tiles=[
+{key:"progress", emoji:"📈", name:"Progress & Memory", sub:masteredWords+" mastered · "+srsLongTermCount()+" long-term"},
+{key:"skills", emoji:"🗺️", name:"Skill Map", sub:"8 skills tracked"},
+{key:"quizzes", emoji:"🎯", name:"Quizzes & Win-back", sub:(state.quizzes||[]).length+" taken"+(missedN?" · "+missedN+" to win back":"")},
+{key:"activity", emoji:"📅", name:"Activity", sub:wkDays+"/7 days this week"},
+{key:"badges", emoji:"🏆", name:"Badges", sub:badgeN+"/"+ACHIEVEMENTS.length+" earned"},
+{key:"athome", emoji:"🏡", name:"Practice at Home", sub:"Ideas + printable card"},
+{key:"settings", emoji:"⚙️", name:"Settings & Sync", sub:"Speed · script · sync"},
+];
+const tileHtml=tiles.map(t=>`<button class="unit" onclick="openParentSection('${t.key}')"><span class="emoji">${t.emoji}</span><span class="name">${t.name}</span><div class="prog">${t.sub}</div></button>`).join("");
+const p=Math.max(4, li.pct);
+$("parentBody").innerHTML=`<div class="navRow"><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">👪 Parent Dashboard</h1>
+<div class="sub">Aria's Hindi progress — encouragement only, no pressure</div>
+<div class="ppCard" style="margin-top:10px"><div class="ppTop"><div class="ppRing" style="background:conic-gradient(from -90deg,#ff2d95 0%,#9b3cff ${p}%,rgba(255,255,255,.08) ${p}% 100%)"><span>${li.badge}</span></div><div><div class="ppLvlName">Level ${li.level} · ${li.name}</div><div class="ppLvlSub">${li.stars} stars · ${learned} words learned · ${wkDays}/7 days this week</div></div></div></div>
+<div class="choiceGrid" style="margin-top:12px">${tileHtml}</div>`;
+}
+function renderParentSection(key){
+const S={
+progress:{emoji:"📈", name:"Progress & Memory", fn:ppProgress},
+skills:{emoji:"🗺️", name:"Skill Map", fn:ppSkills},
+quizzes:{emoji:"🎯", name:"Quizzes & Win-back", fn:ppQuizzes},
+activity:{emoji:"📅", name:"Activity", fn:ppActivity},
+badges:{emoji:"🏆", name:"Badges", fn:ppBadges},
+athome:{emoji:"🏡", name:"Practice at Home", fn:ppHomeIdeas},
+settings:{emoji:"⚙️", name:"Settings & Sync", fn:ppSettings},
+};
+const s=S[key]; if(!s){ renderParentLanding(); return; }
+$("parentBody").innerHTML=`<div class="navRow"><button class="backBtn" onclick="openParent()">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
+<h1 style="margin-top:8px">${s.emoji} ${s.name}</h1>
+<div style="margin-top:12px">${s.fn()}</div>`;
+$("parentScreen").scrollTop=0;
+}
+
+function ppProgress(){
+const lv={1:0,2:0,3:0,4:0}; Object.values(state.wordLevel||{}).forEach(l=>{ if(lv[l]!==undefined) lv[l]++; });
+const learned=Object.keys(state.seen||{}).length;
+const masteredWords=Object.keys(state.mastered||{}).length;
+const topics=topicsMastered();
 const convos=CONVOS.filter(c=>state.done["convo_"+c.id]).length;
 const li=levelInfo();
-// last 14 days activity
-let cal="", activeDays=0;
-for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=todayKey(d); const on=(state.log||{})[k]; if(on)activeDays++;
-cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'⭐':''}</div><div class="dl">${d.getDate()}</div></div>`; }
-const recent=Object.entries(state.seen||{}).slice(-18).map(([ro,en])=>`<span class="chip">${ro} · ${en}</span>`).join("");
-$("parentBody").innerHTML=`
-<div class="pcard">
-<div style="font-weight:900;font-size:17px">Device Sync ✨</div>
-${ syncCode
-? `<div style="font-size:14px;opacity:.8;font-weight:700;margin-top:4px">This device is synced. Enter this family code on her other devices to keep stars &amp; progress together:</div>
-<div class="chip" style="font-size:17px;letter-spacing:2px;margin-top:10px;display:inline-block;user-select:text;-webkit-user-select:text">${syncCode}</div>
-<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-<button class="speakBtn" style="margin-top:0" onclick="syncNow()">🔄 Sync now</button>
-<button class="backBtn" onclick="syncDisconnect()">Disconnect</button>
-</div>`
-: `<div style="font-size:14px;opacity:.8;font-weight:700;margin-top:4px">Keep her stars &amp; progress in sync across iPad, phone, etc.</div>
-<button class="speakBtn" style="margin-top:12px" onclick="syncCreate()">✨ Create sync code</button>
-<div style="margin-top:14px;font-size:13px;opacity:.7;font-weight:700">Already have a code from another device?</div>
-<div style="display:flex;gap:8px;margin-top:8px">
-<input id="syncInput" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="enter code" style="flex:1;min-width:0;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font-weight:700;user-select:text;-webkit-user-select:text" />
-<button class="speakBtn" style="margin-top:0" onclick="syncJoin()">Join</button>
-</div>` }
-</div>
-<div class="pcard">
-<div class="statRow">
-<div class="stat"><div class="n">${learned}</div><div class="l">words & phrases practiced</div></div>
-<div class="stat"><div class="n">${li.stars}</div><div class="l">stars earned ⭐</div></div>
-<div class="stat"><div class="n">Lv ${li.level}</div><div class="l">${li.name} ${li.badge}</div></div>
-<div class="stat"><div class="n">${masteredWords}</div><div class="l">words mastered 🌟</div></div>
-<div class="stat"><div class="n">${mastered}/${UNITS.length}</div><div class="l">topics mastered 👑</div></div>
-<div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div>
-</div>
-</div>
-${(()=>{ const lv={1:0,2:0,3:0,4:0}; Object.values(state.wordLevel||{}).forEach(l=>{ if(lv[l]!==undefined) lv[l]++; });
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Mastery ladder 🪜</div><div style="font-size:13px;opacity:.78;font-weight:700;margin-top:2px">Each word climbs as she practices: Seen → Heard → Recognized → Slayed.</div><div class="mlrow"><div class="mlcell l1"><div class="mn">${lv[1]}</div><div class="ml">👁️ Seen</div></div><div class="mlcell l2"><div class="mn">${lv[2]}</div><div class="ml">👂 Heard</div></div><div class="mlcell l3"><div class="mn">${lv[3]}</div><div class="ml">✅ Recognized</div></div><div class="mlcell l4"><div class="mn">${lv[4]}</div><div class="ml">🗡️ Slayed</div></div></div></div>`; })()}
-${(()=>{ const m=Object.entries(state.missed||{});
-if(!m.length) return `<div class="pcard"><div style="font-weight:900;font-size:17px">Words to win back ⚔️</div><div style="font-size:14px;opacity:.78;font-weight:700;margin-top:4px">Nothing to win back right now — she's holding onto everything she's learned. 🌟</div></div>`;
-const chips=m.slice(-24).map(([ro,info])=>`<span class="chip">${ro}${info&&info.en?' · '+info.en:''}</span>`).join("");
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Words to win back ⚔️ (${m.length})</div><div style="font-size:13px;opacity:.8;font-weight:700;margin:4px 0 8px">Missed in a quiz — they leave her learned list until she practices them. She can win them back from the “⚔️ Win back” button on the home Daily Quiz panel.</div><div class="wordChips">${chips}</div></div>`; })()}
-${(()=>{ const today=new Date(); const wk=todayKey(new Date(today.getTime()-6*86400000));
+const overview=`<div class="pcard"><div class="statRow"><div class="stat"><div class="n">${learned}</div><div class="l">words practiced</div></div><div class="stat"><div class="n">${li.stars}</div><div class="l">stars earned ⭐</div></div><div class="stat"><div class="n">${masteredWords}</div><div class="l">words mastered 🌟</div></div><div class="stat"><div class="n">${topics}/${UNITS.length}</div><div class="l">topics mastered 👑</div></div><div class="stat"><div class="n">${convos}/${CONVOS.length}</div><div class="l">conversations 🎭</div></div><div class="stat"><div class="n">Lv ${li.level}</div><div class="l">${li.name} ${li.badge}</div></div></div></div>`;
+const ladder=`<div class="pcard"><div class="pcTitle">Mastery ladder 🪜</div><div class="pcSub">Each word climbs as she practices: Seen → Heard → Recognized → Slayed.</div><div class="mlrow"><div class="mlcell l1"><div class="mn">${lv[1]}</div><div class="ml">👁️ Seen</div></div><div class="mlcell l2"><div class="mn">${lv[2]}</div><div class="ml">👂 Heard</div></div><div class="mlcell l3"><div class="mn">${lv[3]}</div><div class="ml">✅ Recognized</div></div><div class="mlcell l4"><div class="mn">${lv[4]}</div><div class="ml">🗡️ Slayed</div></div></div></div>`;
+const srs=state.srs||{}; const t=todayKey(); let due=0,learn2=0,longterm=0;
+for(const ro in srs){ if(!state.seen||!state.seen[ro]) continue; const s=srs[ro]; if((s.step||0)>=SRS_STEPS.length-1) longterm++; else learn2++; if(s.due<=t) due++; }
+const memory=`<div class="pcard"><div class="pcTitle">Memory &amp; review 🧠</div><div class="pcSub">Spaced practice brings each word back right before she'd forget it.</div><div class="statRow" style="grid-template-columns:repeat(3,1fr);margin-top:10px"><div class="stat"><div class="n">${due}</div><div class="l">ready to review</div></div><div class="stat"><div class="n">${learn2}</div><div class="l">still learning</div></div><div class="stat"><div class="n">${longterm}</div><div class="l">long-term 🌟</div></div></div></div>`;
+const recent=Object.entries(state.seen||{}).slice(-30).map(([ro,en])=>`<span class="chip">${ro} · ${en}</span>`).join("");
+const met=`<div class="pcard"><div class="pcTitle">Words she's met (${learned})</div><div class="wordChips">${recent||'<span style="opacity:.6">Nothing yet — play a lesson together!</span>'}</div></div>`;
+return overview+ladder+memory+met;
+}
+function ppSkills(){
+const sk=skillScores();
+const rows=sk.map(s=>`<div class="skrow"><span class="skname">${s.emoji} ${s.name}</span><span class="skbar"><i style="width:${s.pct}%"></i></span><span class="skpct">${s.pct}%</span></div>`).join("");
+const map=`<div class="pcard"><div class="pcTitle">Skill map 🗺️</div><div class="pcSub">Progress by skill, not just topic — so you can see what's strong and what needs love.</div>${rows}</div>`;
+const gs=(typeof GAMES!=="undefined"?GAMES:[]); let arena="";
+if(gs.length){
+const miss=state.gameMiss||{}; const played=gs.filter(g=>state.done["game_"+g.id]); const tried=played.length;
+let strongest=null,needs=null; played.forEach(g=>{ const m=miss[g.id]||0; if(strongest===null||m<(miss[strongest.id]||0)) strongest=g; if(needs===null||m>(miss[needs.id]||0)) needs=g; });
+const untried=gs.filter(g=>!state.done["game_"+g.id]);
+const strongLabel=tried?strongest.name:"—"; const needsLabel=untried.length?untried[0].name+" (not tried yet)":(needs&&(miss[needs.id]||0)>0?needs.name:"—");
+const rows2=gs.map(g=>{ const done=state.done["game_"+g.id]; const m=miss[g.id]||0; return `<div class="qrow"><span class="qd">${g.emoji} ${g.name}</span><span class="qbar"><i style="width:${done?100:0}%"></i></span><span class="qsc ${done?'g':'b'}">${done?(m>0?m+' miss':'✓'):'—'}</span></div>`; }).join("");
+const sb=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]); const sbDone=sb.filter(x=>state.done['grammar_'+x.id]).length;
+arena=`<div class="pcard"><div class="pcTitle">Grammar Arena 🕹️ · ${tried}/${gs.length} games tried</div><div style="font-size:13px;font-weight:700;margin:6px 0 6px"><span style="color:var(--good)">💪 Strongest:</span> ${strongLabel}<br><span style="color:var(--gold)">🎯 Needs practice:</span> ${needsLabel}</div>${rows2}<div style="font-size:12.5px;opacity:.75;font-weight:700;margin-top:8px">✍️ Sentence Builder: ${sbDone}/${sb.length} lessons done</div></div>`;
+}
+return map+arena;
+}
+function ppQuizzes(){
+const l=state.quizzes||[]; let scores;
+if(!l.length) scores=`<div class="pcard"><div class="pcTitle">Quiz scores 🎯</div><div class="pcSub">No quizzes yet. Have her take a Daily Quiz to start tracking how much she's actually learning over time.</div></div>`;
+else{ const best=Math.max(...l.map(q=>q.pct)), avg=Math.round(l.reduce((a,q)=>a+q.pct,0)/l.length);
+const first=l.slice(0,Math.min(3,l.length)), last=l.slice(-3);
+const fa=Math.round(first.reduce((a,q)=>a+q.pct,0)/first.length), la=Math.round(last.reduce((a,q)=>a+q.pct,0)/last.length);
+const trend=l.length>=4?(la>fa?`📈 Improving — up ${la-fa}% since her first quizzes`:la<fa?`A little dip (${fa-la}%) — more practice will help`:`📊 Holding steady`):`Take a few more to see her trend`;
+const rows=l.slice(-10).reverse().map(q=>`<div class="qrow"><span class="qd">${q.date}</span><span class="qbar"><i style="width:${q.pct}%"></i></span><span class="qsc ${q.pct>=80?'g':q.pct>=50?'m':'b'}">${q.score}/${q.total}</span></div>`).join("");
+scores=`<div class="pcard"><div class="pcTitle">Quiz scores 🎯 · best ${best}% · avg ${avg}%</div><div class="pcSub">${trend}</div>${rows}</div>`; }
+const m=Object.entries(state.missed||{}); let winback;
+if(!m.length) winback=`<div class="pcard"><div class="pcTitle">Words to win back ⚔️</div><div class="pcSub">Nothing to win back right now — she's holding onto everything she's learned. 🌟</div></div>`;
+else{ const chips=m.slice(-30).map(([ro,info])=>`<span class="chip">${ro}${info&&info.en?' · '+info.en:''}</span>`).join("");
+winback=`<div class="pcard"><div class="pcTitle">Words to win back ⚔️ (${m.length})</div><div class="pcSub">Missed in a quiz — they leave her learned list until she practices them. She can win them back from the “⚔️ Win back” button on the Daily Quiz panel.</div><div class="wordChips">${chips}</div></div>`; }
+return scores+winback;
+}
+function ppActivity(){
+const today=new Date(); const wk=todayKey(new Date(today.getTime()-6*86400000));
 let wkWords=0; for(const ro in (state.seenDate||{})){ if(state.seenDate[ro]>=wk) wkWords++; }
 const wkQ=(state.quizzes||[]).filter(q=>q.date>=wk); const wkAcc=wkQ.length?Math.round(wkQ.reduce((a,q)=>a+q.pct,0)/wkQ.length):null;
 let wkDays=0; for(let i=0;i<7;i++){ const d=new Date(today.getTime()-i*86400000); if((state.log||{})[todayKey(d)]) wkDays++; }
 const touched=new Set(); UNITS.forEach(u=>{ if(state.done[u.id+"_learn"]||state.done[u.id+"_listen"]||state.done[u.id+"_say"]) touched.add(u.id); });
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">This week 📅</div><div class="statRow" style="grid-template-columns:repeat(4,1fr);margin-top:10px"><div class="stat"><div class="n">${wkWords}</div><div class="l">new words</div></div><div class="stat"><div class="n">${wkDays}/7</div><div class="l">days practiced</div></div><div class="stat"><div class="n">${touched.size}</div><div class="l">topics touched</div></div><div class="stat"><div class="n">${wkAcc===null?'—':wkAcc+'%'}</div><div class="l">quiz accuracy</div></div></div></div>`; })()}
-${(()=>{ const srs=state.srs||{}; const t=todayKey(); let due=0,learning=0,longterm=0;
-for(const ro in srs){ if(!state.seen||!state.seen[ro]) continue; const s=srs[ro]; if((s.step||0)>=SRS_STEPS.length-1) longterm++; else learning++; if(s.due<=t) due++; }
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Memory &amp; review 🧠</div><div style="font-size:13px;opacity:.78;font-weight:700;margin-top:2px">Spaced practice brings each word back right before she'd forget it — that's what makes it stick.</div><div class="statRow" style="grid-template-columns:repeat(3,1fr);margin-top:10px"><div class="stat"><div class="n">${due}</div><div class="l">ready to review</div></div><div class="stat"><div class="n">${learning}</div><div class="l">still learning</div></div><div class="stat"><div class="n">${longterm}</div><div class="l">long-term 🌟</div></div></div></div>`; })()}
-${(()=>{ const sk=skillScores();
-const rows=sk.map(s=>`<div class="skrow"><span class="skname">${s.emoji} ${s.name}</span><span class="skbar"><i style="width:${s.pct}%"></i></span><span class="skpct">${s.pct}%</span></div>`).join("");
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Skill map 🗺️</div><div style="font-size:13px;opacity:.78;font-weight:700;margin:2px 0 8px">Progress by skill, not just topic — so you can see what's strong and what needs love.</div>${rows}</div>`; })()}
-${(()=>{ const earned=state.achievements||{}; const n=Object.keys(earned).length;
-const chips=ACHIEVEMENTS.map(a=>`<span class="badgeChip ${earned[a.id]?'got':''}">${earned[a.id]?a.emoji:'🔒'} ${a.name}</span>`).join("");
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Badges 🏆 · ${n}/${ACHIEVEMENTS.length}</div><div style="font-size:13px;opacity:.78;font-weight:700;margin:2px 0 8px">Earned for real skills, never just for time spent.</div><div class="badgeChips">${chips}</div></div>`; })()}
-${(()=>{ const gs=(typeof GAMES!=="undefined"?GAMES:[]); if(!gs.length) return "";
-const miss=state.gameMiss||{};
-const played=gs.filter(g=>state.done["game_"+g.id]); const tried=played.length;
-let strongest=null,needs=null;
-played.forEach(g=>{ const m=miss[g.id]||0; if(strongest===null||m<(miss[strongest.id]||0)) strongest=g; if(needs===null||m>(miss[needs.id]||0)) needs=g; });
-const untried=gs.filter(g=>!state.done["game_"+g.id]);
-const strongLabel = tried? strongest.name : "—";
-const needsLabel = untried.length? untried[0].name+" (not tried yet)" : (needs && (miss[needs.id]||0)>0 ? needs.name : "—");
-const rows=gs.map(g=>{ const done=state.done["game_"+g.id]; const m=miss[g.id]||0; return `<div class="qrow"><span class="qd">${g.emoji} ${g.name}</span><span class="qbar"><i style="width:${done?100:0}%"></i></span><span class="qsc ${done?'g':'b'}">${done?(m>0?m+' miss':'✓'):'—'}</span></div>`; }).join("");
-const sb=(typeof GRAMMAR!=="undefined"?GRAMMAR:[]); const sbDone=sb.filter(x=>state.done['grammar_'+x.id]).length;
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Grammar Arena 🕹️ · ${tried}/${gs.length} games tried</div>
-<div style="font-size:13px;font-weight:700;margin:6px 0 6px"><span style="color:var(--good)">💪 Strongest:</span> ${strongLabel}<br><span style="color:var(--gold)">🎯 Needs practice:</span> ${needsLabel}</div>
-${rows}
-<div style="font-size:12.5px;opacity:.75;font-weight:700;margin-top:8px">✍️ Sentence Builder: ${sbDone}/${sb.length} lessons done</div></div>`; })()}
-${(()=>{ const l=state.quizzes||[];
-if(!l.length) return `<div class="pcard"><div style="font-weight:900;font-size:17px">Quiz scores 🎯</div><div style="font-size:14px;opacity:.78;font-weight:700;margin-top:4px">No quizzes yet. Have her take a Daily Quiz to start tracking how much she's actually learning over time.</div></div>`;
-const best=Math.max(...l.map(q=>q.pct)), avg=Math.round(l.reduce((a,q)=>a+q.pct,0)/l.length);
-const first=l.slice(0,Math.min(3,l.length)), last=l.slice(-3);
-const fa=Math.round(first.reduce((a,q)=>a+q.pct,0)/first.length), la=Math.round(last.reduce((a,q)=>a+q.pct,0)/last.length);
-const trend = l.length>=4 ? (la>fa? `📈 Improving — up ${la-fa}% since her first quizzes` : la<fa? `A little dip (${fa-la}%) — more practice will help` : `📊 Holding steady`) : `Take a few more to see her trend`;
-const rows=l.slice(-8).reverse().map(q=>`<div class="qrow"><span class="qd">${q.date}</span><span class="qbar"><i style="width:${q.pct}%"></i></span><span class="qsc ${q.pct>=80?'g':q.pct>=50?'m':'b'}">${q.score}/${q.total}</span></div>`).join("");
-return `<div class="pcard"><div style="font-weight:900;font-size:17px">Quiz scores 🎯 · best ${best}% · avg ${avg}%</div><div style="font-size:13px;opacity:.8;font-weight:700;margin:4px 0 8px">${trend}</div>${rows}</div>`;
-})()}
-<div class="pcard">
-<div style="font-weight:900;font-size:17px">Last 2 weeks</div>
-<div style="font-size:14px;opacity:.8;font-weight:700;margin-top:2px">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div>
-<div class="cal">${cal}</div>
-</div>
-<div class="pcard">
-<div style="font-weight:900;font-size:17px">Words she's met (${learned})</div>
-<div class="wordChips">${recent||'<span style="opacity:.6">Nothing yet — play a lesson together!</span>'}</div>
-</div>
-<div class="pcard">
-<div style="font-weight:900;font-size:17px">Practice ideas at home 🏡</div>
+const week=`<div class="pcard"><div class="pcTitle">This week 📅</div><div class="statRow" style="grid-template-columns:repeat(4,1fr);margin-top:10px"><div class="stat"><div class="n">${wkWords}</div><div class="l">new words</div></div><div class="stat"><div class="n">${wkDays}/7</div><div class="l">days practiced</div></div><div class="stat"><div class="n">${touched.size}</div><div class="l">topics touched</div></div><div class="stat"><div class="n">${wkAcc===null?'—':wkAcc+'%'}</div><div class="l">quiz accuracy</div></div></div></div>`;
+let cal="", activeDays=0;
+for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const k=todayKey(d); const on=(state.log||{})[k]; if(on)activeDays++; cal+=`<div class="day"><div class="box ${on?'on':''}">${on?'⭐':''}</div><div class="dl">${d.getDate()}</div></div>`; }
+const last2=`<div class="pcard"><div class="pcTitle">Last 2 weeks</div><div class="pcSub">Aria practiced on <b>${activeDays}</b> ${activeDays===1?'day':'days'} 🎉 Every day is a bonus, never a must.</div><div class="cal">${cal}</div></div>`;
+return week+last2;
+}
+function ppBadges(){
+const earned=state.achievements||{}; const n=Object.keys(earned).length;
+const grid=ACHIEVEMENTS.map(a=>{ const got=!!earned[a.id]; return `<div class="badge${got?' got':''}"><div class="bIco">${got?a.emoji:'🔒'}</div><div class="bName">${a.name}</div><div class="bDesc">${a.desc}</div></div>`; }).join("");
+return `<div class="pcard"><div class="pcTitle">Badges 🏆 · ${n}/${ACHIEVEMENTS.length} earned</div><div class="pcSub">Earned for real skills, never just for time spent.</div><div class="badgeGrid" style="margin-top:12px">${grid}</div></div>`;
+}
+function ppHomeIdeas(){
+return `<div class="pcard"><div class="pcTitle">Practice ideas at home 🏡</div>
 <div style="font-size:14px;font-weight:800;color:var(--gold);margin-top:6px">⏱️ Today's 3-minute idea: ${(function(){ try{ return recommendNext().label; }catch(e){ return "Play a quick lesson together"; } })()}</div>
-<div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:6px">
-Use today's Word of the Day in a real sentence at dinner. Ask her one "Listen &amp; Find" word in the car.
-Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟
-</div>
+<div style="font-size:14px;line-height:1.6;font-weight:600;margin-top:6px">Use today's Word of the Day in a real sentence at dinner. Ask her one "Listen &amp; Find" word in the car. Act out a conversation with her — you be Friend 1. Praise effort, not correctness. 🌟</div>
 <button class="speakBtn" style="margin-top:14px;background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="printPracticeCard()">🖨️ Print today's take-home card</button>
-<div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:6px">A one-page sheet: today's 5 words, a chat to act out, a dinner question, and a grammar challenge.</div>
-</div>
-<div class="pcard">
-<div style="font-weight:900;font-size:17px">Settings ⚙️</div>
-<div style="font-size:13px;opacity:.8;font-weight:700;margin-top:8px">Pronunciation speed</div>
-<div class="setRow">
-<button class="setBtn ${state.speed<.75?'on':''}" onclick="setSpeed(0.6)">🐢 Slow</button>
-<button class="setBtn ${state.speed>=.75&&state.speed<=1?'on':''}" onclick="setSpeed(0.85)">🚶 Normal</button>
-<button class="setBtn ${state.speed>1?'on':''}" onclick="setSpeed(1.1)">🐇 Fast</button>
-</div>
-<div style="font-size:13px;opacity:.8;font-weight:700;margin-top:14px">Script help</div>
-<div class="setRow">
-<button class="setBtn ${state.scriptMode==='both'?'on':''}" onclick="setScript('both')">अ + romanized</button>
-<button class="setBtn ${state.scriptMode==='deva'?'on':''}" onclick="setScript('deva')">अ Devanagari only</button>
-</div>
-<div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:8px">“Devanagari only” hides the romanized spelling once she's ready to read the script itself.</div>
-</div>
-<button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button>`;
-show("parentScreen");
+<div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:6px">A one-page sheet: today's 5 words, a chat to act out, a dinner question, and a grammar challenge.</div></div>`;
+}
+function ppSettings(){
+const sync = syncCode
+? `<div class="pcSub">This device is synced. Enter this family code on her other devices to keep stars &amp; progress together:</div><div class="chip" style="font-size:17px;letter-spacing:2px;margin-top:10px;display:inline-block;user-select:text;-webkit-user-select:text">${syncCode}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="speakBtn" style="margin-top:0" onclick="syncNow()">🔄 Sync now</button><button class="backBtn" onclick="syncDisconnect()">Disconnect</button></div>`
+: `<div class="pcSub">Keep her stars &amp; progress in sync across iPad, phone, etc.</div><button class="speakBtn" style="margin-top:12px" onclick="syncCreate()">✨ Create sync code</button><div style="margin-top:14px;font-size:13px;opacity:.7;font-weight:700">Already have a code from another device?</div><div style="display:flex;gap:8px;margin-top:8px"><input id="syncInput" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="enter code" style="flex:1;min-width:0;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font-weight:700;user-select:text;-webkit-user-select:text" /><button class="speakBtn" style="margin-top:0" onclick="syncJoin()">Join</button></div>`;
+return `<div class="pcard"><div class="pcTitle">Pronunciation speed</div><div class="setRow"><button class="setBtn ${state.speed<.75?'on':''}" onclick="setSpeed(0.6)">🐢 Slow</button><button class="setBtn ${state.speed>=.75&&state.speed<=1?'on':''}" onclick="setSpeed(0.85)">🚶 Normal</button><button class="setBtn ${state.speed>1?'on':''}" onclick="setSpeed(1.1)">🐇 Fast</button></div>
+<div class="pcTitle" style="margin-top:16px">Script help</div><div class="setRow"><button class="setBtn ${state.scriptMode==='both'?'on':''}" onclick="setScript('both')">अ + romanized</button><button class="setBtn ${state.scriptMode==='deva'?'on':''}" onclick="setScript('deva')">अ Devanagari only</button></div><div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:8px">“Devanagari only” hides the romanized spelling once she's ready to read the script itself.</div></div>
+<div class="pcard"><div class="pcTitle">Device Sync ✨</div>${sync}</div>
+<div class="pcard"><div class="pcTitle" style="color:var(--bad)">Danger zone</div><div class="pcSub">This erases all of Aria's stars and progress on this device.</div><button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="margin-top:10px;background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button></div>`;
 }
 
 /* ============ DEVICE SYNC LOGIC ============ */
@@ -1891,21 +1895,21 @@ catch(e){ return false; }
 function syncPushSoon(){ if(!syncCode) return; clearTimeout(syncTimer); syncTimer=setTimeout(syncPush, 1500); }
 function syncCreate(){
 syncCode = genCode(); try{ localStorage.setItem(SYNC_CODE_KEY, syncCode); }catch(e){}
-syncPush().then(()=>{ toast("Sync on ✨"); openParent(); });
+syncPush().then(()=>{ toast("Sync on ✨"); parentRefresh(); });
 }
 function syncJoin(){
 const el=$("syncInput"); const v=((el&&el.value)||"").trim().toLowerCase().replace(/\s+/g,"");
 if(v.length<6){ toast("Enter a valid code"); return; }
 syncCode = v; try{ localStorage.setItem(SYNC_CODE_KEY, syncCode); }catch(e){}
-syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); openParent(); });
+syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); parentRefresh(); });
 }
-function syncNow(){ syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); openParent(); }); }
-function syncDisconnect(){ syncCode=""; try{ localStorage.removeItem(SYNC_CODE_KEY); }catch(e){} toast("Sync off"); openParent(); }
+function syncNow(){ syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); parentRefresh(); }); }
+function syncDisconnect(){ syncCode=""; try{ localStorage.removeItem(SYNC_CODE_KEY); }catch(e){} toast("Sync off"); parentRefresh(); }
 
 /* ============ SETTINGS ============ */
 function applySettings(){ document.body.classList.toggle('deva-only', state.scriptMode==='deva'); }
-function setSpeed(v){ state.speed=v; saveState(); applySettings(); speak("नमस्ते"); openParent(); }
-function setScript(m){ state.scriptMode=m; saveState(); applySettings(); toast(m==='deva'?"Devanagari only ✍️":"Romanized help on"); openParent(); }
+function setSpeed(v){ state.speed=v; saveState(); applySettings(); speak("नमस्ते"); parentRefresh(); }
+function setScript(m){ state.scriptMode=m; saveState(); applySettings(); toast(m==='deva'?"Devanagari only ✍️":"Romanized help on"); parentRefresh(); }
 function explainProgress(){
 const ov=document.createElement("div"); ov.className="overlay";
 ov.innerHTML=`<div class="rewardCard" style="text-align:left;max-width:380px">
