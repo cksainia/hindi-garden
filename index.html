@@ -338,6 +338,12 @@ background:linear-gradient(150deg, rgba(255,210,74,.10), rgba(155,60,255,.16));b
 .topbar{max-width:1120px;margin:0 auto;width:100%;}
 .screen{max-width:760px;margin-left:auto;margin-right:auto;width:100%;}
 #welcomeScreen,#homeScreen,#catScreen{max-width:1120px;}
+/* deep screens: a tidy, focused, centered column on iPad */
+#actScreen,#menuScreen{max-width:620px;}
+#actScreen .card,#menuScreen .card{border-radius:22px;}
+#actScreen .actBody,.actBtn{border-radius:18px;}
+#actScreen .dots,#menuScreen .dots{justify-content:center;}
+#menuScreen h1,#actScreen h1{font-size:25px;}
 .navRow{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;}
 .navbtn{background:var(--cardGlass);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:800;color:var(--ink);display:inline-flex;align-items:center;gap:6px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 2px 12px var(--shadowS);}
 .navbtn:active{transform:scale(.96);}
@@ -519,7 +525,7 @@ u.pitch = 1.05;
 speechSynthesis.speak(u);
 }catch(e){}
 }
-function speakSlow(text){ const base=(state&&typeof state.speed==="number")?state.speed:.85; speak(text, Math.max(0.3, base*0.5)); }
+function speakSlow(text){ const base=(state&&typeof state.speed==="number")?state.speed:.85; speak(text, Math.max(0.1, base*0.1)); }
 
 /* ============ HELPERS ============ */
 const $ = id => document.getElementById(id);
