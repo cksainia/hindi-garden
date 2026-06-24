@@ -1,13 +1,7 @@
 /* Aria's Hindi Garden — content pack (640 words, 20 topics) */
-
 const UNITS = [
   { id:"greet", name:"Hello & Manners", emoji:"👋", words:[
     {hi:"नमस्ते", ro:"namaste", en:"Hello / Goodbye", ic:"🙏"},
-    {hi:"बाय", ro:"bye", en:"Goodbye", ic:"👋"},
-    {hi:"गुड मॉर्निंग", ro:"good morning", en:"Good morning", ic:"🌅"},
-    {hi:"थैंक्यू", ro:"thank you", en:"Thank you", ic:"🙏"},
-    {hi:"प्लीज़", ro:"please", en:"Please", ic:"🙏"},
-    {hi:"सॉरी", ro:"sorry", en:"Sorry", ic:"😔"},
     {hi:"माफ़ करना", ro:"maaf karna", en:"Excuse me / Forgive me", ic:"🙇"},
     {hi:"आप कैसे हो?", ro:"aap kaise ho?", en:"How are you?", ic:"🙂"},
     {hi:"मैं ठीक हूँ", ro:"main theek hoon", en:"I am fine", ic:"👍"},
@@ -52,9 +46,7 @@ const UNITS = [
     {hi:"भाभी", ro:"bhabhi", en:"Brother's wife", ic:"👰"},
     {hi:"जीजा", ro:"jija", en:"Sister's husband", ic:"🤵"},
     {hi:"ताया", ro:"taya", en:"Older Paternal Uncle", ic:"🧔"},
-    {hi:"ताई", ro:"tayi", en:"Taya's wife", ic:"👩"},
-    {hi:"अंकल", ro:"uncle", en:"Uncle (General)", ic:"🧔"},
-    {hi:"आंटी", ro:"aunty", en:"Aunt (General)", ic:"👩"}
+    {hi:"ताई", ro:"tayi", en:"Taya's wife", ic:"👩"}
   ]},
   { id:"feel", name:"Feelings & States", emoji:"😊", words:[
     {hi:"खुश", ro:"khush", en:"Happy", ic:"😄"},
@@ -567,80 +559,78 @@ const UNITS = [
     {hi:"बाज़ार", ro:"baazaar", en:"Market / Bazaar", ic:"🛍️"}
   ]}
 ];
-
 const CONVOS = [
   { id:"c1", name:"Saying Hello", emoji:"👋", lines:[
     {sp:"A", hi:"नमस्ते!", ro:"namaste!", en:"Hello!"},
     {sp:"B", hi:"नमस्ते! तुम कैसी हो?", ro:"namaste! tum kaisi ho?", en:"Hello! How are you?"},
     {sp:"A", hi:"मैं ठीक हूँ, शुक्रिया। और तुम?", ro:"main theek hoon, shukriya. aur tum?", en:"I'm fine, thank you. And you?"},
     {sp:"B", hi:"मैं भी ठीक हूँ।", ro:"main bhi theek hoon.", en:"I'm fine too."},
-    {sp:"A", hi:"फिर मिलेंगे!", ro:"phir milenge!", en:"See you again!"},
+    {sp:"A", hi:"फिर मिलेंगे!", ro:"phir milenge!", en:"See you again!"}
   ]},
   { id:"c2", name:"At Snack Time", emoji:"🍎", lines:[
     {sp:"A", hi:"मुझे भूख लगी है।", ro:"mujhe bhookh lagi hai.", en:"I am hungry."},
     {sp:"B", hi:"क्या तुम्हें सेब चाहिए?", ro:"kya tumhein seb chahiye?", en:"Do you want an apple?"},
     {sp:"A", hi:"हाँ, कृपया!", ro:"haan, kripya!", en:"Yes, please!"},
     {sp:"B", hi:"यह लो।", ro:"yeh lo.", en:"Here you go."},
-    {sp:"A", hi:"बहुत स्वादिष्ट है। शुक्रिया!", ro:"bahut swaadisht hai. shukriya!", en:"It's very tasty. Thank you!"},
+    {sp:"A", hi:"बहुत स्वादिष्ट है। शुक्रिया!", ro:"bahut swaadisht hai. shukriya!", en:"It's very tasty. Thank you!"}
   ]},
   { id:"c3", name:"Meeting a Friend", emoji:"🧒", lines:[
     {sp:"A", hi:"तुम्हारा नाम क्या है?", ro:"tumhara naam kya hai?", en:"What's your name?"},
     {sp:"B", hi:"मेरा नाम आरिया है। और तुम्हारा?", ro:"mera naam Aria hai. aur tumhara?", en:"My name is Aria. And yours?"},
     {sp:"A", hi:"मेरा नाम रवि है।", ro:"mera naam Ravi hai.", en:"My name is Ravi."},
     {sp:"B", hi:"आपसे मिलकर खुशी हुई!", ro:"aapse milkar khushi hui!", en:"Nice to meet you!"},
-    {sp:"A", hi:"चलो खेलते हैं!", ro:"chalo khelte hain!", en:"Let's play!"},
+    {sp:"A", hi:"चलो खेलते हैं!", ro:"chalo khelte hain!", en:"Let's play!"}
   ]},
   { id:"c4", name:"Good Morning", emoji:"🌅", lines:[
     {sp:"A", hi:"शुभ प्रभात!", ro:"shubh prabhaat!", en:"Good morning!"},
     {sp:"B", hi:"शुभ प्रभात! क्या तुम उठ गई?", ro:"shubh prabhaat! kya tum uth gayi?", en:"Good morning! Did you wake up?"},
     {sp:"A", hi:"हाँ, मैं तैयार हूँ।", ro:"haan, main taiyaar hoon.", en:"Yes, I am ready."},
     {sp:"B", hi:"चलो नाश्ता करते हैं।", ro:"chalo naashta karte hain.", en:"Let's eat breakfast."},
-    {sp:"A", hi:"मुझे दूध चाहिए।", ro:"mujhe doodh chahiye.", en:"I want milk."},
+    {sp:"A", hi:"मुझे दूध चाहिए।", ro:"mujhe doodh chahiye.", en:"I want milk."}
   ]},
   { id:"c5", name:"At the Park", emoji:"🏞️", lines:[
     {sp:"A", hi:"चलो पार्क चलते हैं।", ro:"chalo park chalte hain.", en:"Let's go to the park."},
     {sp:"B", hi:"मैं झूला झूलना चाहती हूँ।", ro:"main jhoola jhoolna chahti hoon.", en:"I want to swing."},
     {sp:"A", hi:"मैं फिसलपट्टी पर खेलूँगी।", ro:"main phisalpatti par kheloongi.", en:"I will play on the slide."},
     {sp:"B", hi:"देखो, कितनी सुंदर तितली!", ro:"dekho, kitni sundar titli!", en:"Look, what a beautiful butterfly!"},
-    {sp:"A", hi:"बहुत मज़ा आ रहा है!", ro:"bahut mazaa aa raha hai!", en:"This is so much fun!"},
+    {sp:"A", hi:"बहुत मज़ा आ रहा है!", ro:"bahut mazaa aa raha hai!", en:"This is so much fun!"}
   ]},
   { id:"c6", name:"Bedtime", emoji:"🌙", lines:[
     {sp:"A", hi:"मुझे नींद आ रही है।", ro:"mujhe neend aa rahi hai.", en:"I am feeling sleepy."},
     {sp:"B", hi:"चलो सोने का समय हो गया।", ro:"chalo sone ka samay ho gaya.", en:"Come, it's time to sleep."},
     {sp:"A", hi:"क्या तुम मुझे कहानी सुनाओगी?", ro:"kya tum mujhe kahaani sunaaogi?", en:"Will you tell me a story?"},
     {sp:"B", hi:"हाँ, ज़रूर।", ro:"haan, zaroor.", en:"Yes, of course."},
-    {sp:"A", hi:"शुभ रात्रि!", ro:"shubh raatri!", en:"Good night!"},
+    {sp:"A", hi:"शुभ रात्रि!", ro:"shubh raatri!", en:"Good night!"}
   ]},
   { id:"c7", name:"Helping Mom", emoji:"🤝", lines:[
     {sp:"A", hi:"माँ, क्या मैं मदद करूँ?", ro:"maa, kya main madad karoon?", en:"Mom, shall I help?"},
     {sp:"B", hi:"हाँ, कृपया मेज़ साफ़ करो।", ro:"haan, kripya mez saaf karo.", en:"Yes, please clean the table."},
     {sp:"A", hi:"ठीक है, हो गया।", ro:"theek hai, ho gaya.", en:"Okay, it's done."},
     {sp:"B", hi:"शाबाश! तुम बहुत अच्छी हो।", ro:"shaabaash! tum bahut achhi ho.", en:"Well done! You are very good."},
-    {sp:"A", hi:"धन्यवाद, माँ!", ro:"dhanyavaad, maa!", en:"Thank you, Mom!"},
+    {sp:"A", hi:"धन्यवाद, माँ!", ro:"dhanyavaad, maa!", en:"Thank you, Mom!"}
   ]},
   { id:"c8", name:"What's Your Favorite?", emoji:"❤️", lines:[
     {sp:"A", hi:"तुम्हारा पसंदीदा रंग कौन सा है?", ro:"tumhara pasandeeda rang kaun sa hai?", en:"What is your favorite color?"},
     {sp:"B", hi:"मुझे गुलाबी रंग पसंद है।", ro:"mujhe gulaabi rang pasand hai.", en:"I like the color pink."},
     {sp:"A", hi:"तुम्हारा पसंदीदा फल क्या है?", ro:"tumhara pasandeeda phal kya hai?", en:"What is your favorite fruit?"},
     {sp:"B", hi:"मुझे आम बहुत पसंद हैं।", ro:"mujhe aam bahut pasand hain.", en:"I really like mangoes."},
-    {sp:"A", hi:"मुझे भी!", ro:"mujhe bhi!", en:"Me too!"},
+    {sp:"A", hi:"मुझे भी!", ro:"mujhe bhi!", en:"Me too!"}
   ]},
   { id:"c9", name:"Feeling Sick", emoji:"🤒", lines:[
     {sp:"A", hi:"मेरी तबीयत ठीक नहीं है।", ro:"meri tabiyat theek nahin hai.", en:"I am not feeling well."},
     {sp:"B", hi:"क्या हुआ? कहाँ दर्द है?", ro:"kya hua? kahaan dard hai?", en:"What happened? Where does it hurt?"},
     {sp:"A", hi:"मेरे सिर में दर्द है।", ro:"mere sir mein dard hai.", en:"My head hurts."},
     {sp:"B", hi:"आराम करो, सब ठीक हो जाएगा।", ro:"aaraam karo, sab theek ho jaayega.", en:"Rest, everything will be fine."},
-    {sp:"A", hi:"शुक्रिया।", ro:"shukriya.", en:"Thank you."},
+    {sp:"A", hi:"शुक्रिया।", ro:"shukriya.", en:"Thank you."}
   ]},
   { id:"c10", name:"At the Market", emoji:"🛒", lines:[
     {sp:"A", hi:"हमें क्या खरीदना है?", ro:"hamein kya khareedna hai?", en:"What do we need to buy?"},
     {sp:"B", hi:"हमें सेब और दूध चाहिए।", ro:"hamein seb aur doodh chahiye.", en:"We need apples and milk."},
     {sp:"A", hi:"यह कितने का है?", ro:"yeh kitne ka hai?", en:"How much is this?"},
     {sp:"B", hi:"यह बीस रुपये का है।", ro:"yeh bees rupaye ka hai.", en:"This is twenty rupees."},
-    {sp:"A", hi:"ठीक है, हम इसे लेंगे।", ro:"theek hai, hum ise lenge.", en:"Okay, we'll take it."},
-  ]},
+    {sp:"A", hi:"ठीक है, हम इसे लेंगे।", ro:"theek hai, hum ise lenge.", en:"Okay, we'll take it."}
+  ]}
 ];
-
 /* ===== GRAMMAR: build-the-sentence lessons ===== */
 const GRAMMAR = [
   { id:"order", name:"Verb Goes Last", emoji:"🔤",
@@ -648,138 +638,137 @@ const GRAMMAR = [
     examples:[
       {hi:"मैं सेब खाती हूँ", ro:"main seb khaati hoon", en:"I eat an apple"},
       {hi:"वह पानी पीता है", ro:"vah paani peeta hai", en:"He drinks water"},
-      {hi:"हम खेल खेलते हैं", ro:"hum khel khelte hain", en:"We play a game"},
+      {hi:"हम खेल खेलते हैं", ro:"hum khel khelte hain", en:"We play a game"}
     ],
     builds:[
       {en:"I eat an apple", words:["मैं","सेब","खाती","हूँ"], ro:"main seb khaati hoon"},
       {en:"He drinks water", words:["वह","पानी","पीता","है"], ro:"vah paani peeta hai"},
-      {en:"I read a book", words:["मैं","किताब","पढ़ती","हूँ"], ro:"main kitaab padhti hoon"},
+      {en:"I read a book", words:["मैं","किताब","पढ़ती","हूँ"], ro:"main kitaab padhti hoon"}
     ]},
   { id:"tobe", name:"I am / You are", emoji:"🙋",
     tip:"To say 'am/is/are' use होना: मैं हूँ (I am), तुम हो (you are), वह है (he/she is), हम हैं (we are).",
     examples:[
       {hi:"मैं खुश हूँ", ro:"main khush hoon", en:"I am happy"},
       {hi:"तुम अच्छे हो", ro:"tum achhe ho", en:"You are good"},
-      {hi:"हम तैयार हैं", ro:"hum taiyaar hain", en:"We are ready"},
+      {hi:"हम तैयार हैं", ro:"hum taiyaar hain", en:"We are ready"}
     ],
     builds:[
       {en:"I am happy", words:["मैं","खुश","हूँ"], ro:"main khush hoon"},
       {en:"You are my friend", words:["तुम","मेरे","दोस्त","हो"], ro:"tum mere dost ho"},
-      {en:"We are ready", words:["हम","तैयार","हैं"], ro:"hum taiyaar hain"},
+      {en:"We are ready", words:["हम","तैयार","हैं"], ro:"hum taiyaar hain"}
     ]},
   { id:"thisthat", name:"This is / That is", emoji:"👉",
     tip:"यह = this, वह = that. Add है at the end: यह सेब है (This is an apple).",
     examples:[
       {hi:"यह सेब है", ro:"yeh seb hai", en:"This is an apple"},
       {hi:"वह बिल्ली है", ro:"vah billi hai", en:"That is a cat"},
-      {hi:"यह मेरी किताब है", ro:"yeh meri kitaab hai", en:"This is my book"},
+      {hi:"यह मेरी किताब है", ro:"yeh meri kitaab hai", en:"This is my book"}
     ],
     builds:[
       {en:"This is a dog", words:["यह","कुत्ता","है"], ro:"yeh kutta hai"},
-      {en:"That is my house", words:["वह","मेरा","घर","है"], ro:"vah mera ghar hai"},
+      {en:"That is my house", words:["वह","मेरा","घर","है"], ro:"vah mera ghar hai"}
     ]},
   { id:"present", name:"Doing It Now", emoji:"🏃",
     tip:"For things you do, add ती (girl) or ता (boy) to the verb, then हूँ/है. Aria is a girl, so she uses ती: मैं खाती हूँ (I eat).",
     examples:[
       {hi:"मैं पढ़ती हूँ", ro:"main padhti hoon", en:"I study"},
       {hi:"मैं गाती हूँ", ro:"main gaati hoon", en:"I sing"},
-      {hi:"तुम खेलते हो", ro:"tum khelte ho", en:"You play"},
+      {hi:"तुम खेलते हो", ro:"tum khelte ho", en:"You play"}
     ],
     builds:[
       {en:"I study", words:["मैं","पढ़ती","हूँ"], ro:"main padhti hoon"},
       {en:"I drink milk", words:["मैं","दूध","पीती","हूँ"], ro:"main doodh peeti hoon"},
-      {en:"I go to school", words:["मैं","स्कूल","जाती","हूँ"], ro:"main school jaati hoon"},
+      {en:"I go to school", words:["मैं","स्कूल","जाती","हूँ"], ro:"main school jaati hoon"}
     ]},
   { id:"poss", name:"My / Your", emoji:"🫳",
     tip:"मेरा/मेरी = my, तुम्हारा/तुम्हारी = your. Match girl-words with मेरी: मेरी माँ (my mom), मेरा भाई (my brother).",
     examples:[
       {hi:"मेरी माँ", ro:"meri maa", en:"my mom"},
       {hi:"मेरा दोस्त", ro:"mera dost", en:"my friend"},
-      {hi:"तुम्हारा नाम", ro:"tumhara naam", en:"your name"},
+      {hi:"तुम्हारा नाम", ro:"tumhara naam", en:"your name"}
     ],
     builds:[
       {en:"This is my mom", words:["यह","मेरी","माँ","है"], ro:"yeh meri maa hai"},
-      {en:"What is your name?", words:["तुम्हारा","नाम","क्या","है"], ro:"tumhara naam kya hai"},
+      {en:"What is your name?", words:["तुम्हारा","नाम","क्या","है"], ro:"tumhara naam kya hai"}
     ]},
   { id:"post", name:"In / On / To", emoji:"📍",
     tip:"Hindi puts these AFTER the word: में = in, पर = on, को = to. घर में (in the house), मेज़ पर (on the table).",
     examples:[
       {hi:"घर में", ro:"ghar mein", en:"in the house"},
       {hi:"मेज़ पर", ro:"mez par", en:"on the table"},
-      {hi:"मैं स्कूल को जाती हूँ", ro:"main school ko jaati hoon", en:"I go to school"},
+      {hi:"मैं स्कूल को जाती हूँ", ro:"main school ko jaati hoon", en:"I go to school"}
     ],
     builds:[
       {en:"The book is on the table", words:["किताब","मेज़","पर","है"], ro:"kitaab mez par hai"},
-      {en:"Mom is in the house", words:["माँ","घर","में","है"], ro:"maa ghar mein hai"},
+      {en:"Mom is in the house", words:["माँ","घर","में","है"], ro:"maa ghar mein hai"}
     ]},
   { id:"quest", name:"Asking Questions", emoji:"❓",
     tip:"Put क्या at the start for yes/no questions: क्या तुम खुश हो? Use कहाँ (where), क्या (what), कौन (who).",
     examples:[
       {hi:"क्या तुम खुश हो?", ro:"kya tum khush ho?", en:"Are you happy?"},
       {hi:"तुम कहाँ हो?", ro:"tum kahaan ho?", en:"Where are you?"},
-      {hi:"यह क्या है?", ro:"yeh kya hai?", en:"What is this?"},
+      {hi:"यह क्या है?", ro:"yeh kya hai?", en:"What is this?"}
     ],
     builds:[
       {en:"Are you ready?", words:["क्या","तुम","तैयार","हो"], ro:"kya tum taiyaar ho"},
-      {en:"Where is mom?", words:["माँ","कहाँ","है"], ro:"maa kahaan hai"},
+      {en:"Where is mom?", words:["माँ","कहाँ","है"], ro:"maa kahaan hai"}
     ]},
   { id:"neg", name:"Saying No", emoji:"🙅",
     tip:"Add नहीं before the verb to say 'not'. यह बिल्ली नहीं है (This is not a cat). मैं उदास नहीं हूँ (I am not sad).",
     examples:[
       {hi:"यह मेरा नहीं है", ro:"yeh mera nahin hai", en:"This is not mine"},
       {hi:"मुझे यह पसंद नहीं है", ro:"mujhe yeh pasand nahin hai", en:"I don't like this"},
-      {hi:"मैं नहीं जाती", ro:"main nahin jaati", en:"I don't go"},
+      {hi:"मैं नहीं जाती", ro:"main nahin jaati", en:"I don't go"}
     ],
     builds:[
       {en:"This is not a cat", words:["यह","बिल्ली","नहीं","है"], ro:"yeh billi nahin hai"},
-      {en:"I am not sad", words:["मैं","उदास","नहीं","हूँ"], ro:"main udaas nahin hoon"},
+      {en:"I am not sad", words:["मैं","उदास","नहीं","हूँ"], ro:"main udaas nahin hoon"}
     ]},
   { id:"plural", name:"More Than One", emoji:"🔢",
     tip:"Many boy-words change ा→े: लड़का→लड़के (boys). Many girl-words add ें: किताब→किताबें (books).",
     examples:[
       {hi:"दो लड़के", ro:"do ladke", en:"two boys"},
       {hi:"तीन किताबें", ro:"teen kitaabein", en:"three books"},
-      {hi:"बहुत फूल", ro:"bahut phool", en:"many flowers"},
+      {hi:"बहुत फूल", ro:"bahut phool", en:"many flowers"}
     ],
     builds:[
       {en:"two boys", words:["दो","लड़के"], ro:"do ladke"},
-      {en:"three books", words:["तीन","किताबें"], ro:"teen kitaabein"},
+      {en:"three books", words:["तीन","किताबें"], ro:"teen kitaabein"}
     ]},
   { id:"gender", name:"Boy & Girl Words", emoji:"⚖️",
     tip:"Words are 'boy' or 'girl', and the describing word matches: अच्छा लड़का (good boy), अच्छी लड़की (good girl).",
     examples:[
       {hi:"अच्छा लड़का", ro:"achha ladka", en:"good boy"},
       {hi:"अच्छी लड़की", ro:"achhi ladki", en:"good girl"},
-      {hi:"बड़ा घर", ro:"bada ghar", en:"big house"},
+      {hi:"बड़ा घर", ro:"bada ghar", en:"big house"}
     ],
     builds:[
       {en:"good girl", words:["अच्छी","लड़की"], ro:"achhi ladki"},
-      {en:"big house", words:["बड़ा","घर"], ro:"bada ghar"},
+      {en:"big house", words:["बड़ा","घर"], ro:"bada ghar"}
     ]},
   { id:"past", name:"What Happened", emoji:"⏪",
     tip:"For the past, the verb changes: जाना→गई (a girl went). मैं स्कूल गई (I went to school).",
     examples:[
       {hi:"मैं स्कूल गई", ro:"main school gayi", en:"I went to school"},
       {hi:"हम पार्क गए", ro:"hum park gaye", en:"We went to the park"},
-      {hi:"उसने खाना खाया", ro:"usne khaana khaaya", en:"He ate food"},
+      {hi:"उसने खाना खाया", ro:"usne khaana khaaya", en:"He ate food"}
     ],
     builds:[
       {en:"I went to school", words:["मैं","स्कूल","गई"], ro:"main school gayi"},
-      {en:"We went to the park", words:["हम","पार्क","गए"], ro:"hum park gaye"},
+      {en:"We went to the park", words:["हम","पार्क","गए"], ro:"hum park gaye"}
     ]},
   { id:"want", name:"I Want / I Need", emoji:"🙏",
     tip:"To say 'I want' use मुझे … चाहिए. मुझे पानी चाहिए (I want water). मुझे मदद चाहिए (I need help).",
     examples:[
       {hi:"मुझे पानी चाहिए", ro:"mujhe paani chahiye", en:"I want water"},
       {hi:"मुझे मदद चाहिए", ro:"mujhe madad chahiye", en:"I need help"},
-      {hi:"मुझे यह चाहिए", ro:"mujhe yeh chahiye", en:"I want this"},
+      {hi:"मुझे यह चाहिए", ro:"mujhe yeh chahiye", en:"I want this"}
     ],
     builds:[
       {en:"I want milk", words:["मुझे","दूध","चाहिए"], ro:"mujhe doodh chahiye"},
-      {en:"I need help", words:["मुझे","मदद","चाहिए"], ro:"mujhe madad chahiye"},
-    ]},
+      {en:"I need help", words:["मुझे","मदद","चाहिए"], ro:"mujhe madad chahiye"}
+    ]}
 ];
-
 /* ===== ARENA GAMES: neon grammar mini-games ===== */
 const GAMES = [
   { id:"aura", name:"Aura Match", emoji:"🌈", type:"aura",
@@ -792,7 +781,7 @@ const GAMES = [
       {en:"That GIRL is reading", prompt:"वह लड़की पढ़ ___", optF:"रही है", optM:"रहा है", ans:"f"},
       {en:"I (a girl) am good", prompt:"मैं ___ हूँ", optF:"अच्छी", optM:"अच्छा", ans:"f"},
       {en:"That BOY is good", prompt:"वह लड़का ___ है", optF:"अच्छी", optM:"अच्छा", ans:"m"},
-      {en:"I (a girl) sing", prompt:"मैं गा ___", optF:"ती हूँ", optM:"ता हूँ", ans:"f"},
+      {en:"I (a girl) sing", prompt:"मैं गा ___", optF:"ती हूँ", optM:"ता हूँ", ans:"f"}
     ]},
   { id:"combo", name:"Combo Chains", emoji:"🥷", type:"combo",
     intro:"Hindi attacks in order: Fighter (who) → Target (what) → Attack (verb). Put the VERB last to land a Critical Hit! 💥",
@@ -802,7 +791,7 @@ const GAMES = [
       {en:"She reads a book", s:"वह", o:"किताब", v:"पढ़ती है"},
       {en:"We play a game", s:"हम", o:"खेल", v:"खेलते हैं"},
       {en:"I see the moon", s:"मैं", o:"चाँद", v:"देखती हूँ"},
-      {en:"I want water", s:"मुझे", o:"पानी", v:"चाहिए"},
+      {en:"I want water", s:"मुझे", o:"पानी", v:"चाहिए"}
     ]},
   { id:"respect", name:"Respect Shield", emoji:"🛡️", type:"respect",
     intro:"Elders, teachers & grandparents get the polite Aap 🛡️ shield to show respect. Friends & younger kids use the casual Tum ⚔️. Pick the right stance!",
@@ -812,7 +801,7 @@ const GAMES = [
       {scenario:"Greet your teacher 🧑‍🏫", who:"elder", aap:"आप कैसे हैं?", tum:"तुम कैसे हो?"},
       {scenario:"Tell your little brother to come 👦", who:"friend", aap:"आप आइए", tum:"तुम आओ"},
       {scenario:"Tell Dadaji (grandpa) to sit 👴", who:"elder", aap:"आप बैठिए", tum:"तुम बैठो"},
-      {scenario:"Call your best friend 🧒", who:"friend", aap:"आप सुनिए", tum:"तुम सुनो"},
+      {scenario:"Call your best friend 🧒", who:"friend", aap:"आप सुनिए", tum:"तुम सुनो"}
     ]},
   { id:"runes", name:"Time Runes", emoji:"⏳", type:"runes",
     intro:"Verbs are your weapons. Snap on a time rune: ⚡ NOW (happening), 🌑 DONE (past), or ✨ LATER (future). Tap the verb form that matches!",
@@ -822,7 +811,7 @@ const GAMES = [
       {verb:"sleep", ask:"past", present:"सो रही हूँ", past:"सोई", future:"सोऊँगी"},
       {verb:"come", ask:"future", present:"आ रही हूँ", past:"आई", future:"आऊँगी"},
       {verb:"dance", ask:"now", present:"नाच रही हूँ", past:"नाची", future:"नाचूँगी"},
-      {verb:"sing", ask:"past", present:"गा रही हूँ", past:"गाई", future:"गाऊँगी"},
+      {verb:"sing", ask:"past", present:"गा रही हूँ", past:"गाई", future:"गाऊँगी"}
     ]},
   { id:"potion", name:"Potion Lab", emoji:"⚗️", type:"potion",
     intro:"Hindi puts in/on/to AFTER the word, like a catalyst dropped in last: घर में (in the house). Brew the potion — add the right catalyst after the noun!",
@@ -832,10 +821,9 @@ const GAMES = [
       {en:"in the closet", noun:"अलमारी", post:"में", opts:["में","पर","को"]},
       {en:"on the bed", noun:"बिस्तर", post:"पर", opts:["पर","में","को"]},
       {en:"to school", noun:"स्कूल", post:"को", opts:["को","में","पर"]},
-      {en:"in the water", noun:"पानी", post:"में", opts:["में","पर","से"]},
-    ]},
+      {en:"in the water", noun:"पानी", post:"में", opts:["में","पर","से"]}
+    ]}
 ];
-
 // Cultural Context Bites — tiny, warm "Hindi at home" notes
 const CULTURE_THEMES = [{"key": "respect", "emoji": "🙏", "name": "Respect & Manners"}, {"key": "festivals", "emoji": "🪔", "name": "Festivals"}, {"key": "food", "emoji": "🍽️", "name": "Food & Eating"}, {"key": "family", "emoji": "👪", "name": "Family Ties"}, {"key": "language", "emoji": "🗣️", "name": "Language & Names"}, {"key": "traditions", "emoji": "🎨", "name": "Traditions & Daily Life"}];
 const CULTURE = [
@@ -894,7 +882,7 @@ const STORIES = [
       { ic:"👵", hi:"नानी कहती हैं, “नमस्ते बेटा!”", ro:"naani kehti hain, “namaste beta!”", en:"Nani says, “Hello, child!”" },
       { ic:"☕", hi:"नानी मुझे चाय देती हैं।", ro:"naani mujhe chaay deti hain.", en:"Nani gives me tea." },
       { ic:"🍪", hi:"हम साथ बिस्किट खाते हैं।", ro:"ham saath biskit khaate hain.", en:"We eat biscuits together." },
-      { ic:"😊", hi:"मैं बहुत खुश हूँ।", ro:"main bahut khush hoon.", en:"I am very happy." },
+      { ic:"😊", hi:"मैं बहुत खुश हूँ।", ro:"main bahut khush hoon.", en:"I am very happy." }
     ],
     question:{ q:"What does Nani give Aria to drink?", opts:["Tea","Water","Milk","Juice"], ans:0 } },
   { id:"market", emoji:"🛒", title:"Aria Goes to the Market",
@@ -903,7 +891,7 @@ const STORIES = [
       { ic:"🍎", hi:"हम पाँच सेब खरीदते हैं।", ro:"ham paanch seb khareedte hain.", en:"We buy five apples." },
       { ic:"🍌", hi:"मैं केले भी लेती हूँ।", ro:"main kele bhi leti hoon.", en:"I also take bananas." },
       { ic:"💰", hi:"माँ पैसे देती हैं।", ro:"maa paise deti hain.", en:"Mom gives money." },
-      { ic:"🏠", hi:"हम घर वापस आते हैं।", ro:"ham ghar waapas aate hain.", en:"We come back home." },
+      { ic:"🏠", hi:"हम घर वापस आते हैं।", ro:"ham ghar waapas aate hain.", en:"We come back home." }
     ],
     question:{ q:"How many apples did they buy?", opts:["Five","Two","Ten","Three"], ans:0 } },
   { id:"school", emoji:"🏫", title:"School Morning",
@@ -912,7 +900,7 @@ const STORIES = [
       { ic:"🪥", hi:"मैं दाँत साफ़ करती हूँ।", ro:"main daant saaf karti hoon.", en:"I brush my teeth." },
       { ic:"👗", hi:"मैं कपड़े पहनती हूँ।", ro:"main kapde pehenti hoon.", en:"I put on my clothes." },
       { ic:"🎒", hi:"मैं बैग लेती हूँ।", ro:"main bag leti hoon.", en:"I take my bag." },
-      { ic:"🚌", hi:"मैं स्कूल जाती हूँ।", ro:"main school jaati hoon.", en:"I go to school." },
+      { ic:"🚌", hi:"मैं स्कूल जाती हूँ।", ro:"main school jaati hoon.", en:"I go to school." }
     ],
     question:{ q:"Where does Aria go at the end?", opts:["School","Market","Park","Home"], ans:0 } },
   { id:"rain", emoji:"🌧️", title:"A Rainy Day",
@@ -921,7 +909,7 @@ const STORIES = [
       { ic:"🏠", hi:"हम घर के अंदर हैं।", ro:"ham ghar ke andar hain.", en:"We are inside the house." },
       { ic:"☕", hi:"माँ गरम चाय बनाती हैं।", ro:"maa garam chaay banaati hain.", en:"Mom makes hot tea." },
       { ic:"📖", hi:"मैं एक किताब पढ़ती हूँ।", ro:"main ek kitaab padhti hoon.", en:"I read a book." },
-      { ic:"😴", hi:"फिर मैं सो जाती हूँ।", ro:"phir main so jaati hoon.", en:"Then I fall asleep." },
+      { ic:"😴", hi:"फिर मैं सो जाती हूँ।", ro:"phir main so jaati hoon.", en:"Then I fall asleep." }
     ],
     question:{ q:"What is the weather like?", opts:["Rainy","Sunny","Snowy","Windy"], ans:0 } },
   { id:"dinner", emoji:"🍽️", title:"Dinner Time",
@@ -930,7 +918,7 @@ const STORIES = [
       { ic:"👨‍👩‍👧", hi:"पूरा परिवार साथ बैठता है।", ro:"poora parivaar saath baithta hai.", en:"The whole family sits together." },
       { ic:"🍲", hi:"हम दाल और चावल खाते हैं।", ro:"ham daal aur chaawal khaate hain.", en:"We eat dal and rice." },
       { ic:"💧", hi:"मैं पानी पीती हूँ।", ro:"main paani peeti hoon.", en:"I drink water." },
-      { ic:"😋", hi:"खाना बहुत अच्छा है।", ro:"khaana bahut accha hai.", en:"The food is very good." },
+      { ic:"😋", hi:"खाना बहुत अच्छा है।", ro:"khaana bahut accha hai.", en:"The food is very good." }
     ],
     question:{ q:"What does the family eat?", opts:["Dal and rice","Bread","Apples","Biscuits"], ans:0 } },
   { id:"room", emoji:"🎨", title:"My Colorful Room",
@@ -939,9 +927,9 @@ const STORIES = [
       { ic:"🛏️", hi:"मेरा बिस्तर नीला है।", ro:"mera bistar neela hai.", en:"My bed is blue." },
       { ic:"🪟", hi:"खिड़की बड़ी है।", ro:"khidki badi hai.", en:"The window is big." },
       { ic:"🧸", hi:"मेरे पास एक टेडी है।", ro:"mere paas ek teddy hai.", en:"I have a teddy bear." },
-      { ic:"❤️", hi:"मुझे मेरा कमरा पसंद है।", ro:"mujhe mera kamra pasand hai.", en:"I like my room." },
+      { ic:"❤️", hi:"मुझे मेरा कमरा पसंद है।", ro:"mujhe mera kamra pasand hai.", en:"I like my room." }
     ],
-    question:{ q:"What color is Aria's bed?", opts:["Blue","Red","Green","Yellow"], ans:0 } },
+    question:{ q:"What color is Aria's bed?", opts:["Blue","Red","Green","Yellow"], ans:0 } }
 ];
 const LEVEL2 = {
   "greet": [
@@ -1486,13 +1474,10 @@ const LEVEL2 = {
   ]
 };
 if (typeof UNITS !== "undefined") { UNITS.forEach(function(u){ u.words2 = LEVEL2[u.id] || []; }); }
-
-
 const CONVOS2 = [{"id": "c11", "name": "At the Airport", "emoji": "✈️", "lv": 2, "lines": [{"sp": "A", "hi": "हमें हवाई अड्डे जल्दी पहुँचना है।", "ro": "humein hawaai adde jaldi pahunchna hai.", "en": "We have to reach the airport quickly."}, {"sp": "B", "hi": "मेरा बैग तैयार है।", "ro": "mera bag taiyaar hai.", "en": "My bag is ready."}, {"sp": "A", "hi": "तुम्हारा पासपोर्ट कहाँ है?", "ro": "tumhaara passport kahaan hai?", "en": "Where is your passport?"}, {"sp": "B", "hi": "मेरे बैग में है।", "ro": "mere bag mein hai.", "en": "It's in my bag."}, {"sp": "A", "hi": "चलो, हमें देर हो रही है!", "ro": "chalo, humein der ho rahi hai!", "en": "Let's go, we're getting late!"}]}, {"id": "c12", "name": "At the Restaurant", "emoji": "🍽️", "lv": 2, "lines": [{"sp": "A", "hi": "मुझे बहुत भूख लगी है।", "ro": "mujhe bahut bhookh lagi hai.", "en": "I'm very hungry."}, {"sp": "B", "hi": "तुम क्या खाओगी?", "ro": "tum kya khaaogi?", "en": "What will you eat?"}, {"sp": "A", "hi": "मैं नूडल्स खाऊँगी।", "ro": "main noodles khaaungi.", "en": "I will eat noodles."}, {"sp": "B", "hi": "मैं समोसा लूँगा।", "ro": "main samosa loonga.", "en": "I'll take a samosa."}, {"sp": "A", "hi": "यह खाना बहुत स्वादिष्ट है!", "ro": "yeh khaana bahut swaadisht hai!", "en": "This food is very delicious!"}]}, {"id": "c13", "name": "Hunter Squad", "emoji": "🗡️", "lv": 2, "lines": [{"sp": "A", "hi": "तैयार हो जाओ, राक्षस आ रहा है!", "ro": "taiyaar ho jaao, raakshas aa raha hai!", "en": "Get ready, the monster is coming!"}, {"sp": "B", "hi": "मैं उससे लड़ूँगी!", "ro": "main usse ladungi!", "en": "I will fight it!"}, {"sp": "A", "hi": "मुझे बचाओ!", "ro": "mujhe bachaao!", "en": "Save me!"}, {"sp": "B", "hi": "चिंता मत करो, हम जीतेंगे!", "ro": "chinta mat karo, hum jeetenge!", "en": "Don't worry, we will win!"}, {"sp": "A", "hi": "हम सबसे ताकतवर हंटर हैं!", "ro": "hum sabse taakatvar hunter hain!", "en": "We are the strongest hunters!"}]}, {"id": "c14", "name": "Getting Ready for School", "emoji": "🎒", "lv": 2, "lines": [{"sp": "A", "hi": "जल्दी करो, स्कूल का समय हो गया!", "ro": "jaldi karo, school ka samay ho gaya!", "en": "Hurry, it's time for school!"}, {"sp": "B", "hi": "मैं तैयार हो रही हूँ।", "ro": "main taiyaar ho rahi hoon.", "en": "I'm getting ready."}, {"sp": "A", "hi": "क्या तुमने अपना होमवर्क किया?", "ro": "kya tumne apna homework kiya?", "en": "Did you do your homework?"}, {"sp": "B", "hi": "हाँ, मैंने सब कर लिया।", "ro": "haan, maine sab kar liya.", "en": "Yes, I did it all."}, {"sp": "A", "hi": "शाबाश! अब चलो।", "ro": "shaabaash! ab chalo.", "en": "Well done! Now let's go."}]}, {"id": "c15", "name": "A Festival at Nani's", "emoji": "🪔", "lv": 2, "lines": [{"sp": "A", "hi": "आज दिवाली है!", "ro": "aaj diwali hai!", "en": "Today is Diwali!"}, {"sp": "B", "hi": "हम दीये जलाएँगे।", "ro": "hum diye jalaayenge.", "en": "We will light lamps."}, {"sp": "A", "hi": "नानी ने मिठाई बनाई है।", "ro": "naani ne mithaai banaayi hai.", "en": "Nani made sweets."}, {"sp": "B", "hi": "मुझे मिठाई बहुत पसंद है!", "ro": "mujhe mithaai bahut pasand hai!", "en": "I love sweets!"}, {"sp": "A", "hi": "दिवाली मुबारक!", "ro": "diwali mubaarak!", "en": "Happy Diwali!"}]}, {"id": "c16", "name": "Asking for Directions", "emoji": "🗺️", "lv": 2, "lines": [{"sp": "A", "hi": "माफ़ कीजिए, अस्पताल कहाँ है?", "ro": "maaf kijiye, aspataal kahaan hai?", "en": "Excuse me, where is the hospital?"}, {"sp": "B", "hi": "सीधे जाओ, फिर बाएँ मुड़ो।", "ro": "seedhe jaao, phir baayen mudo.", "en": "Go straight, then turn left."}, {"sp": "A", "hi": "कितनी दूर है?", "ro": "kitni door hai?", "en": "How far is it?"}, {"sp": "B", "hi": "ज़्यादा दूर नहीं।", "ro": "zyaada door nahin.", "en": "Not too far."}, {"sp": "A", "hi": "बहुत शुक्रिया!", "ro": "bahut shukriya!", "en": "Thank you so much!"}]}, {"id": "c17", "name": "Shopping for Clothes", "emoji": "👗", "lv": 2, "lines": [{"sp": "A", "hi": "मुझे एक नई जैकेट चाहिए।", "ro": "mujhe ek nayi jacket chahiye.", "en": "I need a new jacket."}, {"sp": "B", "hi": "यह नीली वाली कैसी है?", "ro": "yeh neeli waali kaisi hai?", "en": "How about this blue one?"}, {"sp": "A", "hi": "यह सुंदर है, पर महँगी है।", "ro": "yeh sundar hai, par mahangi hai.", "en": "It's pretty, but expensive."}, {"sp": "B", "hi": "यह वाली सस्ती है।", "ro": "yeh waali sasti hai.", "en": "This one is cheap."}, {"sp": "A", "hi": "ठीक है, मैं यही लूँगी।", "ro": "theek hai, main yahi loongi.", "en": "Okay, I'll take this one."}]}, {"id": "c18", "name": "A Rainy Afternoon", "emoji": "🌧️", "lv": 2, "lines": [{"sp": "A", "hi": "बाहर तूफ़ान आ रहा है।", "ro": "baahar toofaan aa raha hai.", "en": "A storm is coming outside."}, {"sp": "B", "hi": "चलो अंदर खेलते हैं।", "ro": "chalo andar khelte hain.", "en": "Let's play inside."}, {"sp": "A", "hi": "मैं एक किताब पढ़ूँगी।", "ro": "main ek kitaab padhungi.", "en": "I'll read a book."}, {"sp": "B", "hi": "मैं कॉमिक्स पढ़ूँगा।", "ro": "main comics padhunga.", "en": "I'll read comics."}, {"sp": "A", "hi": "यह दिन बहुत मज़ेदार है!", "ro": "yeh din bahut mazedaar hai!", "en": "This day is so fun!"}]}];
 const STORIES2 = [{"id": "trip", "emoji": "✈️", "title": "The Big Trip", "lv": 2, "lines": [{"ic": "✈️", "hi": "कल हम छुट्टी पर जा रहे हैं।", "ro": "kal ham chhutti par ja rahe hain.", "en": "Tomorrow we are going on vacation."}, {"ic": "🧳", "hi": "मैं अपना बैग पैक करती हूँ।", "ro": "main apna bag pack karti hoon.", "en": "I pack my bag."}, {"ic": "🚕", "hi": "हम टैक्सी से हवाई अड्डे जाते हैं।", "ro": "ham taxi se hawaai adde jaate hain.", "en": "We go to the airport by taxi."}, {"ic": "🛫", "hi": "हवाई जहाज़ आसमान में उड़ता है।", "ro": "hawaai jahaaz aasmaan mein udta hai.", "en": "The airplane flies in the sky."}, {"ic": "🏨", "hi": "हम एक बड़े होटल में रुकते हैं।", "ro": "ham ek bade hotel mein rukte hain.", "en": "We stay in a big hotel."}, {"ic": "😍", "hi": "यह यात्रा बहुत मज़ेदार है!", "ro": "yeh yaatra bahut mazedaar hai!", "en": "This trip is so much fun!"}], "question": {"q": "How do they get to the airport?", "opts": ["By taxi", "By bus", "By train", "On foot"], "ans": 0}}, {"id": "hunter", "emoji": "🗡️", "title": "The Brave Hunter", "lv": 2, "lines": [{"ic": "🌃", "hi": "रात को शहर में एक राक्षस आया।", "ro": "raat ko shehar mein ek raakshas aaya.", "en": "At night a monster came to the city."}, {"ic": "🗡️", "hi": "आरिया एक बहादुर हंटर है।", "ro": "aaria ek bahaadur hunter hai.", "en": "Aria is a brave hunter."}, {"ic": "⚔️", "hi": "वह राक्षस से लड़ती है।", "ro": "vah raakshas se ladti hai.", "en": "She fights the monster."}, {"ic": "🛡️", "hi": "वह अपने दोस्तों को बचाती है।", "ro": "vah apne doston ko bachaati hai.", "en": "She saves her friends."}, {"ic": "🏆", "hi": "आख़िर में वह जीत जाती है।", "ro": "aakhir mein vah jeet jaati hai.", "en": "In the end she wins."}, {"ic": "🎉", "hi": "सब लोग खुश हैं।", "ro": "sab log khush hain.", "en": "Everyone is happy."}], "question": {"q": "What is Aria in the story?", "opts": ["A brave hunter", "A teacher", "A doctor", "A cook"], "ans": 0}}, {"id": "greenhouse", "emoji": "🌱", "title": "In the Greenhouse", "lv": 2, "lines": [{"ic": "🌱", "hi": "हमारे बगीचे में बहुत पौधे हैं।", "ro": "hamaare bagiche mein bahut paudhe hain.", "en": "There are many plants in our garden."}, {"ic": "🥒", "hi": "हम करेला और भिंडी उगाते हैं।", "ro": "ham karela aur bhindi ugaate hain.", "en": "We grow bitter gourd and okra."}, {"ic": "💧", "hi": "मैं पौधों को पानी देती हूँ।", "ro": "main paudhon ko paani deti hoon.", "en": "I water the plants."}, {"ic": "☀️", "hi": "धूप में पौधे बड़े होते हैं।", "ro": "dhoop mein paudhe bade hote hain.", "en": "The plants grow in the sun."}, {"ic": "🧺", "hi": "हम सब्ज़ियाँ तोड़ते हैं।", "ro": "ham sabziyaan todte hain.", "en": "We pick the vegetables."}, {"ic": "🍲", "hi": "माँ उनसे खाना बनाती हैं।", "ro": "maa unse khaana banaati hain.", "en": "Mom cooks food with them."}], "question": {"q": "What do they grow?", "opts": ["Bitter gourd and okra", "Apples and bananas", "Rice", "Flowers"], "ans": 0}}, {"id": "market2", "emoji": "🛒", "title": "A Busy Market", "lv": 2, "lines": [{"ic": "🛒", "hi": "आज सब्ज़ी मंडी में बहुत भीड़ है।", "ro": "aaj sabzi mandi mein bahut bheed hai.", "en": "Today the vegetable market is very crowded."}, {"ic": "🍋", "hi": "माँ नींबू और अदरक खरीदती हैं।", "ro": "maa nimbu aur adrak khareedti hain.", "en": "Mom buys lemon and ginger."}, {"ic": "💰", "hi": "यह कितने का है?", "ro": "yeh kitne ka hai?", "en": "How much is this?"}, {"ic": "🧺", "hi": "दुकानदार सब्ज़ियाँ देता है।", "ro": "dukaandaar sabziyaan deta hai.", "en": "The shopkeeper gives the vegetables."}, {"ic": "🏠", "hi": "हम भारी थैले घर लाते हैं।", "ro": "ham bhaari thaile ghar laate hain.", "en": "We bring the heavy bags home."}, {"ic": "😋", "hi": "आज रात स्वादिष्ट खाना बनेगा।", "ro": "aaj raat swaadisht khaana banega.", "en": "Tonight delicious food will be made."}], "question": {"q": "What does Mom buy?", "opts": ["Lemon and ginger", "Toys", "Clothes", "Books"], "ans": 0}}, {"id": "sick", "emoji": "🤒", "title": "A Sick Day", "lv": 2, "lines": [{"ic": "🤒", "hi": "आज आरिया बीमार है।", "ro": "aaj aaria bimaar hai.", "en": "Today Aria is sick."}, {"ic": "🛏️", "hi": "वह बिस्तर पर आराम करती है।", "ro": "vah bistar par aaraam karti hai.", "en": "She rests in bed."}, {"ic": "☕", "hi": "माँ गरम चाय लाती हैं।", "ro": "maa garam chaay laati hain.", "en": "Mom brings hot tea."}, {"ic": "💊", "hi": "वह दवाई लेती है।", "ro": "vah davaai leti hai.", "en": "She takes medicine."}, {"ic": "😴", "hi": "वह बहुत देर तक सोती है।", "ro": "vah bahut der tak soti hai.", "en": "She sleeps for a long time."}, {"ic": "😊", "hi": "अगले दिन वह ठीक हो जाती है।", "ro": "agle din vah theek ho jaati hai.", "en": "The next day she gets better."}], "question": {"q": "Why does Aria rest in bed?", "opts": ["She is sick", "She is bored", "It is night", "She is hungry"], "ans": 0}}, {"id": "diwali", "emoji": "🪔", "title": "Diwali Night", "lv": 2, "lines": [{"ic": "🪔", "hi": "आज दिवाली का त्योहार है।", "ro": "aaj diwali ka tyohaar hai.", "en": "Today is the festival of Diwali."}, {"ic": "🏠", "hi": "हम घर को दीयों से सजाते हैं।", "ro": "ham ghar ko diyon se sajaate hain.", "en": "We decorate the house with lamps."}, {"ic": "👗", "hi": "मैं नए कपड़े पहनती हूँ।", "ro": "main naye kapde pehenti hoon.", "en": "I wear new clothes."}, {"ic": "🍬", "hi": "हम मिठाई बाँटते हैं।", "ro": "ham mithaai baantte hain.", "en": "We share sweets."}, {"ic": "🎆", "hi": "आसमान में रंग-बिरंगी रोशनी है।", "ro": "aasmaan mein rang-birangi roshni hai.", "en": "There are colorful lights in the sky."}, {"ic": "❤️", "hi": "पूरा परिवार साथ खुश है।", "ro": "poora parivaar saath khush hai.", "en": "The whole family is happy together."}], "question": {"q": "What festival is it?", "opts": ["Diwali", "Holi", "Birthday", "New Year"], "ans": 0}}];
 const GRAMMAR2 = [{"id": "l2_and", "name": "And & But", "emoji": "🔗", "lv": 2, "tip": "Join two ideas: और (aur) = and, पर (par) = but. Example: मुझे आम पसंद है पर केला नहीं।", "examples": [{"hi": "मुझे आम और केला पसंद है", "ro": "mujhe aam aur kela pasand hai", "en": "I like mango and banana"}, {"hi": "मैं छोटी हूँ पर बहादुर हूँ", "ro": "main chhoti hoon par bahaadur hoon", "en": "I am small but brave"}, {"hi": "वह हँसती है और गाती है", "ro": "vah hansti hai aur gaati hai", "en": "She laughs and sings"}], "builds": [{"en": "I am small but brave", "words": ["मैं", "छोटी", "हूँ", "पर", "बहादुर", "हूँ"], "ro": "main chhoti hoon par bahaadur hoon"}, {"en": "She laughs and sings", "words": ["वह", "हँसती", "है", "और", "गाती", "है"], "ro": "vah hansti hai aur gaati hai"}, {"en": "I like mango and banana", "words": ["मुझे", "आम", "और", "केला", "पसंद", "है"], "ro": "mujhe aam aur kela pasand hai"}]}, {"id": "l2_because", "name": "Because", "emoji": "💡", "lv": 2, "tip": "क्योंकि (kyunki) = because. It tells WHY. मैं खुश हूँ क्योंकि छुट्टी है।", "examples": [{"hi": "मैं खुश हूँ क्योंकि छुट्टी है", "ro": "main khush hoon kyunki chhutti hai", "en": "I am happy because it's a holiday"}, {"hi": "वह रोती है क्योंकि थकी है", "ro": "vah roti hai kyunki thaki hai", "en": "She cries because she is tired"}, {"hi": "मुझे भूख है क्योंकि देर है", "ro": "mujhe bhookh hai kyunki der hai", "en": "I am hungry because it is late"}], "builds": [{"en": "I am happy because it's a holiday", "words": ["मैं", "खुश", "हूँ", "क्योंकि", "छुट्टी", "है"], "ro": "main khush hoon kyunki chhutti hai"}, {"en": "She cries because she is tired", "words": ["वह", "रोती", "है", "क्योंकि", "थकी", "है"], "ro": "vah roti hai kyunki thaki hai"}, {"en": "I am hungry because it is late", "words": ["मुझे", "भूख", "है", "क्योंकि", "देर", "है"], "ro": "mujhe bhookh hai kyunki der hai"}]}, {"id": "l2_future", "name": "I Will (Future)", "emoji": "🔮", "lv": 2, "tip": "Future = will. Girls add -ऊँगी (-ungi), boys add -ऊँगा (-unga). मैं जाऊँगी = I will go.", "examples": [{"hi": "मैं स्कूल जाऊँगी", "ro": "main school jaaungi", "en": "I will go to school"}, {"hi": "वह खाना खाएगा", "ro": "vah khaana khaayega", "en": "He will eat food"}, {"hi": "हम कल खेलेंगे", "ro": "ham kal khelenge", "en": "We will play tomorrow"}], "builds": [{"en": "I will go to school", "words": ["मैं", "स्कूल", "जाऊँगी"], "ro": "main school jaaungi"}, {"en": "He will eat food", "words": ["वह", "खाना", "खाएगा"], "ro": "vah khaana khaayega"}, {"en": "We will play tomorrow", "words": ["हम", "कल", "खेलेंगे"], "ro": "ham kal khelenge"}]}, {"id": "l2_need", "name": "Need & Have To", "emoji": "🙏", "lv": 2, "tip": "चाहिए (chahiye) = need. -ना है (-na hai) = have to. मुझे पानी चाहिए। मुझे जाना है।", "examples": [{"hi": "मुझे पानी चाहिए", "ro": "mujhe paani chahiye", "en": "I need water"}, {"hi": "मुझे स्कूल जाना है", "ro": "mujhe school jaana hai", "en": "I have to go to school"}, {"hi": "तुम्हें सोना है", "ro": "tumhein sona hai", "en": "You have to sleep"}], "builds": [{"en": "I need water", "words": ["मुझे", "पानी", "चाहिए"], "ro": "mujhe paani chahiye"}, {"en": "I have to go to school", "words": ["मुझे", "स्कूल", "जाना", "है"], "ro": "mujhe school jaana hai"}, {"en": "You have to sleep", "words": ["तुम्हें", "सोना", "है"], "ro": "tumhein sona hai"}]}, {"id": "l2_can", "name": "I Can!", "emoji": "💪", "lv": 2, "tip": "Add सकती हूँ (sakti hoon) for girls / सकता है (sakta hai) to show CAN. मैं तैर सकती हूँ = I can swim.", "examples": [{"hi": "मैं तैर सकती हूँ", "ro": "main tair sakti hoon", "en": "I can swim"}, {"hi": "वह दौड़ सकता है", "ro": "vah daud sakta hai", "en": "He can run"}, {"hi": "मैं लड़ सकती हूँ", "ro": "main lad sakti hoon", "en": "I can fight"}], "builds": [{"en": "I can swim", "words": ["मैं", "तैर", "सकती", "हूँ"], "ro": "main tair sakti hoon"}, {"en": "He can run", "words": ["वह", "दौड़", "सकता", "है"], "ro": "vah daud sakta hai"}, {"en": "I can fight", "words": ["मैं", "लड़", "सकती", "हूँ"], "ro": "main lad sakti hoon"}]}, {"id": "l2_compare", "name": "Bigger Than", "emoji": "⚖️", "lv": 2, "tip": "Compare with से (se) = than, सबसे (sabse) = the most. हाथी कुत्ते से बड़ा है = The elephant is bigger than the dog.", "examples": [{"hi": "हाथी कुत्ते से बड़ा है", "ro": "haathi kutte se bada hai", "en": "The elephant is bigger than the dog"}, {"hi": "यह सबसे अच्छा है", "ro": "yeh sabse accha hai", "en": "This is the best"}, {"hi": "मैं तुमसे तेज़ हूँ", "ro": "main tumse tez hoon", "en": "I am faster than you"}], "builds": [{"en": "The elephant is bigger than the dog", "words": ["हाथी", "कुत्ते", "से", "बड़ा", "है"], "ro": "haathi kutte se bada hai"}, {"en": "This is the best", "words": ["यह", "सबसे", "अच्छा", "है"], "ro": "yeh sabse accha hai"}, {"en": "I am faster than you", "words": ["मैं", "तुमसे", "तेज़", "हूँ"], "ro": "main tumse tez hoon"}]}, {"id": "l2_have", "name": "I Have", "emoji": "🫳", "lv": 2, "tip": "To say HAVE, use के पास (ke paas). मेरे पास एक किताब है = I have a book.", "examples": [{"hi": "मेरे पास एक किताब है", "ro": "mere paas ek kitaab hai", "en": "I have a book"}, {"hi": "उसके पास एक कुत्ता है", "ro": "uske paas ek kutta hai", "en": "He has a dog"}, {"hi": "मेरे पास ताकत है", "ro": "mere paas taakat hai", "en": "I have strength"}], "builds": [{"en": "I have a book", "words": ["मेरे", "पास", "एक", "किताब", "है"], "ro": "mere paas ek kitaab hai"}, {"en": "He has a dog", "words": ["उसके", "पास", "एक", "कुत्ता", "है"], "ro": "uske paas ek kutta hai"}, {"en": "I have strength", "words": ["मेरे", "पास", "ताकत", "है"], "ro": "mere paas taakat hai"}]}, {"id": "l2_then", "name": "Do This, Then That", "emoji": "🔁", "lv": 2, "tip": "Add -कर (-kar) to do one thing THEN another. मैं खाकर सोती हूँ = I eat and then sleep.", "examples": [{"hi": "मैं खाकर सोती हूँ", "ro": "main khaakar soti hoon", "en": "I eat and then sleep"}, {"hi": "मैं पढ़कर खेलती हूँ", "ro": "main padhkar khelti hoon", "en": "I study and then play"}, {"hi": "वह नहाकर जाती है", "ro": "vah nahaakar jaati hai", "en": "She bathes and then goes"}], "builds": [{"en": "I eat and then sleep", "words": ["मैं", "खाकर", "सोती", "हूँ"], "ro": "main khaakar soti hoon"}, {"en": "I study and then play", "words": ["मैं", "पढ़कर", "खेलती", "हूँ"], "ro": "main padhkar khelti hoon"}, {"en": "She bathes and then goes", "words": ["वह", "नहाकर", "जाती", "है"], "ro": "vah nahaakar jaati hai"}]}];
 CONVOS.push.apply(CONVOS, CONVOS2);
 STORIES.push.apply(STORIES, STORIES2);
 GRAMMAR.push.apply(GRAMMAR, GRAMMAR2);
-
 if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; window.CULTURE_THEMES = CULTURE_THEMES; window.STORIES = STORIES; window.LEVEL2 = LEVEL2; }
