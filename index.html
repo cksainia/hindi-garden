@@ -1959,8 +1959,41 @@ return true;
 }
 async function syncPush(){
 if(!syncCode) return false;
-try{ await fetch(SYNC_URL+"?code="+encodeURIComponent(syncCode), {method:"POST", body: JSON.stringify(state)}); return true; }
+try{ await fetch(SYNC_URL+"?code="+encodeURIComponent(syncCode), {method:"POST", body: JSON.stringify(state)}); syncPushSummary(); return true; }
 catch(e){ return false; }
+}
+/* ===== Progress summary for external tracker app (read-only snapshot) =====
+   Stored under "<syncCode>-sum" so a separate app can GET a tiny progress blob
+   without parsing the full internal state. Decoupled on purpose. */
+function buildSummary(){
+const li=levelInfo();
+const seen=state.seen||{}, mastered=state.mastered||{};
+const today=new Date();
+let wkDays=0; for(let i=0;i<7;i++){ const d=new Date(today.getTime()-i*86400000); if((state.log||{})[todayKey(d)]) wkDays++; }
+let streak=0; for(let i=0;i<400;i++){ const d=new Date(today.getTime()-i*86400000); if((state.log||{})[todayKey(d)]) streak++; else { if(i===0) continue; break; } }
+const days=Object.keys(state.log||{}).sort(); const lastActive=days.length?days[days.length-1]:"";
+const byTopic={};
+(typeof UNITS!=="undefined"?UNITS:[]).forEach(u=>{
+  const all=(u.words||[]).concat(u.words2||[]); let lrn=0,mst=0;
+  all.forEach(w=>{ if(seen[w.ro])lrn++; if(mastered[w.ro])mst++; });
+  byTopic[u.id]={name:u.name, learned:lrn, mastered:mst, total:all.length};
+});
+const skills={}; (typeof skillScores==="function"?skillScores():[]).forEach(s=>{ skills[s.name]=s.pct; });
+const qs=state.quizzes||[]; const lastQ=qs.length?qs[qs.length-1]:null;
+return {
+  app:"hindi-slayer",
+  updatedAt:new Date().toISOString(),
+  level:li.level, levelName:li.name||"", stars:state.stars||0,
+  wordsLearned:Object.keys(seen).length, wordsMastered:Object.keys(mastered).length,
+  streakDays:streak, daysThisWeek:wkDays, lastActive,
+  quizzesTaken:qs.length, lastQuizPct:lastQ?lastQ.pct:null,
+  badges:Object.keys(state.achievements||{}).length, badgesTotal:(typeof ACHIEVEMENTS!=="undefined"?ACHIEVEMENTS.length:0),
+  skills, byTopic
+};
+}
+async function syncPushSummary(){
+if(!syncCode) return;
+try{ await fetch(SYNC_URL+"?code="+encodeURIComponent(syncCode+"-sum"), {method:"POST", body: JSON.stringify(buildSummary())}); }catch(e){}
 }
 function syncPushSoon(){ if(!syncCode) return; clearTimeout(syncTimer); syncTimer=setTimeout(syncPush, 1500); }
 function syncCreate(){
