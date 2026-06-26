@@ -1,0 +1,55 @@
+name: CI & Deploy
+
+# Runs the smoke test on every push/PR. On push to main, IF deploys are enabled,
+# publishes to GitHub Pages — but only after the test job passes (test-gated deploy).
+#
+# To activate test-gated deploys (one-time):
+#   1. Repo Settings → Pages → Build and deployment → Source → "GitHub Actions".
+#   2. Repo Settings → Secrets and variables → Actions → Variables →
+#      add a variable named ENABLE_PAGES_DEPLOY with value true.
+# Until then the deploy job is skipped (not failed) and your current deploy keeps working.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install --no-save jsdom@^29.1.1
+      - name: Run smoke test
+        run: npm test
+
+  deploy:
+    needs: test
+    if: ${{ github.event_name != 'pull_request' && vars.ENABLE_PAGES_DEPLOY == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+      - id: deployment
+        uses: actions/deploy-pages@v4

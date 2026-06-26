@@ -25,7 +25,7 @@ Vanilla HTML/CSS/JS. **No build step, no framework, no bundler.** Edit files dir
 ## CRITICAL rules (read before editing)
 1. **Bump the service-worker cache version on EVERY change.** In `sw.js`:
    `const CACHE="hindi-garden-vNN";` — increment `NN` or users keep the stale cached
-   copy and your change won't appear. (Current: **v33**.)
+   copy and your change won't appear. (Current: **v39**.)
 2. **Never change the localStorage state key** `ariaHindiGarden_v1` (constant `SAVE_KEY`
    in `index.html`). It holds all of Aria's progress. `loadState()` does careful,
    additive migration — preserve that pattern; never wipe or rename fields.
@@ -70,7 +70,16 @@ Vanilla HTML/CSS/JS. **No build step, no framework, no bundler.** Edit files dir
 - The Worker already returns `Access-Control-Allow-Origin: *` (cross-origin reads work).
 
 ## Verify before you push
-This project has no test runner; verify content + boot with **jsdom**:
+There is now a committed smoke test (`test/smoke.js`). Just run:
+```bash
+npm install --no-save jsdom   # once (or `npm i`)
+npm test                      # asserts 0 boot errors, word/story counts, L2 lowercase,
+                              # quiz-shuffle behavior, and the buildSummary() contract
+```
+GitHub Actions runs this on every push/PR (`.github/workflows/deploy.yml`). The same
+file can also gate Pages deploys on the test (see its header comment to activate).
+
+The original ad-hoc jsdom recipe, for reference:
 ```bash
 npm i jsdom            # once
 ```
