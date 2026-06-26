@@ -1479,5 +1479,375 @@ const STORIES2 = [{"id": "trip", "emoji": "✈️", "title": "The Big Trip", "lv
 const GRAMMAR2 = [{"id": "l2_and", "name": "And & But", "emoji": "🔗", "lv": 2, "tip": "Join two ideas: और (aur) = and, पर (par) = but. Example: मुझे आम पसंद है पर केला नहीं।", "examples": [{"hi": "मुझे आम और केला पसंद है", "ro": "mujhe aam aur kela pasand hai", "en": "I like mango and banana"}, {"hi": "मैं छोटी हूँ पर बहादुर हूँ", "ro": "main chhoti hoon par bahaadur hoon", "en": "I am small but brave"}, {"hi": "वह हँसती है और गाती है", "ro": "vah hansti hai aur gaati hai", "en": "She laughs and sings"}], "builds": [{"en": "I am small but brave", "words": ["मैं", "छोटी", "हूँ", "पर", "बहादुर", "हूँ"], "ro": "main chhoti hoon par bahaadur hoon"}, {"en": "She laughs and sings", "words": ["वह", "हँसती", "है", "और", "गाती", "है"], "ro": "vah hansti hai aur gaati hai"}, {"en": "I like mango and banana", "words": ["मुझे", "आम", "और", "केला", "पसंद", "है"], "ro": "mujhe aam aur kela pasand hai"}]}, {"id": "l2_because", "name": "Because", "emoji": "💡", "lv": 2, "tip": "क्योंकि (kyunki) = because. It tells WHY. मैं खुश हूँ क्योंकि छुट्टी है।", "examples": [{"hi": "मैं खुश हूँ क्योंकि छुट्टी है", "ro": "main khush hoon kyunki chhutti hai", "en": "I am happy because it's a holiday"}, {"hi": "वह रोती है क्योंकि थकी है", "ro": "vah roti hai kyunki thaki hai", "en": "She cries because she is tired"}, {"hi": "मुझे भूख है क्योंकि देर है", "ro": "mujhe bhookh hai kyunki der hai", "en": "I am hungry because it is late"}], "builds": [{"en": "I am happy because it's a holiday", "words": ["मैं", "खुश", "हूँ", "क्योंकि", "छुट्टी", "है"], "ro": "main khush hoon kyunki chhutti hai"}, {"en": "She cries because she is tired", "words": ["वह", "रोती", "है", "क्योंकि", "थकी", "है"], "ro": "vah roti hai kyunki thaki hai"}, {"en": "I am hungry because it is late", "words": ["मुझे", "भूख", "है", "क्योंकि", "देर", "है"], "ro": "mujhe bhookh hai kyunki der hai"}]}, {"id": "l2_future", "name": "I Will (Future)", "emoji": "🔮", "lv": 2, "tip": "Future = will. Girls add -ऊँगी (-ungi), boys add -ऊँगा (-unga). मैं जाऊँगी = I will go.", "examples": [{"hi": "मैं स्कूल जाऊँगी", "ro": "main school jaaungi", "en": "I will go to school"}, {"hi": "वह खाना खाएगा", "ro": "vah khaana khaayega", "en": "He will eat food"}, {"hi": "हम कल खेलेंगे", "ro": "ham kal khelenge", "en": "We will play tomorrow"}], "builds": [{"en": "I will go to school", "words": ["मैं", "स्कूल", "जाऊँगी"], "ro": "main school jaaungi"}, {"en": "He will eat food", "words": ["वह", "खाना", "खाएगा"], "ro": "vah khaana khaayega"}, {"en": "We will play tomorrow", "words": ["हम", "कल", "खेलेंगे"], "ro": "ham kal khelenge"}]}, {"id": "l2_need", "name": "Need & Have To", "emoji": "🙏", "lv": 2, "tip": "चाहिए (chahiye) = need. -ना है (-na hai) = have to. मुझे पानी चाहिए। मुझे जाना है।", "examples": [{"hi": "मुझे पानी चाहिए", "ro": "mujhe paani chahiye", "en": "I need water"}, {"hi": "मुझे स्कूल जाना है", "ro": "mujhe school jaana hai", "en": "I have to go to school"}, {"hi": "तुम्हें सोना है", "ro": "tumhein sona hai", "en": "You have to sleep"}], "builds": [{"en": "I need water", "words": ["मुझे", "पानी", "चाहिए"], "ro": "mujhe paani chahiye"}, {"en": "I have to go to school", "words": ["मुझे", "स्कूल", "जाना", "है"], "ro": "mujhe school jaana hai"}, {"en": "You have to sleep", "words": ["तुम्हें", "सोना", "है"], "ro": "tumhein sona hai"}]}, {"id": "l2_can", "name": "I Can!", "emoji": "💪", "lv": 2, "tip": "Add सकती हूँ (sakti hoon) for girls / सकता है (sakta hai) to show CAN. मैं तैर सकती हूँ = I can swim.", "examples": [{"hi": "मैं तैर सकती हूँ", "ro": "main tair sakti hoon", "en": "I can swim"}, {"hi": "वह दौड़ सकता है", "ro": "vah daud sakta hai", "en": "He can run"}, {"hi": "मैं लड़ सकती हूँ", "ro": "main lad sakti hoon", "en": "I can fight"}], "builds": [{"en": "I can swim", "words": ["मैं", "तैर", "सकती", "हूँ"], "ro": "main tair sakti hoon"}, {"en": "He can run", "words": ["वह", "दौड़", "सकता", "है"], "ro": "vah daud sakta hai"}, {"en": "I can fight", "words": ["मैं", "लड़", "सकती", "हूँ"], "ro": "main lad sakti hoon"}]}, {"id": "l2_compare", "name": "Bigger Than", "emoji": "⚖️", "lv": 2, "tip": "Compare with से (se) = than, सबसे (sabse) = the most. हाथी कुत्ते से बड़ा है = The elephant is bigger than the dog.", "examples": [{"hi": "हाथी कुत्ते से बड़ा है", "ro": "haathi kutte se bada hai", "en": "The elephant is bigger than the dog"}, {"hi": "यह सबसे अच्छा है", "ro": "yeh sabse accha hai", "en": "This is the best"}, {"hi": "मैं तुमसे तेज़ हूँ", "ro": "main tumse tez hoon", "en": "I am faster than you"}], "builds": [{"en": "The elephant is bigger than the dog", "words": ["हाथी", "कुत्ते", "से", "बड़ा", "है"], "ro": "haathi kutte se bada hai"}, {"en": "This is the best", "words": ["यह", "सबसे", "अच्छा", "है"], "ro": "yeh sabse accha hai"}, {"en": "I am faster than you", "words": ["मैं", "तुमसे", "तेज़", "हूँ"], "ro": "main tumse tez hoon"}]}, {"id": "l2_have", "name": "I Have", "emoji": "🫳", "lv": 2, "tip": "To say HAVE, use के पास (ke paas). मेरे पास एक किताब है = I have a book.", "examples": [{"hi": "मेरे पास एक किताब है", "ro": "mere paas ek kitaab hai", "en": "I have a book"}, {"hi": "उसके पास एक कुत्ता है", "ro": "uske paas ek kutta hai", "en": "He has a dog"}, {"hi": "मेरे पास ताकत है", "ro": "mere paas taakat hai", "en": "I have strength"}], "builds": [{"en": "I have a book", "words": ["मेरे", "पास", "एक", "किताब", "है"], "ro": "mere paas ek kitaab hai"}, {"en": "He has a dog", "words": ["उसके", "पास", "एक", "कुत्ता", "है"], "ro": "uske paas ek kutta hai"}, {"en": "I have strength", "words": ["मेरे", "पास", "ताकत", "है"], "ro": "mere paas taakat hai"}]}, {"id": "l2_then", "name": "Do This, Then That", "emoji": "🔁", "lv": 2, "tip": "Add -कर (-kar) to do one thing THEN another. मैं खाकर सोती हूँ = I eat and then sleep.", "examples": [{"hi": "मैं खाकर सोती हूँ", "ro": "main khaakar soti hoon", "en": "I eat and then sleep"}, {"hi": "मैं पढ़कर खेलती हूँ", "ro": "main padhkar khelti hoon", "en": "I study and then play"}, {"hi": "वह नहाकर जाती है", "ro": "vah nahaakar jaati hai", "en": "She bathes and then goes"}], "builds": [{"en": "I eat and then sleep", "words": ["मैं", "खाकर", "सोती", "हूँ"], "ro": "main khaakar soti hoon"}, {"en": "I study and then play", "words": ["मैं", "पढ़कर", "खेलती", "हूँ"], "ro": "main padhkar khelti hoon"}, {"en": "She bathes and then goes", "words": ["वह", "नहाकर", "जाती", "है"], "ro": "vah nahaakar jaati hai"}]}];
 CONVOS.push.apply(CONVOS, CONVOS2);
 STORIES.push.apply(STORIES, STORIES2);
+
+// ---- Level 1 expansion: 24 more beginner stories (feminine forms, positive themes) ----
+const STORIES_L1_EXTRA = [
+  { id:"morning", emoji:"🌅", title:"Good Morning", lv:1, lines:[
+    { ic:"☀️", hi:"सुबह हो गई है।", ro:"subah ho gayi hai.", en:"It is morning." },
+    { ic:"🛏️", hi:"मैं जल्दी उठती हूँ।", ro:"main jaldi uthti hoon.", en:"I wake up early." },
+    { ic:"🪥", hi:"मैं अपने दाँत साफ़ करती हूँ।", ro:"main apne daant saaf karti hoon.", en:"I brush my teeth." },
+    { ic:"🥛", hi:"मैं दूध पीती हूँ।", ro:"main doodh peeti hoon.", en:"I drink milk." },
+    { ic:"😊", hi:"मैं स्कूल के लिए तैयार हूँ।", ro:"main school ke liye taiyaar hoon.", en:"I am ready for school." }
+  ], question:{ q:"What does Aria drink in the morning?", opts:["Milk","Tea","Juice","Water"], ans:0 } },
+  { id:"breakfast", emoji:"🍳", title:"Breakfast Time", lv:1, lines:[
+    { ic:"🍞", hi:"सुबह हम नाश्ता करते हैं।", ro:"subah ham naashta karte hain.", en:"In the morning we have breakfast." },
+    { ic:"🥚", hi:"माँ अंडा बनाती हैं।", ro:"maa anda banaati hain.", en:"Mom makes an egg." },
+    { ic:"🍌", hi:"मैं एक केला खाती हूँ।", ro:"main ek kela khaati hoon.", en:"I eat a banana." },
+    { ic:"🧃", hi:"मैं रस पीती हूँ।", ro:"main ras peeti hoon.", en:"I drink juice." },
+    { ic:"😋", hi:"नाश्ता बहुत अच्छा है।", ro:"naashta bahut achchha hai.", en:"Breakfast is very good." }
+  ], question:{ q:"What does Mom make?", opts:["An egg","Rice","Soup","Cake"], ans:0 } },
+  { id:"cat", emoji:"🐱", title:"My Little Cat", lv:1, lines:[
+    { ic:"🐱", hi:"मेरे पास एक बिल्ली है।", ro:"mere paas ek billi hai.", en:"I have a cat." },
+    { ic:"🥛", hi:"मैं उसे दूध देती हूँ।", ro:"main use doodh deti hoon.", en:"I give her milk." },
+    { ic:"🧶", hi:"वह ऊन से खेलती है।", ro:"vah oon se khelti hai.", en:"She plays with wool." },
+    { ic:"😺", hi:"वह बहुत प्यारी है।", ro:"vah bahut pyaari hai.", en:"She is very cute." },
+    { ic:"❤️", hi:"मैं उससे बहुत प्यार करती हूँ।", ro:"main usse bahut pyaar karti hoon.", en:"I love her very much." }
+  ], question:{ q:"What does Aria give the cat?", opts:["Milk","Water","Bread","Fish"], ans:0 } },
+  { id:"dog", emoji:"🐶", title:"The Happy Dog", lv:1, lines:[
+    { ic:"🐶", hi:"हमारा कुत्ता बहुत खुश है।", ro:"hamaara kutta bahut khush hai.", en:"Our dog is very happy." },
+    { ic:"🦴", hi:"मैं उसे हड्डी देती हूँ।", ro:"main use haddi deti hoon.", en:"I give him a bone." },
+    { ic:"🏃", hi:"वह बगीचे में दौड़ता है।", ro:"vah bagiche mein daudta hai.", en:"He runs in the garden." },
+    { ic:"🎾", hi:"हम गेंद से खेलते हैं।", ro:"ham gend se khelte hain.", en:"We play with a ball." },
+    { ic:"😊", hi:"वह मेरा अच्छा दोस्त है।", ro:"vah mera achchha dost hai.", en:"He is my good friend." }
+  ], question:{ q:"Where does the dog run?", opts:["In the garden","In the house","At school","On the road"], ans:0 } },
+  { id:"park", emoji:"🏞️", title:"A Day at the Park", lv:1, lines:[
+    { ic:"🏞️", hi:"आज हम पार्क जाते हैं।", ro:"aaj ham park jaate hain.", en:"Today we go to the park." },
+    { ic:"🛝", hi:"मैं झूले पर झूलती हूँ।", ro:"main jhoole par jhoolti hoon.", en:"I swing on the swing." },
+    { ic:"🌳", hi:"पेड़ बहुत हरे हैं।", ro:"ped bahut hare hain.", en:"The trees are very green." },
+    { ic:"🦋", hi:"मैं एक तितली देखती हूँ।", ro:"main ek titli dekhti hoon.", en:"I see a butterfly." },
+    { ic:"😄", hi:"पार्क में बहुत मज़ा आता है।", ro:"park mein bahut maza aata hai.", en:"The park is so much fun." }
+  ], question:{ q:"What does Aria see at the park?", opts:["A butterfly","A lion","A fish","A bird"], ans:0 } },
+  { id:"friend", emoji:"👭", title:"My Best Friend", lv:1, lines:[
+    { ic:"👭", hi:"मेरी एक अच्छी सहेली है।", ro:"meri ek achchhi saheli hai.", en:"I have a good friend." },
+    { ic:"🏫", hi:"हम साथ स्कूल जाते हैं।", ro:"ham saath school jaate hain.", en:"We go to school together." },
+    { ic:"🎨", hi:"हम साथ चित्र बनाते हैं।", ro:"ham saath chitra banaate hain.", en:"We draw pictures together." },
+    { ic:"🍱", hi:"हम साथ खाना खाते हैं।", ro:"ham saath khaana khaate hain.", en:"We eat food together." },
+    { ic:"😊", hi:"वह बहुत अच्छी है।", ro:"vah bahut achchhi hai.", en:"She is very nice." }
+  ], question:{ q:"What do they draw together?", opts:["Pictures","Letters","Numbers","Maps"], ans:0 } },
+  { id:"garden", emoji:"🌷", title:"In the Garden", lv:1, lines:[
+    { ic:"🌷", hi:"हमारे बगीचे में फूल हैं।", ro:"hamaare bagiche mein phool hain.", en:"There are flowers in our garden." },
+    { ic:"💧", hi:"मैं फूलों को पानी देती हूँ।", ro:"main phoolon ko paani deti hoon.", en:"I water the flowers." },
+    { ic:"🐝", hi:"एक मधुमक्खी आती है।", ro:"ek madhumakkhi aati hai.", en:"A bee comes." },
+    { ic:"🌸", hi:"फूल बहुत सुंदर हैं।", ro:"phool bahut sundar hain.", en:"The flowers are very beautiful." },
+    { ic:"😊", hi:"मुझे बगीचा बहुत पसंद है।", ro:"mujhe bagicha bahut pasand hai.", en:"I like the garden very much." }
+  ], question:{ q:"What does Aria do for the flowers?", opts:["Waters them","Eats them","Cuts them","Counts them"], ans:0 } },
+  { id:"birthday", emoji:"🎂", title:"Happy Birthday", lv:1, lines:[
+    { ic:"🎂", hi:"आज मेरा जन्मदिन है।", ro:"aaj mera janmdin hai.", en:"Today is my birthday." },
+    { ic:"🎈", hi:"हम गुब्बारे लगाते हैं।", ro:"ham gubbaare lagaate hain.", en:"We put up balloons." },
+    { ic:"🎁", hi:"मुझे एक तोहफ़ा मिलता है।", ro:"mujhe ek tohfa milta hai.", en:"I get a gift." },
+    { ic:"🍰", hi:"हम केक खाते हैं।", ro:"ham cake khaate hain.", en:"We eat cake." },
+    { ic:"🥳", hi:"मैं बहुत खुश हूँ।", ro:"main bahut khush hoon.", en:"I am very happy." }
+  ], question:{ q:"What does Aria get on her birthday?", opts:["A gift","A book","A pen","A toy car"], ans:0 } },
+  { id:"beach", emoji:"🏖️", title:"At the Beach", lv:1, lines:[
+    { ic:"🏖️", hi:"हम समुद्र के किनारे जाते हैं।", ro:"ham samudra ke kinaare jaate hain.", en:"We go to the seaside." },
+    { ic:"🌊", hi:"लहरें बहुत बड़ी हैं।", ro:"lehrein bahut badi hain.", en:"The waves are very big." },
+    { ic:"🏰", hi:"मैं रेत का घर बनाती हूँ।", ro:"main ret ka ghar banaati hoon.", en:"I build a sand house." },
+    { ic:"🐚", hi:"मैं सीपियाँ इकट्ठा करती हूँ।", ro:"main seepiyaan ikattha karti hoon.", en:"I collect shells." },
+    { ic:"😄", hi:"समुद्र बहुत सुंदर है।", ro:"samudra bahut sundar hai.", en:"The sea is very beautiful." }
+  ], question:{ q:"What does Aria build at the beach?", opts:["A sand house","A boat","A wall","A bridge"], ans:0 } },
+  { id:"library", emoji:"📚", title:"At the Library", lv:1, lines:[
+    { ic:"📚", hi:"मैं पुस्तकालय जाती हूँ।", ro:"main pustakaalay jaati hoon.", en:"I go to the library." },
+    { ic:"🤫", hi:"यहाँ सब चुप रहते हैं।", ro:"yahaan sab chup rehte hain.", en:"Everyone stays quiet here." },
+    { ic:"📖", hi:"मैं एक किताब चुनती हूँ।", ro:"main ek kitaab chunti hoon.", en:"I choose a book." },
+    { ic:"🪑", hi:"मैं कुर्सी पर बैठती हूँ।", ro:"main kursi par baithti hoon.", en:"I sit on a chair." },
+    { ic:"😊", hi:"मुझे पढ़ना अच्छा लगता है।", ro:"mujhe padhna achchha lagta hai.", en:"I like reading." }
+  ], question:{ q:"What does Aria choose at the library?", opts:["A book","A toy","A pen","A bag"], ans:0 } },
+  { id:"doctor", emoji:"🩺", title:"Visit to the Doctor", lv:1, lines:[
+    { ic:"🩺", hi:"आज मैं डॉक्टर के पास जाती हूँ।", ro:"aaj main doctor ke paas jaati hoon.", en:"Today I go to the doctor." },
+    { ic:"😷", hi:"मुझे थोड़ा ज़ुकाम है।", ro:"mujhe thoda zukaam hai.", en:"I have a little cold." },
+    { ic:"💊", hi:"डॉक्टर दवाई देते हैं।", ro:"doctor davaai dete hain.", en:"The doctor gives medicine." },
+    { ic:"🥗", hi:"मैं अच्छा खाना खाती हूँ।", ro:"main achchha khaana khaati hoon.", en:"I eat good food." },
+    { ic:"😊", hi:"जल्दी मैं ठीक हो जाती हूँ।", ro:"jaldi main theek ho jaati hoon.", en:"I get better soon." }
+  ], question:{ q:"Why does Aria see the doctor?", opts:["She has a cold","She is hungry","She is sleepy","She is happy"], ans:0 } },
+  { id:"bicycle", emoji:"🚲", title:"Riding My Bicycle", lv:1, lines:[
+    { ic:"🚲", hi:"मेरे पास एक नई साइकिल है।", ro:"mere paas ek nayi cycle hai.", en:"I have a new bicycle." },
+    { ic:"🪖", hi:"मैं हेलमेट पहनती हूँ।", ro:"main helmet pehenti hoon.", en:"I wear a helmet." },
+    { ic:"🛣️", hi:"मैं सड़क पर चलाती हूँ।", ro:"main sadak par chalaati hoon.", en:"I ride on the road." },
+    { ic:"💨", hi:"हवा बहुत तेज़ है।", ro:"hawa bahut tez hai.", en:"The wind is very fast." },
+    { ic:"😄", hi:"साइकिल चलाना मज़ेदार है।", ro:"cycle chalaana mazedaar hai.", en:"Riding a bicycle is fun." }
+  ], question:{ q:"What does Aria wear to ride?", opts:["A helmet","A hat","Gloves","Boots"], ans:0 } },
+  { id:"kitchen", emoji:"🍲", title:"Helping in the Kitchen", lv:1, lines:[
+    { ic:"🍲", hi:"मैं रसोई में माँ की मदद करती हूँ।", ro:"main rasoi mein maa ki madad karti hoon.", en:"I help mom in the kitchen." },
+    { ic:"🥔", hi:"मैं आलू धोती हूँ।", ro:"main aaloo dhoti hoon.", en:"I wash the potatoes." },
+    { ic:"🥄", hi:"माँ सब्ज़ी पकाती हैं।", ro:"maa sabzi pakaati hain.", en:"Mom cooks the vegetables." },
+    { ic:"👃", hi:"खाने की खुशबू अच्छी है।", ro:"khaane ki khushboo achchhi hai.", en:"The food smells good." },
+    { ic:"😋", hi:"हम साथ खाना खाते हैं।", ro:"ham saath khaana khaate hain.", en:"We eat together." }
+  ], question:{ q:"What does Aria wash?", opts:["Potatoes","Dishes","Clothes","Hands"], ans:0 } },
+  { id:"colors", emoji:"🌈", title:"My Favorite Colors", lv:1, lines:[
+    { ic:"🌈", hi:"मुझे रंग बहुत पसंद हैं।", ro:"mujhe rang bahut pasand hain.", en:"I like colors very much." },
+    { ic:"🔴", hi:"गुलाब लाल है।", ro:"gulaab laal hai.", en:"The rose is red." },
+    { ic:"🟡", hi:"सूरज पीला है।", ro:"sooraj peela hai.", en:"The sun is yellow." },
+    { ic:"🟢", hi:"पत्ते हरे हैं।", ro:"patte hare hain.", en:"The leaves are green." },
+    { ic:"😊", hi:"रंग दुनिया को सुंदर बनाते हैं।", ro:"rang duniya ko sundar banaate hain.", en:"Colors make the world beautiful." }
+  ], question:{ q:"What color is the sun in the story?", opts:["Yellow","Red","Green","Blue"], ans:0 } },
+  { id:"numbers", emoji:"🔢", title:"Counting Fun", lv:1, lines:[
+    { ic:"🔢", hi:"मैं गिनती सीखती हूँ।", ro:"main ginti seekhti hoon.", en:"I learn to count." },
+    { ic:"☝️", hi:"एक, दो, तीन।", ro:"ek, do, teen.", en:"One, two, three." },
+    { ic:"🍎", hi:"मेरे पास तीन सेब हैं।", ro:"mere paas teen seb hain.", en:"I have three apples." },
+    { ic:"🤝", hi:"मैं एक दोस्त को देती हूँ।", ro:"main ek dost ko deti hoon.", en:"I give one to a friend." },
+    { ic:"😊", hi:"अब मेरे पास दो हैं।", ro:"ab mere paas do hain.", en:"Now I have two." }
+  ], question:{ q:"How many apples does Aria have left?", opts:["Two","Three","One","Four"], ans:0 } },
+  { id:"weather", emoji:"🌤️", title:"Today's Weather", lv:1, lines:[
+    { ic:"🌤️", hi:"आज मौसम अच्छा है।", ro:"aaj mausam achchha hai.", en:"Today the weather is nice." },
+    { ic:"☀️", hi:"सूरज चमक रहा है।", ro:"sooraj chamak raha hai.", en:"The sun is shining." },
+    { ic:"🌬️", hi:"हल्की हवा चलती है।", ro:"halki hawa chalti hai.", en:"A light wind blows." },
+    { ic:"🧥", hi:"मुझे जैकेट नहीं चाहिए।", ro:"mujhe jacket nahin chahiye.", en:"I do not need a jacket." },
+    { ic:"😄", hi:"मैं बाहर खेलती हूँ।", ro:"main baahar khelti hoon.", en:"I play outside." }
+  ], question:{ q:"What is the sun doing?", opts:["Shining","Hiding","Setting","Raining"], ans:0 } },
+  { id:"zoo", emoji:"🦁", title:"A Trip to the Zoo", lv:1, lines:[
+    { ic:"🦁", hi:"आज हम चिड़ियाघर जाते हैं।", ro:"aaj ham chidiyaaghar jaate hain.", en:"Today we go to the zoo." },
+    { ic:"🐘", hi:"हाथी बहुत बड़ा है।", ro:"haathi bahut bada hai.", en:"The elephant is very big." },
+    { ic:"🐒", hi:"बंदर पेड़ पर कूदता है।", ro:"bandar ped par koodta hai.", en:"The monkey jumps on the tree." },
+    { ic:"🦓", hi:"ज़ेबरा काला और सफ़ेद है।", ro:"zebra kaala aur safed hai.", en:"The zebra is black and white." },
+    { ic:"😄", hi:"मुझे जानवर बहुत पसंद हैं।", ro:"mujhe jaanvar bahut pasand hain.", en:"I like animals very much." }
+  ], question:{ q:"Which animal is big?", opts:["The elephant","The monkey","The zebra","The cat"], ans:0 } },
+  { id:"music", emoji:"🎵", title:"I Love Music", lv:1, lines:[
+    { ic:"🎵", hi:"मुझे संगीत बहुत पसंद है।", ro:"mujhe sangeet bahut pasand hai.", en:"I like music very much." },
+    { ic:"🎤", hi:"मैं एक गाना गाती हूँ।", ro:"main ek gaana gaati hoon.", en:"I sing a song." },
+    { ic:"🥁", hi:"मेरी सहेली ढोल बजाती है।", ro:"meri saheli dhol bajaati hai.", en:"My friend plays the drum." },
+    { ic:"💃", hi:"हम साथ नाचते हैं।", ro:"ham saath naachte hain.", en:"We dance together." },
+    { ic:"😄", hi:"हम बहुत खुश हैं।", ro:"ham bahut khush hain.", en:"We are very happy." }
+  ], question:{ q:"What does Aria do?", opts:["Sings a song","Plays the drum","Sleeps","Reads"], ans:0 } },
+  { id:"painting", emoji:"🎨", title:"Painting a Picture", lv:1, lines:[
+    { ic:"🎨", hi:"मैं एक चित्र बनाती हूँ।", ro:"main ek chitra banaati hoon.", en:"I paint a picture." },
+    { ic:"🖌️", hi:"मैं नीला आसमान बनाती हूँ।", ro:"main neela aasmaan banaati hoon.", en:"I paint a blue sky." },
+    { ic:"🌞", hi:"मैं एक पीला सूरज बनाती हूँ।", ro:"main ek peela sooraj banaati hoon.", en:"I paint a yellow sun." },
+    { ic:"🌳", hi:"मैं हरे पेड़ बनाती हूँ।", ro:"main hare ped banaati hoon.", en:"I paint green trees." },
+    { ic:"😊", hi:"मेरा चित्र सुंदर है।", ro:"mera chitra sundar hai.", en:"My picture is beautiful." }
+  ], question:{ q:"What color is the sky in the picture?", opts:["Blue","Green","Yellow","Red"], ans:0 } },
+  { id:"bedtime", emoji:"🌙", title:"Bedtime Story", lv:1, lines:[
+    { ic:"🌙", hi:"रात हो गई है।", ro:"raat ho gayi hai.", en:"It is night." },
+    { ic:"🛏️", hi:"मैं बिस्तर पर जाती हूँ।", ro:"main bistar par jaati hoon.", en:"I go to bed." },
+    { ic:"📖", hi:"माँ मुझे कहानी सुनाती हैं।", ro:"maa mujhe kahaani sunaati hain.", en:"Mom tells me a story." },
+    { ic:"🧸", hi:"मैं अपना टेडी पकड़ती हूँ।", ro:"main apna teddy pakadti hoon.", en:"I hold my teddy." },
+    { ic:"😴", hi:"मैं चैन से सोती हूँ।", ro:"main chain se soti hoon.", en:"I sleep peacefully." }
+  ], question:{ q:"Who tells the bedtime story?", opts:["Mom","Dad","Nani","Friend"], ans:0 } },
+  { id:"teeth", emoji:"🪥", title:"Brushing My Teeth", lv:1, lines:[
+    { ic:"🪥", hi:"मैं रोज़ दाँत साफ़ करती हूँ।", ro:"main roz daant saaf karti hoon.", en:"I clean my teeth every day." },
+    { ic:"🦷", hi:"मेरे दाँत सफ़ेद हैं।", ro:"mere daant safed hain.", en:"My teeth are white." },
+    { ic:"🌅", hi:"मैं सुबह ब्रश करती हूँ।", ro:"main subah brush karti hoon.", en:"I brush in the morning." },
+    { ic:"🌙", hi:"मैं रात को भी ब्रश करती हूँ।", ro:"main raat ko bhi brush karti hoon.", en:"I brush at night too." },
+    { ic:"😁", hi:"मेरी मुस्कान सुंदर है।", ro:"meri muskaan sundar hai.", en:"My smile is beautiful." }
+  ], question:{ q:"When does Aria brush?", opts:["Morning and night","Only morning","Only night","Never"], ans:0 } },
+  { id:"shopping", emoji:"🛍️", title:"Shopping with Mom", lv:1, lines:[
+    { ic:"🛍️", hi:"हम बाज़ार जाते हैं।", ro:"ham bazaar jaate hain.", en:"We go to the market." },
+    { ic:"👗", hi:"माँ एक नई फ़्रॉक खरीदती हैं।", ro:"maa ek nayi frock khareedti hain.", en:"Mom buys a new frock." },
+    { ic:"👟", hi:"मुझे नए जूते मिलते हैं।", ro:"mujhe naye joote milte hain.", en:"I get new shoes." },
+    { ic:"💰", hi:"माँ पैसे देती हैं।", ro:"maa paise deti hain.", en:"Mom pays the money." },
+    { ic:"😄", hi:"हम खुश होकर घर आते हैं।", ro:"ham khush hokar ghar aate hain.", en:"We come home happy." }
+  ], question:{ q:"What does Aria get?", opts:["New shoes","A frock","A bag","A hat"], ans:0 } },
+  { id:"grandpa", emoji:"👴", title:"With Nana", lv:1, lines:[
+    { ic:"👴", hi:"नाना बगीचे में बैठते हैं।", ro:"naana bagiche mein baithte hain.", en:"Nana sits in the garden." },
+    { ic:"📖", hi:"वह मुझे कहानी सुनाते हैं।", ro:"vah mujhe kahaani sunaate hain.", en:"He tells me a story." },
+    { ic:"🌳", hi:"हम पेड़ के नीचे बैठते हैं।", ro:"ham ped ke neeche baithte hain.", en:"We sit under the tree." },
+    { ic:"🍎", hi:"वह मुझे सेब देते हैं।", ro:"vah mujhe seb dete hain.", en:"He gives me an apple." },
+    { ic:"❤️", hi:"मुझे नाना बहुत पसंद हैं।", ro:"mujhe naana bahut pasand hain.", en:"I love Nana very much." }
+  ], question:{ q:"Where do they sit?", opts:["Under the tree","In the house","At school","On the road"], ans:0 } },
+  { id:"snow", emoji:"❄️", title:"A Snowy Day", lv:1, lines:[
+    { ic:"❄️", hi:"आज बर्फ़ गिर रही है।", ro:"aaj barf gir rahi hai.", en:"Today it is snowing." },
+    { ic:"🧤", hi:"मैं दस्ताने पहनती हूँ।", ro:"main dastaane pehenti hoon.", en:"I wear gloves." },
+    { ic:"⛄", hi:"मैं एक हिम-मानव बनाती हूँ।", ro:"main ek him-maanav banaati hoon.", en:"I make a snowman." },
+    { ic:"☕", hi:"माँ गरम चाय लाती हैं।", ro:"maa garam chaay laati hain.", en:"Mom brings hot tea." },
+    { ic:"😄", hi:"बर्फ़ में खेलना मज़ेदार है।", ro:"barf mein khelna mazedaar hai.", en:"Playing in snow is fun." }
+  ], question:{ q:"What does Aria make in the snow?", opts:["A snowman","A sandcastle","A cake","A kite"], ans:0 } }
+];
+
+// ---- Level 2 expansion: 24 more stories (richer, feminine forms; includes slayer-themed adventures) ----
+const STORIES_L2_EXTRA = [
+  { id:"holi", emoji:"🎨", title:"Holi Colors", lv:2, lines:[
+    { ic:"🎨", hi:"आज होली का त्योहार है।", ro:"aaj holi ka tyohaar hai.", en:"Today is the festival of Holi." },
+    { ic:"💦", hi:"हम एक-दूसरे पर रंग डालते हैं।", ro:"ham ek-doosre par rang daalte hain.", en:"We throw colors on each other." },
+    { ic:"👗", hi:"मेरे कपड़े रंग-बिरंगे हो जाते हैं।", ro:"mere kapde rang-birange ho jaate hain.", en:"My clothes become colorful." },
+    { ic:"🍬", hi:"हम मीठी गुजिया खाते हैं।", ro:"ham meethi gujiya khaate hain.", en:"We eat sweet gujiya." },
+    { ic:"💃", hi:"सब लोग गाते और नाचते हैं।", ro:"sab log gaate aur naachte hain.", en:"Everyone sings and dances." },
+    { ic:"😄", hi:"होली बहुत मज़ेदार है!", ro:"holi bahut mazedaar hai!", en:"Holi is so much fun!" }
+  ], question:{ q:"What do they throw on each other?", opts:["Colors","Water only","Flowers","Sweets"], ans:0 } },
+  { id:"cricket", emoji:"🏏", title:"The Cricket Match", lv:2, lines:[
+    { ic:"🏏", hi:"आज हमारा क्रिकेट मैच है।", ro:"aaj hamaara cricket match hai.", en:"Today is our cricket match." },
+    { ic:"🧢", hi:"मैं अपनी टीम की कप्तान हूँ।", ro:"main apni team ki kaptaan hoon.", en:"I am the captain of my team." },
+    { ic:"🏃‍♀️", hi:"मैं तेज़ दौड़ती हूँ।", ro:"main tez daudti hoon.", en:"I run fast." },
+    { ic:"🏏", hi:"मैं चार रन बनाती हूँ।", ro:"main chaar run banaati hoon.", en:"I make four runs." },
+    { ic:"🏆", hi:"हमारी टीम जीत जाती है।", ro:"hamaari team jeet jaati hai.", en:"Our team wins." },
+    { ic:"🎉", hi:"सब बहुत खुश हैं।", ro:"sab bahut khush hain.", en:"Everyone is very happy." }
+  ], question:{ q:"What is Aria in the team?", opts:["The captain","A coach","A fan","The umpire"], ans:0 } },
+  { id:"trek", emoji:"🥾", title:"Mountain Trek", lv:2, lines:[
+    { ic:"🥾", hi:"हम पहाड़ पर चढ़ते हैं।", ro:"ham pahaad par chadhte hain.", en:"We climb the mountain." },
+    { ic:"🌲", hi:"रास्ते में बहुत पेड़ हैं।", ro:"raaste mein bahut ped hain.", en:"There are many trees on the way." },
+    { ic:"💧", hi:"हम ठंडा पानी पीते हैं।", ro:"ham thanda paani peete hain.", en:"We drink cold water." },
+    { ic:"🦅", hi:"आसमान में एक चील उड़ती है।", ro:"aasmaan mein ek cheel udti hai.", en:"An eagle flies in the sky." },
+    { ic:"⛰️", hi:"ऊपर से नज़ारा सुंदर है।", ro:"oopar se nazaara sundar hai.", en:"The view from the top is beautiful." },
+    { ic:"😄", hi:"मुझे बहुत गर्व है।", ro:"mujhe bahut garv hai.", en:"I feel very proud." }
+  ], question:{ q:"What flies in the sky?", opts:["An eagle","A plane","A kite","A balloon"], ans:0 } },
+  { id:"science", emoji:"🔬", title:"The Science Fair", lv:2, lines:[
+    { ic:"🔬", hi:"आज स्कूल में विज्ञान मेला है।", ro:"aaj school mein vigyaan mela hai.", en:"Today there is a science fair at school." },
+    { ic:"🌋", hi:"मैं एक ज्वालामुखी बनाती हूँ।", ro:"main ek jwaalaamukhi banaati hoon.", en:"I make a volcano." },
+    { ic:"💥", hi:"वह नकली लावा निकालता है।", ro:"vah nakli laava nikaalta hai.", en:"It pours out fake lava." },
+    { ic:"👏", hi:"सब बच्चे ताली बजाते हैं।", ro:"sab bachche taali bajaate hain.", en:"All the children clap." },
+    { ic:"🥇", hi:"मुझे पहला इनाम मिलता है।", ro:"mujhe pehla inaam milta hai.", en:"I get the first prize." },
+    { ic:"😊", hi:"मैं बहुत खुश हूँ।", ro:"main bahut khush hoon.", en:"I am very happy." }
+  ], question:{ q:"What does Aria make for the fair?", opts:["A volcano","A robot","A rocket","A clock"], ans:0 } },
+  { id:"cooking", emoji:"🍳", title:"Cooking Class", lv:2, lines:[
+    { ic:"🍳", hi:"आज हम खाना बनाना सीखते हैं।", ro:"aaj ham khaana banaana seekhte hain.", en:"Today we learn to cook." },
+    { ic:"🥗", hi:"मैं सब्ज़ियाँ काटती हूँ।", ro:"main sabziyaan kaatti hoon.", en:"I cut the vegetables." },
+    { ic:"🫓", hi:"माँ रोटी बनाती हैं।", ro:"maa roti banaati hain.", en:"Mom makes roti." },
+    { ic:"🧂", hi:"मैं थोड़ा नमक डालती हूँ।", ro:"main thoda namak daalti hoon.", en:"I add a little salt." },
+    { ic:"🍲", hi:"खाना तैयार है।", ro:"khaana taiyaar hai.", en:"The food is ready." },
+    { ic:"😋", hi:"यह बहुत स्वादिष्ट है।", ro:"yeh bahut swaadisht hai.", en:"It is very delicious." }
+  ], question:{ q:"What does Aria add to the food?", opts:["A little salt","Sugar","Water","Oil"], ans:0 } },
+  { id:"rainyday", emoji:"🌧️", title:"A Rainy Afternoon", lv:2, lines:[
+    { ic:"🌧️", hi:"बाहर तेज़ बारिश हो रही है।", ro:"baahar tez baarish ho rahi hai.", en:"It is raining hard outside." },
+    { ic:"☔", hi:"मैं खिड़की से बारिश देखती हूँ।", ro:"main khidki se baarish dekhti hoon.", en:"I watch the rain from the window." },
+    { ic:"🫖", hi:"माँ गरम पकौड़े बनाती हैं।", ro:"maa garam pakode banaati hain.", en:"Mom makes hot pakoras." },
+    { ic:"📖", hi:"मैं एक किताब पढ़ती हूँ।", ro:"main ek kitaab padhti hoon.", en:"I read a book." },
+    { ic:"🌈", hi:"बारिश के बाद इंद्रधनुष निकलता है।", ro:"baarish ke baad indradhanush nikalta hai.", en:"After the rain a rainbow comes out." },
+    { ic:"😄", hi:"दिन बहुत अच्छा है।", ro:"din bahut achchha hai.", en:"The day is very nice." }
+  ], question:{ q:"What comes out after the rain?", opts:["A rainbow","The moon","Stars","Snow"], ans:0 } },
+  { id:"newfriend", emoji:"🤝", title:"A New Friend", lv:2, lines:[
+    { ic:"🏫", hi:"आज स्कूल में एक नई लड़की आती है।", ro:"aaj school mein ek nayi ladki aati hai.", en:"Today a new girl comes to school." },
+    { ic:"🙂", hi:"वह थोड़ा शरमाती है।", ro:"vah thoda sharmaati hai.", en:"She is a little shy." },
+    { ic:"🤝", hi:"मैं उससे दोस्ती करती हूँ।", ro:"main usse dosti karti hoon.", en:"I make friends with her." },
+    { ic:"🍱", hi:"हम साथ खाना खाते हैं।", ro:"ham saath khaana khaate hain.", en:"We eat together." },
+    { ic:"😄", hi:"अब वह खुश है।", ro:"ab vah khush hai.", en:"Now she is happy." },
+    { ic:"❤️", hi:"हम अच्छी सहेलियाँ बन जाती हैं।", ro:"ham achchhi saheliyaan ban jaati hain.", en:"We become good friends." }
+  ], question:{ q:"How does the new girl feel at first?", opts:["A little shy","Angry","Sleepy","Hungry"], ans:0 } },
+  { id:"lostdog", emoji:"🐕", title:"The Lost Puppy", lv:2, lines:[
+    { ic:"🐕", hi:"रास्ते में एक छोटा पिल्ला रोता है।", ro:"raaste mein ek chhota pilla rota hai.", en:"A little puppy cries on the road." },
+    { ic:"😟", hi:"वह खो गया है।", ro:"vah kho gaya hai.", en:"It is lost." },
+    { ic:"🥛", hi:"मैं उसे दूध देती हूँ।", ro:"main use doodh deti hoon.", en:"I give it milk." },
+    { ic:"🔎", hi:"हम उसका घर ढूँढते हैं।", ro:"ham uska ghar dhoondhte hain.", en:"We look for its home." },
+    { ic:"🏠", hi:"हमें उसका मालिक मिल जाता है।", ro:"hamein uska maalik mil jaata hai.", en:"We find its owner." },
+    { ic:"😊", hi:"पिल्ला फिर से खुश है।", ro:"pilla phir se khush hai.", en:"The puppy is happy again." }
+  ], question:{ q:"What does Aria give the lost puppy?", opts:["Milk","A bone","Water","Bread"], ans:0 } },
+  { id:"talent", emoji:"🎤", title:"The Talent Show", lv:2, lines:[
+    { ic:"🎤", hi:"आज स्कूल में प्रतिभा शो है।", ro:"aaj school mein pratibha show hai.", en:"Today there is a talent show at school." },
+    { ic:"😟", hi:"मैं थोड़ा घबराती हूँ।", ro:"main thoda ghabraati hoon.", en:"I am a little nervous." },
+    { ic:"🎶", hi:"मैं एक हिंदी गाना गाती हूँ।", ro:"main ek hindi gaana gaati hoon.", en:"I sing a Hindi song." },
+    { ic:"👏", hi:"सब लोग ताली बजाते हैं।", ro:"sab log taali bajaate hain.", en:"Everyone claps." },
+    { ic:"🌟", hi:"मेरी आवाज़ सबको पसंद आती है।", ro:"meri aawaaz sabko pasand aati hai.", en:"Everyone likes my voice." },
+    { ic:"😄", hi:"मुझे अपने आप पर गर्व है।", ro:"mujhe apne aap par garv hai.", en:"I am proud of myself." }
+  ], question:{ q:"What does Aria do in the show?", opts:["Sings a song","Dances","Tells a joke","Paints"], ans:0 } },
+  { id:"camping", emoji:"🏕️", title:"Camping Under Stars", lv:2, lines:[
+    { ic:"🏕️", hi:"हम जंगल में तंबू लगाते हैं।", ro:"ham jangal mein tamboo lagaate hain.", en:"We pitch a tent in the forest." },
+    { ic:"🔥", hi:"हम आग के पास बैठते हैं।", ro:"ham aag ke paas baithte hain.", en:"We sit by the fire." },
+    { ic:"🌃", hi:"रात को आसमान में तारे चमकते हैं।", ro:"raat ko aasmaan mein taare chamakte hain.", en:"At night the stars shine in the sky." },
+    { ic:"🎵", hi:"पापा गाना गाते हैं।", ro:"papa gaana gaate hain.", en:"Dad sings a song." },
+    { ic:"🍢", hi:"हम सेंक कर खाना खाते हैं।", ro:"ham senk kar khaana khaate hain.", en:"We roast and eat food." },
+    { ic:"😴", hi:"मैं तंबू में चैन से सोती हूँ।", ro:"main tamboo mein chain se soti hoon.", en:"I sleep peacefully in the tent." }
+  ], question:{ q:"Where do they sleep?", opts:["In a tent","In a house","In a car","On a boat"], ans:0 } },
+  { id:"train", emoji:"🚆", title:"The Train Journey", lv:2, lines:[
+    { ic:"🚆", hi:"हम ट्रेन से नानी के घर जाते हैं।", ro:"ham train se naani ke ghar jaate hain.", en:"We go to Nani's house by train." },
+    { ic:"🪟", hi:"मैं खिड़की से बाहर देखती हूँ।", ro:"main khidki se baahar dekhti hoon.", en:"I look out the window." },
+    { ic:"🌾", hi:"खेत बहुत हरे हैं।", ro:"khet bahut hare hain.", en:"The fields are very green." },
+    { ic:"🍵", hi:"हम चाय और नाश्ता करते हैं।", ro:"ham chaay aur naashta karte hain.", en:"We have tea and a snack." },
+    { ic:"🌉", hi:"ट्रेन एक बड़े पुल से गुज़रती है।", ro:"train ek bade pul se guzarti hai.", en:"The train passes over a big bridge." },
+    { ic:"😄", hi:"सफ़र बहुत मज़ेदार है।", ro:"safar bahut mazedaar hai.", en:"The journey is so much fun." }
+  ], question:{ q:"How do they travel?", opts:["By train","By bus","By car","By plane"], ans:0 } },
+  { id:"helping", emoji:"🧹", title:"A Helping Hand", lv:2, lines:[
+    { ic:"🏠", hi:"आज घर में बहुत काम है।", ro:"aaj ghar mein bahut kaam hai.", en:"Today there is a lot of work at home." },
+    { ic:"🧹", hi:"मैं फ़र्श साफ़ करती हूँ।", ro:"main farsh saaf karti hoon.", en:"I clean the floor." },
+    { ic:"🧺", hi:"मैं कपड़े तह करती हूँ।", ro:"main kapde tah karti hoon.", en:"I fold the clothes." },
+    { ic:"🪴", hi:"मैं पौधों को पानी देती हूँ।", ro:"main paudhon ko paani deti hoon.", en:"I water the plants." },
+    { ic:"😊", hi:"माँ बहुत खुश होती हैं।", ro:"maa bahut khush hoti hain.", en:"Mom is very happy." },
+    { ic:"🤗", hi:"वह मुझे गले लगाती हैं।", ro:"vah mujhe gale lagaati hain.", en:"She hugs me." }
+  ], question:{ q:"What does Aria clean?", opts:["The floor","The car","The window","The dishes"], ans:0 } },
+  { id:"artclass", emoji:"🖼️", title:"Art Class", lv:2, lines:[
+    { ic:"🖼️", hi:"आज कला की कक्षा है।", ro:"aaj kala ki kaksha hai.", en:"Today is art class." },
+    { ic:"🎨", hi:"हम रंगों से चित्र बनाते हैं।", ro:"ham rangon se chitra banaate hain.", en:"We paint pictures with colors." },
+    { ic:"🏔️", hi:"मैं एक बड़ा पहाड़ बनाती हूँ।", ro:"main ek bada pahaad banaati hoon.", en:"I paint a big mountain." },
+    { ic:"🌊", hi:"मैं एक नीली नदी बनाती हूँ।", ro:"main ek neeli nadi banaati hoon.", en:"I paint a blue river." },
+    { ic:"👩‍🏫", hi:"अध्यापिका मेरी तारीफ़ करती हैं।", ro:"adhyaapika meri taareef karti hain.", en:"The teacher praises me." },
+    { ic:"😄", hi:"मुझे कला बहुत पसंद है।", ro:"mujhe kala bahut pasand hai.", en:"I like art very much." }
+  ], question:{ q:"What does Aria paint?", opts:["A mountain and a river","A house","An animal","A car"], ans:0 } },
+  { id:"swimming", emoji:"🏊", title:"Swimming Lesson", lv:2, lines:[
+    { ic:"🏊‍♀️", hi:"आज मेरी तैराकी की कक्षा है।", ro:"aaj meri tairaaki ki kaksha hai.", en:"Today is my swimming lesson." },
+    { ic:"🩱", hi:"मैं तैराकी के कपड़े पहनती हूँ।", ro:"main tairaaki ke kapde pehenti hoon.", en:"I wear swimming clothes." },
+    { ic:"💧", hi:"पहले मुझे थोड़ा डर लगता है।", ro:"pehle mujhe thoda dar lagta hai.", en:"At first I feel a little scared." },
+    { ic:"👩‍🏫", hi:"मेरी अध्यापिका मेरी मदद करती हैं।", ro:"meri adhyaapika meri madad karti hain.", en:"My teacher helps me." },
+    { ic:"🏊‍♀️", hi:"धीरे-धीरे मैं तैरना सीखती हूँ।", ro:"dheere-dheere main tairna seekhti hoon.", en:"Slowly I learn to swim." },
+    { ic:"😄", hi:"अब मुझे पानी से डर नहीं लगता।", ro:"ab mujhe paani se dar nahin lagta.", en:"Now I am not afraid of water." }
+  ], question:{ q:"How does Aria feel at first?", opts:["A little scared","Very brave","Sleepy","Angry"], ans:0 } },
+  { id:"slayer", emoji:"🌙", title:"The Night Slayer", lv:2, lines:[
+    { ic:"🌙", hi:"रात को शहर में अँधेरा छा जाता है।", ro:"raat ko shehar mein andhera chha jaata hai.", en:"At night darkness covers the city." },
+    { ic:"👹", hi:"एक छाया-राक्षस लोगों को डराता है।", ro:"ek chhaaya-raakshas logon ko daraata hai.", en:"A shadow-monster scares the people." },
+    { ic:"🗡️", hi:"आरिया अपनी चमकती तलवार उठाती है।", ro:"aaria apni chamakti talwaar uthaati hai.", en:"Aria picks up her shining sword." },
+    { ic:"🎶", hi:"वह एक जादुई गाना गाती है।", ro:"vah ek jaadui gaana gaati hai.", en:"She sings a magic song." },
+    { ic:"✨", hi:"रोशनी से राक्षस गायब हो जाता है।", ro:"roshni se raakshas gaayab ho jaata hai.", en:"The monster vanishes in the light." },
+    { ic:"🌟", hi:"शहर फिर से सुरक्षित है।", ro:"shehar phir se surakshit hai.", en:"The city is safe again." }
+  ], question:{ q:"How does Aria defeat the monster?", opts:["With a magic song and light","With a net","With food","By running away"], ans:0 } },
+  { id:"temple", emoji:"🛕", title:"At the Temple", lv:2, lines:[
+    { ic:"🛕", hi:"हम सुबह मंदिर जाते हैं।", ro:"ham subah mandir jaate hain.", en:"We go to the temple in the morning." },
+    { ic:"🔔", hi:"मैं घंटी बजाती हूँ।", ro:"main ghanti bajaati hoon.", en:"I ring the bell." },
+    { ic:"🪔", hi:"हम दीया जलाते हैं।", ro:"ham diya jalaate hain.", en:"We light a lamp." },
+    { ic:"🙏", hi:"मैं आँखें बंद करके प्रार्थना करती हूँ।", ro:"main aankhein band karke praarthna karti hoon.", en:"I close my eyes and pray." },
+    { ic:"🍬", hi:"पुजारी हमें प्रसाद देते हैं।", ro:"pujaari hamein prasaad dete hain.", en:"The priest gives us prasad." },
+    { ic:"😊", hi:"मेरा मन शांत है।", ro:"mera man shaant hai.", en:"My mind is peaceful." }
+  ], question:{ q:"What does Aria ring at the temple?", opts:["The bell","The drum","The phone","The alarm"], ans:0 } },
+  { id:"farm", emoji:"🚜", title:"A Day on the Farm", lv:2, lines:[
+    { ic:"🚜", hi:"हम गाँव के खेत में जाते हैं।", ro:"ham gaon ke khet mein jaate hain.", en:"We go to the village farm." },
+    { ic:"🐄", hi:"मैं एक गाय को घास देती हूँ।", ro:"main ek gaay ko ghaas deti hoon.", en:"I give grass to a cow." },
+    { ic:"🐓", hi:"मुर्गी अंडे देती है।", ro:"murgi ande deti hai.", en:"The hen lays eggs." },
+    { ic:"🌾", hi:"किसान गेहूँ काटते हैं।", ro:"kisaan gehoon kaatte hain.", en:"The farmer cuts the wheat." },
+    { ic:"🥭", hi:"मैं एक मीठा आम खाती हूँ।", ro:"main ek meetha aam khaati hoon.", en:"I eat a sweet mango." },
+    { ic:"😄", hi:"खेत में दिन बहुत अच्छा बीतता है।", ro:"khet mein din bahut achchha beetta hai.", en:"The day on the farm is lovely." }
+  ], question:{ q:"What does Aria give the cow?", opts:["Grass","Milk","Bread","Water"], ans:0 } },
+  { id:"dance", emoji:"💃", title:"The Dance Recital", lv:2, lines:[
+    { ic:"💃", hi:"आज मेरा नृत्य कार्यक्रम है।", ro:"aaj mera nritya kaaryakram hai.", en:"Today is my dance recital." },
+    { ic:"👗", hi:"मैं एक सुंदर पोशाक पहनती हूँ।", ro:"main ek sundar poshaak pehenti hoon.", en:"I wear a beautiful costume." },
+    { ic:"🎶", hi:"संगीत शुरू होता है।", ro:"sangeet shuru hota hai.", en:"The music begins." },
+    { ic:"💃", hi:"मैं ताल पर नाचती हूँ।", ro:"main taal par naachti hoon.", en:"I dance to the beat." },
+    { ic:"👏", hi:"दर्शक खूब ताली बजाते हैं।", ro:"darshak khoob taali bajaate hain.", en:"The audience claps a lot." },
+    { ic:"😄", hi:"मैं बहुत गर्व महसूस करती हूँ।", ro:"main bahut garv mehsoos karti hoon.", en:"I feel very proud." }
+  ], question:{ q:"What does Aria wear for the recital?", opts:["A beautiful costume","A raincoat","A helmet","A uniform"], ans:0 } },
+  { id:"robot", emoji:"🤖", title:"My Little Robot", lv:2, lines:[
+    { ic:"🤖", hi:"मैं एक छोटा रोबोट बनाती हूँ।", ro:"main ek chhota robot banaati hoon.", en:"I build a little robot." },
+    { ic:"🔧", hi:"मैं तार और पहिए जोड़ती हूँ।", ro:"main taar aur pahiye jodti hoon.", en:"I join wires and wheels." },
+    { ic:"🔋", hi:"मैं उसमें बैटरी लगाती हूँ।", ro:"main usmein battery lagaati hoon.", en:"I put a battery in it." },
+    { ic:"▶️", hi:"रोबोट आगे चलता है।", ro:"robot aage chalta hai.", en:"The robot moves forward." },
+    { ic:"💡", hi:"उसकी आँखें चमकती हैं।", ro:"uski aankhein chamakti hain.", en:"Its eyes glow." },
+    { ic:"😄", hi:"मेरा रोबोट काम करता है!", ro:"mera robot kaam karta hai!", en:"My robot works!" }
+  ], question:{ q:"What does Aria put in the robot?", opts:["A battery","Water","Oil","Paint"], ans:0 } },
+  { id:"harvest", emoji:"🌾", title:"Harvest Day", lv:2, lines:[
+    { ic:"🌾", hi:"आज फ़सल काटने का दिन है।", ro:"aaj fasal kaatne ka din hai.", en:"Today is harvest day." },
+    { ic:"🧺", hi:"हम टोकरी में सब्ज़ियाँ भरते हैं।", ro:"ham tokri mein sabziyaan bharte hain.", en:"We fill the basket with vegetables." },
+    { ic:"🥕", hi:"मैं गाजर खींचती हूँ।", ro:"main gaajar kheenchti hoon.", en:"I pull out a carrot." },
+    { ic:"🍅", hi:"टमाटर लाल और पके हैं।", ro:"tamaatar laal aur pake hain.", en:"The tomatoes are red and ripe." },
+    { ic:"🎉", hi:"गाँव में सब लोग खुश हैं।", ro:"gaon mein sab log khush hain.", en:"Everyone in the village is happy." },
+    { ic:"😊", hi:"हम मिलकर त्योहार मनाते हैं।", ro:"ham milkar tyohaar manaate hain.", en:"Together we celebrate the festival." }
+  ], question:{ q:"What does Aria pull out?", opts:["A carrot","A potato","An onion","A flower"], ans:0 } },
+  { id:"kindness", emoji:"💝", title:"An Act of Kindness", lv:2, lines:[
+    { ic:"🧓", hi:"रास्ते में एक बूढ़ी औरत बैठी है।", ro:"raaste mein ek boodhi aurat baithi hai.", en:"An old woman sits on the road." },
+    { ic:"😟", hi:"उसके पास खाना नहीं है।", ro:"uske paas khaana nahin hai.", en:"She has no food." },
+    { ic:"🍱", hi:"मैं उसे अपना खाना देती हूँ।", ro:"main use apna khaana deti hoon.", en:"I give her my food." },
+    { ic:"💧", hi:"मैं उसे पानी भी देती हूँ।", ro:"main use paani bhi deti hoon.", en:"I give her water too." },
+    { ic:"🙏", hi:"वह मुझे आशीर्वाद देती है।", ro:"vah mujhe aashirvaad deti hai.", en:"She gives me a blessing." },
+    { ic:"❤️", hi:"मदद करके मुझे खुशी मिलती है।", ro:"madad karke mujhe khushi milti hai.", en:"Helping makes me happy." }
+  ], question:{ q:"What does Aria give the old woman?", opts:["Her food and water","Money","Clothes","A book"], ans:0 } },
+  { id:"brave", emoji:"🦸", title:"The Brave Girl", lv:2, lines:[
+    { ic:"🌊", hi:"एक दिन नदी में पानी बढ़ जाता है।", ro:"ek din nadi mein paani badh jaata hai.", en:"One day the river water rises." },
+    { ic:"🐕", hi:"एक पिल्ला पानी में फँस जाता है।", ro:"ek pilla paani mein phans jaata hai.", en:"A puppy gets stuck in the water." },
+    { ic:"😟", hi:"सब लोग डर जाते हैं।", ro:"sab log dar jaate hain.", en:"Everyone gets scared." },
+    { ic:"🦸‍♀️", hi:"आरिया बहादुरी से आगे बढ़ती है।", ro:"aaria bahaaduri se aage badhti hai.", en:"Aria bravely steps forward." },
+    { ic:"🤲", hi:"वह पिल्ले को बचा लेती है।", ro:"vah pille ko bacha leti hai.", en:"She saves the puppy." },
+    { ic:"🎉", hi:"सब लोग उसकी तारीफ़ करते हैं।", ro:"sab log uski taareef karte hain.", en:"Everyone praises her." }
+  ], question:{ q:"Who does Aria save?", opts:["A puppy","A bird","A child","A cat"], ans:0 } },
+  { id:"starry", emoji:"🌟", title:"A Starry Night", lv:2, lines:[
+    { ic:"🌌", hi:"रात को आसमान साफ़ है।", ro:"raat ko aasmaan saaf hai.", en:"At night the sky is clear." },
+    { ic:"🔭", hi:"मैं दूरबीन से तारे देखती हूँ।", ro:"main doorbeen se taare dekhti hoon.", en:"I watch the stars with a telescope." },
+    { ic:"🌙", hi:"चाँद बहुत बड़ा और चमकीला है।", ro:"chaand bahut bada aur chamkeela hai.", en:"The moon is very big and bright." },
+    { ic:"⭐", hi:"मैं एक टूटता तारा देखती हूँ।", ro:"main ek tootta taara dekhti hoon.", en:"I see a shooting star." },
+    { ic:"🤞", hi:"मैं एक इच्छा माँगती हूँ।", ro:"main ek ichchha maangti hoon.", en:"I make a wish." },
+    { ic:"😊", hi:"रात बहुत जादुई लगती है।", ro:"raat bahut jaadui lagti hai.", en:"The night feels very magical." }
+  ], question:{ q:"What does Aria use to watch the stars?", opts:["A telescope","A camera","Glasses","A mirror"], ans:0 } },
+  { id:"rakhi", emoji:"🪢", title:"Raksha Bandhan", lv:2, lines:[
+    { ic:"🪢", hi:"आज रक्षा बंधन का त्योहार है।", ro:"aaj raksha bandhan ka tyohaar hai.", en:"Today is the festival of Raksha Bandhan." },
+    { ic:"🧵", hi:"मैं अपने भाई की कलाई पर राखी बाँधती हूँ।", ro:"main apne bhai ki kalaai par raakhi baandhti hoon.", en:"I tie a rakhi on my brother's wrist." },
+    { ic:"🍬", hi:"मैं उसे मिठाई खिलाती हूँ।", ro:"main use mithaai khilaati hoon.", en:"I feed him a sweet." },
+    { ic:"🎁", hi:"वह मुझे एक तोहफ़ा देता है।", ro:"vah mujhe ek tohfa deta hai.", en:"He gives me a gift." },
+    { ic:"🤗", hi:"हम एक-दूसरे का ख़याल रखते हैं।", ro:"ham ek-doosre ka khayaal rakhte hain.", en:"We take care of each other." },
+    { ic:"❤️", hi:"हमारा रिश्ता बहुत प्यारा है।", ro:"hamaara rishta bahut pyaara hai.", en:"Our bond is very sweet." }
+  ], question:{ q:"What does Aria tie on her brother's wrist?", opts:["A rakhi","A watch","A ribbon","A bell"], ans:0 } }
+];
+STORIES.push.apply(STORIES, STORIES_L1_EXTRA);
+STORIES.push.apply(STORIES, STORIES_L2_EXTRA);
 GRAMMAR.push.apply(GRAMMAR, GRAMMAR2);
 if (typeof window !== "undefined") { window.UNITS = UNITS; window.CONVOS = CONVOS; window.GRAMMAR = GRAMMAR; window.GAMES = GAMES; window.CULTURE = CULTURE; window.CULTURE_THEMES = CULTURE_THEMES; window.STORIES = STORIES; window.LEVEL2 = LEVEL2; }
