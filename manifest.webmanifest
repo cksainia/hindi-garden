@@ -1,6 +1,11 @@
 {
+  "id": "/hindi-garden/",
   "name": "Huntrix Aria - Hindi Slayer",
   "short_name": "Hindi Slayer",
+  "description": "A fun, offline, speaking-first way for kids to learn conversational Hindi — neon demon-hunter theme, positive-only, no ads.",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "kids"],
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -8,7 +13,8 @@
   "background_color": "#0d0a1f",
   "theme_color": "#0d0a1f",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
