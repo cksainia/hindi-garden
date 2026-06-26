@@ -403,6 +403,12 @@ h1.heroTitle{font-size:58px;text-align:left;line-height:1.02;margin:16px 0 0;let
 .choiceArea{min-width:0;}
 .choiceGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
 .hubCtas{display:grid;gap:12px;margin-bottom:14px;}
+/* Respect the OS "reduce motion" setting: calm animations/transitions for sensory comfort */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  .rewardCard .grow,.starPulse{ animation:none !important; }
+  .confetti{ display:none !important; }
+}
 </style>
 </head>
 <body>
@@ -1744,6 +1750,8 @@ burstConfetti(leveledUp);
 }
 function closeReward(btn){ btn.closest(".overlay").remove(); goHome(); }
 function burstConfetti(big){
+// honor reduced-motion: skip the falling-emoji animation entirely
+try{ if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){}
 const ems=["⭐","🌟","✨","💜","🩷","💫"];
 const count = big ? 36 : 22;
 for(let i=0;i<count;i++){
