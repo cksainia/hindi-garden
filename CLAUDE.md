@@ -41,8 +41,12 @@ Vanilla HTML/CSS/JS. **No build step, no framework, no bundler.** Edit files dir
 - Level-2 words carry `lv:2` and live in `LEVEL2[topicId]` (25 per topic). They're
   attached at load via `UNITS.forEach(u=>{u.words2 = LEVEL2[u.id]||[]})`.
 - 20 topics. Level 1 ≈ 518 words; Level 2 = 500 words.
-- **Level-2 unlock gating:** a topic's L2 unlocks once all its L1 words are mastered
-  (`level2Unlocked(unit)` in `index.html`). Convos/stories/grammar unlock L2 per-section.
+- **Level-2 unlock gating:** TWO gates. (1) **Entitlement** — Level 2 (and beyond) requires
+  *Hindi Slayer Plus* (`isPlus()`); free tier = all of Level 1. (2) **Progression** — once Plus,
+  a topic's L2 still unlocks as its L1 words are mastered (`level2Unlocked(unit)`). Not-Plus users
+  see L2 tabs as a 🔒 upsell (`showPlusUpsell()`); `unlockPlus()` grants entitlement.
+  `PLUS_PRICE = 0` is the launch promo — raise it + route `unlockPlus()` through real billing
+  (store IAP / Stripe) when monetizing. Entitlement (`state.plus`) syncs across devices (OR-merge).
 - `CONVOS`, `STORIES`, `GRAMMAR`, `GAMES`, `CULTURE` (themed via `CULTURE_THEMES`).
 - Watch for **Devanagari pitfalls** when editing literals programmatically: nukta and
   combining marks can make two visually-identical strings differ byte-wise. Match on the
@@ -53,7 +57,8 @@ Vanilla HTML/CSS/JS. **No build step, no framework, no bundler.** Edit files dir
   / `menuScreen` / `actScreen` / `parentScreen`. `goHome()` returns to the hub.
 - Welcome hero → home hub (progress panel + 8 choice tiles) → category → unit → activity.
 - State shape (in `loadState()`): `done, log, seen, mastered, missed, wordLevel, seenDate,
-  srs, quizzes, gameMiss, pathDone, achievements, cultureSeen, stars, speed, scriptMode`.
+  srs, quizzes, gameMiss, pathDone, achievements, cultureSeen, stars, speed, scriptMode,
+  muted, volume, plus, plusSince`.
 - **Spaced repetition:** `state.srs` per word, `SRS_STEPS=[1,3,7,16,35]`.
 - **Levels:** `STARS_PER_LEVEL=12`; `levelInfo()` derives level/name/badge from stars.
 - **Skills:** `skillScores()` returns 8 derived 0–100 scores for the parent dashboard.

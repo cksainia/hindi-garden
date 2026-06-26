@@ -87,6 +87,24 @@ setTimeout(() => {
   check("games present", GAMES.length > 0);
   check("culture notes present", CULTURE.length > 0);
 
+  // --- Free/Plus paywall: Level 2 is gated until unlocked ---
+  if (typeof w.isPlus === "function" && typeof w.openUnit === "function") {
+    check("free tier starts without Plus", w.isPlus() === false);
+    const u = w.UNITS[0];
+    w.openUnit(u.id); // free user opening a topic
+    const topicHtml = w.document.getElementById("menuScreen").innerHTML;
+    check("free user: Level 2 tab routes to upsell (not L2 content)",
+      /showPlusUpsell\(\)/.test(topicHtml) && !/openUnit\([^)]*,2\)/.test(topicHtml));
+    w.openCategory("stories", 2); // try to force L2 stories as a free user
+    check("free user: forcing category L2 still shows upsell",
+      /showPlusUpsell\(\)/.test(w.document.getElementById("catScreen").innerHTML));
+    if (typeof w.unlockPlus === "function") {
+      w.unlockPlus();
+      const saved = JSON.parse(w.localStorage.getItem("ariaHindiGarden_v1") || "{}");
+      check("unlockPlus persists entitlement + date", saved.plus === true && /^\d{4}-\d\d-\d\d$/.test(saved.plusSince || ""));
+    }
+  }
+
   // --- External tracker contract ---
   check("buildSummary() runs", typeof w.buildSummary === "function" && !!w.buildSummary());
 

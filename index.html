@@ -514,6 +514,9 @@ if(s.scriptMode!=="deva" && s.scriptMode!=="both") s.scriptMode = "both";
 // audio settings (device-local): persisted mute + voice volume 0–1
 if(typeof s.muted !== "boolean") s.muted = false;
 if(typeof s.volume !== "number" || s.volume<0 || s.volume>1) s.volume = 1;
+// Hindi Slayer Plus entitlement — unlocks Level 2 (and beyond). Free tier = all of Level 1.
+if(typeof s.plus !== "boolean") s.plus = false;
+if(typeof s.plusSince !== "string") s.plusSince = "";
 // Grammar Arena mistake counters by game type (for parent "needs practice")
 if(!s.gameMiss || typeof s.gameMiss!=="object") s.gameMiss = {};
 // Spaced repetition schedule per word: { ro: {step, due:"YYYY-MM-DD", reps, lapses} }
@@ -540,6 +543,37 @@ return s;
 function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} if(typeof syncPushSoon==="function") syncPushSoon(); }
 // HTML-escape helper for any value interpolated into innerHTML (global, reusable).
 const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* ============ HINDI SLAYER PLUS (Level 2+ entitlement) ============ */
+// Free tier = everything in Level 1. Level 2 and beyond require Plus.
+// PLUS_PRICE = 0 is the launch promo ("free for a limited time"). When real billing is
+// wired (App Store / Play IAP via the wrapper, or Stripe on the web), raise this and route
+// unlockPlus() through that flow instead of unlocking directly.
+const PLUS_NAME = "Hindi Slayer Plus";
+const PLUS_PRICE = 0;
+function isPlus(){ return !!(state && state.plus); }
+function unlockPlus(){
+  if(!state.plus){ state.plus = true; if(!state.plusSince) state.plusSince = todayKey(); saveState(); }
+  toast("✨ "+PLUS_NAME+" unlocked — Level 2 is open!");
+  if(typeof parentRefresh==="function") parentRefresh();
+  goHome();
+}
+function showPlusUpsell(){
+  if(isPlus()){ toast("✨ "+PLUS_NAME+" is already active"); return; }
+  const priceLine = PLUS_PRICE===0 ? "Free for a limited time ✨" : "$"+PLUS_PRICE.toFixed(2)+" / month";
+  const ov=document.createElement("div"); ov.className="overlay";
+  ov.innerHTML=`<div class="rewardCard" style="max-width:344px">
+  <div class="grow" style="font-size:52px">🔓</div>
+  <h2 style="margin:2px 0">Unlock ${esc(PLUS_NAME)}</h2>
+  <div style="font-size:14px;color:var(--good);font-weight:800;margin:2px 0 12px">${priceLine}</div>
+  <div style="text-align:left;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.75;margin:0 auto 4px;max-width:270px">
+    🔥 500 more words (Level 2)<br>🎭 Advanced conversations<br>📖 30 Level-2 stories<br>✍️ Harder sentence builders<br>🚀 New content as it's added</div>
+  <div style="font-size:11.5px;opacity:.66;font-weight:700;margin:10px 0 2px">Level 1 stays free forever. Please ask a grown-up to unlock.</div>
+  <button class="footerBtn" style="margin-top:12px" onclick="this.closest('.overlay').remove(); unlockPlus();">${PLUS_PRICE===0?'✨ Unlock free':'Subscribe'}</button>
+  <button class="backBtn" style="margin-top:10px" onclick="this.closest('.overlay').remove();">Maybe later</button>
+  </div>`;
+  document.body.appendChild(ov);
+}
 
 /* ============ SPEECH ============ */
 let hiVoice = null;
@@ -702,7 +736,7 @@ const done=Math.min(total,(state.done[u.id+"_learn"]?u.words.length:0)+(state.do
 const pct=Math.round(done/total*100);
 const u2=level2Unlocked(u);
 const b=document.createElement("button"); b.className="unit"+(pct>=100?" mastered":""); b.onclick=()=>openUnit(u.id);
-const prog = pct>=100 ? (u2?'<div class="prog"><span class="crown">👑</span> Lv 2 ready ✨</div>':'<div class="prog"><span class="crown">👑</span> Mastered!</div>') : `<div class="prog">${pct}% complete</div>`;
+const prog = pct>=100 ? (u2?(isPlus()?'<div class="prog"><span class="crown">👑</span> Lv 2 ready ✨</div>':'<div class="prog"><span class="crown">👑</span> Mastered! 🔒 Lv 2</div>'):'<div class="prog"><span class="crown">👑</span> Mastered!</div>') : `<div class="prog">${pct}% complete</div>`;
 b.innerHTML=`<span class="emoji">${u.emoji}</span><span class="name">${u.name}</span>${prog}<div class="bar"><i style="width:${pct}%"></i></div>`;
 wrap.appendChild(b);
 });
@@ -1065,9 +1099,12 @@ const c=C[key]; if(!c){ goHome(); return; }
 const li=catLevelInfo(key);
 let toggle="", hint="";
 if(li){
-if(level===2 && !li.unlocked) level=1;
-toggle=`<div class="lvlTabs"><button class="lvlTab${level===1?' on':''}" onclick="openCategory('${key}',1)">⭐ Level 1 · ${li.l1n}</button><button class="lvlTab${level===2?' on':''}${li.unlocked?'':' locked'}" onclick="${li.unlocked?`openCategory('${key}',2)`:`toast('Finish all of Level 1 to unlock Level 2 ✨')`}">${li.unlocked?'🔥 ':'🔒 '}Level 2 · ${li.l2n}</button></div>`;
-if(!li.unlocked) hint=`<div class="qpEmpty" style="text-align:center;margin-top:8px">✨ Finish every Level 1 ${li.noun.replace(/s$/,'')} to unlock ${li.l2n} advanced ones!</div>`;
+const plus=isPlus(), canL2=plus&&li.unlocked;
+if(level===2 && !canL2) level=1;
+const l2click = !plus ? "showPlusUpsell()" : (li.unlocked ? `openCategory('${key}',2)` : "toast('Finish all of Level 1 to unlock Level 2 ✨')");
+toggle=`<div class="lvlTabs"><button class="lvlTab${level===1?' on':''}" onclick="openCategory('${key}',1)">⭐ Level 1 · ${li.l1n}</button><button class="lvlTab${level===2?' on':''}${canL2?'':' locked'}" onclick="${l2click}">${canL2?'🔥 ':'🔒 '}Level 2 · ${li.l2n}</button></div>`;
+if(!plus) hint=`<div class="qpEmpty" style="text-align:center;margin-top:8px">🔒 Level 2 · ${li.l2n} advanced ${li.noun} unlock with ${PLUS_NAME}. <a onclick="showPlusUpsell()" style="color:var(--magenta);font-weight:800;cursor:pointer;text-decoration:underline">Unlock free →</a></div>`;
+else if(!li.unlocked) hint=`<div class="qpEmpty" style="text-align:center;margin-top:8px">✨ Finish every Level 1 ${li.noun.replace(/s$/,'')} to unlock ${li.l2n} advanced ones!</div>`;
 }
 const cs=$("catScreen");
 cs.innerHTML=`<div class="navRow"><button class="backBtn" onclick="goHome()">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
@@ -1107,7 +1144,8 @@ const u=UNITS.find(x=>x.id===id);
 if(!u){ goHome(); return; }
 currentUnit=id; currentCat="words";
 const unlocked=level2Unlocked(u);
-level = (level===2 && unlocked) ? 2 : 1;
+const plus=isPlus(), canL2=plus&&unlocked;
+level = (level===2 && canL2) ? 2 : 1;
 const words = level===2 ? u.words2 : u.words;
 const suf = level===2 ? "2" : "";
 const acts=[
@@ -1119,9 +1157,10 @@ const actHtml = acts.map(a=>{
 const seen = a.k==="listen" ? (state.done[id+"_listen"+suf]?" ✓":"") : (state.done[id+"_"+a.k+suf]?" ✓":"");
 return `<button class="actBtn" onclick="startActivity('${id}','${a.k}',null,${level})"><span class="big">${a.big}</span><span><span class="t">${a.t}${seen}</span><br><span class="d">${a.d}</span></span></button>`;
 }).join("");
+const l2click = !plus ? "showPlusUpsell()" : (unlocked ? `openUnit('${id}',2)` : "toast('Master every Level 1 word to unlock Level 2 ✨')");
 const toggle=`<div class="lvlTabs">
 <button class="lvlTab${level===1?' on':''}" onclick="openUnit('${id}',1)">⭐ Level 1 · ${u.words.length}</button>
-<button class="lvlTab${level===2?' on':''}${unlocked?'':' locked'}" onclick="${unlocked?`openUnit('${id}',2)`:`toast('Master every Level 1 word to unlock Level 2 ✨')`}">${unlocked?'🔥 ':'🔒 '}Level 2 · ${u.words2.length}</button>
+<button class="lvlTab${level===2?' on':''}${canL2?'':' locked'}" onclick="${l2click}">${canL2?'🔥 ':'🔒 '}Level 2 · ${u.words2.length}</button>
 </div>`;
 const ms=$("menuScreen");
 ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory('words')">⬅️ Back</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
@@ -1129,7 +1168,7 @@ ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openCategory(
 <div class="sub">${level===2?'Level 2 · advanced words':words.length+' words to discover'}</div>
 ${toggle}
 <div style="margin-top:10px">${actHtml}</div>
-${(!unlocked)?`<div class="qpEmpty" style="text-align:center;margin-top:10px">✨ Get every Level 1 word right in Listen &amp; Find to unlock 25 more advanced words!</div>`:''}`;
+${(!plus)?`<div class="qpEmpty" style="text-align:center;margin-top:10px">🔒 Level 2 adds 25 more advanced words with ${PLUS_NAME}. <a onclick="showPlusUpsell()" style="color:var(--magenta);font-weight:800;cursor:pointer;text-decoration:underline">Unlock free →</a></div>`:((!unlocked)?`<div class="qpEmpty" style="text-align:center;margin-top:10px">✨ Get every Level 1 word right in Listen &amp; Find to unlock 25 more advanced words!</div>`:'')}`;
 show("menuScreen"); ms.scrollTop=0;
 }
 
@@ -1958,6 +1997,9 @@ return `<div class="pcard"><div class="pcTitle">Pronunciation speed</div><div cl
 <div class="pcTitle" style="margin-top:16px">Voice volume</div><div class="setRow"><button class="setBtn ${state.volume<=0.5?'on':''}" onclick="setVolume(0.5)">🔈 Soft</button><button class="setBtn ${state.volume>0.5&&state.volume<1?'on':''}" onclick="setVolume(0.8)">🔉 Medium</button><button class="setBtn ${state.volume>=1?'on':''}" onclick="setVolume(1)">🔊 Full</button></div>
 <div class="pcTitle" style="margin-top:16px">Script help</div><div class="setRow"><button class="setBtn ${state.scriptMode==='both'?'on':''}" onclick="setScript('both')">अ + romanized</button><button class="setBtn ${state.scriptMode==='deva'?'on':''}" onclick="setScript('deva')">अ Devanagari only</button></div><div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:8px">“Devanagari only” hides the romanized spelling once she's ready to read the script itself.</div></div>
 <div class="pcard"><div class="pcTitle">Device Sync ✨</div>${sync}</div>
+<div class="pcard"><div class="pcTitle">${esc(PLUS_NAME)} ${isPlus()?'✨':''}</div>${isPlus()
+? `<div class="pcSub">Active${state.plusSince?` since ${esc(state.plusSince)}`:''}. Level 2 &amp; beyond are unlocked.</div>`
+: `<div class="pcSub">Level 1 is free. Unlock Level 2 — 500+ more words, advanced stories &amp; conversations${PLUS_PRICE===0?' — free for a limited time':''}.</div><button class="speakBtn" style="margin-top:12px" onclick="showPlusUpsell()">🔓 Unlock ${esc(PLUS_NAME)}</button>`}</div>
 <div class="pcard"><div class="pcTitle" style="color:var(--bad)">Danger zone</div><div class="pcSub">This erases all of Aria's stars and progress on this device.</div><button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="margin-top:10px;background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button></div>
 <div style="text-align:center;margin-top:6px"><a href="privacy.html" style="color:var(--muted);font-size:12px;font-weight:700;text-decoration:underline">Privacy Policy</a></div>`;
 }
@@ -1980,7 +2022,8 @@ return {
   wordLevel:obj(r.wordLevel), seenDate:obj(r.seenDate), missed:obj(r.missed),
   srs:obj(r.srs), achievements:obj(r.achievements), pathDone:obj(r.pathDone),
   cultureSeen:obj(r.cultureSeen),
-  quizzes:Array.isArray(r.quizzes)?r.quizzes.filter(q=>q && typeof q==="object"):[]
+  quizzes:Array.isArray(r.quizzes)?r.quizzes.filter(q=>q && typeof q==="object"):[],
+  plus:r.plus===true, plusSince:(typeof r.plusSince==="string")?r.plusSince:""
 };
 }
 function mergeState(local, remote){
@@ -2022,6 +2065,9 @@ for(const k in (local.achievements||{})){ if(!ach[k] || local.achievements[k] < 
 out.achievements = ach;
 out.pathDone = Object.assign({}, remote.pathDone||{}, local.pathDone||{});
 out.cultureSeen = Object.assign({}, remote.cultureSeen||{}, local.cultureSeen||{});
+// Plus entitlement: unlocked if either device has it; keep the earliest unlock date
+out.plus = !!(local.plus || remote.plus);
+out.plusSince = [local.plusSince, remote.plusSince].filter(Boolean).sort()[0] || "";
 // settings stay device-local (out===local already keeps speed/scriptMode)
 return out;
 }
