@@ -550,7 +550,9 @@ const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
 // wired (App Store / Play IAP via the wrapper, or Stripe on the web), raise this and route
 // unlockPlus() through that flow instead of unlocking directly.
 const PLUS_NAME = "Hindi Slayer Plus";
-const PLUS_PRICE = 0;
+const PLUS_PRICE = 0;                 // current price ($0 = free launch promo)
+const PLUS_REGULAR_PRICE = 4.99;      // <-- planned price AFTER the promo; set your real price here
+const PLUS_PERIOD = "month";          // billing period shown in copy
 function isPlus(){ return !!(state && state.plus); }
 function unlockPlus(){
   if(!state.plus){ state.plus = true; if(!state.plusSince) state.plusSince = todayKey(); saveState(); }
@@ -558,9 +560,38 @@ function unlockPlus(){
   if(typeof parentRefresh==="function") parentRefresh();
   goHome();
 }
+// Parental gate: a quick multiplication only a grown-up is likely to solve, shown before any
+// purchase/unlock (required for child-directed app stores). Calls onPass() only on a correct answer.
+function parentalGate(onPass){
+  const a=3+Math.floor(Math.random()*7), b=4+Math.floor(Math.random()*6); // a 3–9, b 4–9
+  const answer=a*b;
+  const ov=document.createElement("div"); ov.className="overlay";
+  ov.innerHTML=`<div class="rewardCard" style="max-width:312px">
+  <div class="grow" style="font-size:44px">🔐</div>
+  <h2 style="margin:2px 0">Grown-up check</h2>
+  <div style="font-size:12.5px;color:var(--muted);font-weight:700;margin:2px 0 12px">Ask a parent to solve this to continue.</div>
+  <div style="font-size:26px;font-weight:900;margin:4px 0">${a} × ${b} = ?</div>
+  <input id="pgInput" inputmode="numeric" autocomplete="off" aria-label="Answer"
+    style="width:128px;text-align:center;font-size:20px;font-weight:800;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--ink);margin-top:8px" />
+  <div id="pgErr" style="font-size:12.5px;color:var(--bad);font-weight:700;min-height:16px;margin-top:6px"></div>
+  <button class="footerBtn" id="pgGo" style="margin-top:4px">Continue</button>
+  <button class="backBtn" style="margin-top:10px" onclick="this.closest('.overlay').remove();">Cancel</button>
+  </div>`;
+  document.body.appendChild(ov);
+  const input=ov.querySelector("#pgInput"), err=ov.querySelector("#pgErr");
+  const go=()=>{ if(parseInt(input.value,10)===answer){ ov.remove(); if(typeof onPass==="function") onPass(); }
+    else { err.textContent="Not quite — try again."; input.value=""; input.focus(); } };
+  ov.querySelector("#pgGo").onclick=go;
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter") go(); });
+  setTimeout(()=>{ try{ input.focus(); }catch(e){} },50);
+}
+// Run the parental gate, then grant Plus. UI unlock buttons call this (not unlockPlus directly).
+function confirmUnlock(){ if(isPlus()){ toast("✨ "+PLUS_NAME+" is already active"); return; } parentalGate(unlockPlus); }
 function showPlusUpsell(){
   if(isPlus()){ toast("✨ "+PLUS_NAME+" is already active"); return; }
-  const priceLine = PLUS_PRICE===0 ? "Free for a limited time ✨" : "$"+PLUS_PRICE.toFixed(2)+" / month";
+  const priceLine = PLUS_PRICE===0
+    ? `Free for a limited time ✨<br><span style="font-size:11.5px;color:var(--muted);font-weight:700">then $${PLUS_REGULAR_PRICE.toFixed(2)}/${PLUS_PERIOD}</span>`
+    : "$"+PLUS_PRICE.toFixed(2)+" / "+PLUS_PERIOD;
   const ov=document.createElement("div"); ov.className="overlay";
   ov.innerHTML=`<div class="rewardCard" style="max-width:344px">
   <div class="grow" style="font-size:52px">🔓</div>
@@ -569,7 +600,7 @@ function showPlusUpsell(){
   <div style="text-align:left;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.75;margin:0 auto 4px;max-width:270px">
     🔥 500 more words (Level 2)<br>🎭 Advanced conversations<br>📖 30 Level-2 stories<br>✍️ Harder sentence builders<br>🚀 New content as it's added</div>
   <div style="font-size:11.5px;opacity:.66;font-weight:700;margin:10px 0 2px">Level 1 stays free forever. Please ask a grown-up to unlock.</div>
-  <button class="footerBtn" style="margin-top:12px" onclick="this.closest('.overlay').remove(); unlockPlus();">${PLUS_PRICE===0?'✨ Unlock free':'Subscribe'}</button>
+  <button class="footerBtn" style="margin-top:12px" onclick="this.closest('.overlay').remove(); confirmUnlock();">${PLUS_PRICE===0?'✨ Unlock free':'Subscribe'}</button>
   <button class="backBtn" style="margin-top:10px" onclick="this.closest('.overlay').remove();">Maybe later</button>
   </div>`;
   document.body.appendChild(ov);
@@ -1999,7 +2030,7 @@ return `<div class="pcard"><div class="pcTitle">Pronunciation speed</div><div cl
 <div class="pcard"><div class="pcTitle">Device Sync ✨</div>${sync}</div>
 <div class="pcard"><div class="pcTitle">${esc(PLUS_NAME)} ${isPlus()?'✨':''}</div>${isPlus()
 ? `<div class="pcSub">Active${state.plusSince?` since ${esc(state.plusSince)}`:''}. Level 2 &amp; beyond are unlocked.</div>`
-: `<div class="pcSub">Level 1 is free. Unlock Level 2 — 500+ more words, advanced stories &amp; conversations${PLUS_PRICE===0?' — free for a limited time':''}.</div><button class="speakBtn" style="margin-top:12px" onclick="showPlusUpsell()">🔓 Unlock ${esc(PLUS_NAME)}</button>`}</div>
+: `<div class="pcSub">Level 1 is free. Unlock Level 2 — 500+ more words, advanced stories &amp; conversations${PLUS_PRICE===0?` — free for a limited time, then $${PLUS_REGULAR_PRICE.toFixed(2)}/${PLUS_PERIOD}`:''}.</div><button class="speakBtn" style="margin-top:12px" onclick="showPlusUpsell()">🔓 Unlock ${esc(PLUS_NAME)}</button>`}</div>
 <div class="pcard"><div class="pcTitle" style="color:var(--bad)">Danger zone</div><div class="pcSub">This erases all of Aria's stars and progress on this device.</div><button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="margin-top:10px;background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button></div>
 <div style="text-align:center;margin-top:6px"><a href="privacy.html" style="color:var(--muted);font-size:12px;font-weight:700;text-decoration:underline">Privacy Policy</a></div>`;
 }

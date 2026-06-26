@@ -44,8 +44,10 @@ Vanilla HTML/CSS/JS. **No build step, no framework, no bundler.** Edit files dir
 - **Level-2 unlock gating:** TWO gates. (1) **Entitlement** — Level 2 (and beyond) requires
   *Hindi Slayer Plus* (`isPlus()`); free tier = all of Level 1. (2) **Progression** — once Plus,
   a topic's L2 still unlocks as its L1 words are mastered (`level2Unlocked(unit)`). Not-Plus users
-  see L2 tabs as a 🔒 upsell (`showPlusUpsell()`); `unlockPlus()` grants entitlement.
-  `PLUS_PRICE = 0` is the launch promo — raise it + route `unlockPlus()` through real billing
+  see L2 tabs as a 🔒 upsell (`showPlusUpsell()`). Unlock UI calls `confirmUnlock()` →
+  `parentalGate()` (a multiplication challenge, store requirement for kids apps) → `unlockPlus()`
+  grants entitlement. `PLUS_PRICE = 0` is the launch promo; `PLUS_REGULAR_PRICE`/`PLUS_PERIOD`
+  drive the "then $X/mo" copy. Raise `PLUS_PRICE` + route `unlockPlus()` through real billing
   (store IAP / Stripe) when monetizing. Entitlement (`state.plus`) syncs across devices (OR-merge).
 - `CONVOS`, `STORIES`, `GRAMMAR`, `GAMES`, `CULTURE` (themed via `CULTURE_THEMES`).
 - Watch for **Devanagari pitfalls** when editing literals programmatically: nukta and

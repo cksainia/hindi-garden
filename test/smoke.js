@@ -98,6 +98,11 @@ setTimeout(() => {
     w.openCategory("stories", 2); // try to force L2 stories as a free user
     check("free user: forcing category L2 still shows upsell",
       /showPlusUpsell\(\)/.test(w.document.getElementById("catScreen").innerHTML));
+    if (typeof w.confirmUnlock === "function") {
+      w.confirmUnlock(); // should open a parental gate, NOT unlock immediately
+      check("unlock is behind a parental gate (not granted on tap)",
+        w.isPlus() === false && /×/.test(w.document.body.textContent));
+    }
     if (typeof w.unlockPlus === "function") {
       w.unlockPlus();
       const saved = JSON.parse(w.localStorage.getItem("ariaHindiGarden_v1") || "{}");
