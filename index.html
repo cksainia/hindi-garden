@@ -505,6 +505,9 @@ if(!s.seenDate || typeof s.seenDate!=="object") s.seenDate = {};
 // settings
 if(typeof s.speed !== "number") s.speed = 0.85;
 if(s.scriptMode!=="deva" && s.scriptMode!=="both") s.scriptMode = "both";
+// audio settings (device-local): persisted mute + voice volume 0–1
+if(typeof s.muted !== "boolean") s.muted = false;
+if(typeof s.volume !== "number" || s.volume<0 || s.volume>1) s.volume = 1;
 // Grammar Arena mistake counters by game type (for parent "needs practice")
 if(!s.gameMiss || typeof s.gameMiss!=="object") s.gameMiss = {};
 // Spaced repetition schedule per word: { ro: {step, due:"YYYY-MM-DD", reps, lapses} }
@@ -529,6 +532,8 @@ for(const ro in s.seen){ if(!s.seenDate[ro]) s.seenDate[ro]=todayKey(); if(!s.wo
 return s;
 }
 function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} if(typeof syncPushSoon==="function") syncPushSoon(); }
+// HTML-escape helper for any value interpolated into innerHTML (global, reusable).
+const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 
 /* ============ SPEECH ============ */
 let hiVoice = null;
@@ -545,6 +550,7 @@ const u = new SpeechSynthesisUtterance(text);
 u.lang = "hi-IN"; if(hiVoice) u.voice = hiVoice;
 u.rate = (typeof rate==="number") ? rate : ((state&&typeof state.speed==="number")?state.speed:.85);
 u.pitch = 1.05;
+u.volume = (state&&typeof state.volume==="number") ? state.volume : 1;
 speechSynthesis.speak(u);
 }catch(e){}
 }
@@ -1068,7 +1074,10 @@ show("catScreen"); cs.scrollTop=0;
 }
 
 /* ============ WORD OF THE DAY ============ */
-const ALL_WORDS = UNITS.reduce((a,u)=>a.concat(u.words, u.words2||[]),[]);
+// Some words are intentionally cross-listed in two topics' lessons (e.g. "raat" in
+// day + time). The global pool dedupes by `ro` so quizzes/reviews/counts never show
+// or count the same word twice (SRS is keyed by `ro`, so the schedule is shared anyway).
+const ALL_WORDS = (function(){ const seen={}, out=[]; UNITS.forEach(u=>[].concat(u.words||[], u.words2||[]).forEach(w=>{ if(w && !seen[w.ro]){ seen[w.ro]=1; out.push(w); } })); return out; })();
 const WOTD_WORDS = UNITS.reduce((a,u)=>a.concat(u.words),[]); // Word of the Day stays on Level 1
 // Level 2 unlocks for a topic once every Level 1 word has been mastered (recalled in Listen & Find)
 function level2Unlocked(u){ return !!(u && u.words2 && u.words2.length && u.words.every(w=>state.mastered && state.mastered[w.ro])); }
@@ -1784,7 +1793,6 @@ const ep=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/86400000);
 const cpool=CONVOS.filter(c=>(c.lv||1)===1); const convo=cpool[ep%cpool.length];
 const gpool=GRAMMAR.filter(g=>(g.lv||1)===1); const gram=gpool[ep%gpool.length]; const build=(gram&&gram.builds&&gram.builds.length)?gram.builds[ep%gram.builds.length]:null;
 const dw=words[0]||ALL_WORDS[0];
-const esc=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const wrows=words.map(w=>`<tr><td class="d">${esc(w.hi)}</td><td class="r">${esc(w.ro)}</td><td>${esc(w.en)}</td><td class="chk">☐</td></tr>`).join("");
 const crows=convo.lines.map(l=>`<div class="cl"><b class="d">${esc(l.hi)}</b> <span class="r">(${esc(l.ro)})</span><br>${esc(l.en)}</div>`).join("");
 const buildLine = build?`Put these words in the right order: <b class="d">${esc(shuffle(build.words).join("  •  "))}</b><br><span class="hint">(English: "${esc(build.en)}" — remember, the verb usually comes last!)</span>`:`Make a short sentence using one of today's words.`;
@@ -1936,9 +1944,10 @@ return `<div class="pcard"><div class="pcTitle">Practice ideas at home 🏡</div
 }
 function ppSettings(){
 const sync = syncCode
-? `<div class="pcSub">This device is synced. Enter this family code on her other devices to keep stars &amp; progress together:</div><div class="chip" style="font-size:17px;letter-spacing:2px;margin-top:10px;display:inline-block;user-select:text;-webkit-user-select:text">${syncCode}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="speakBtn" style="margin-top:0" onclick="syncNow()">🔄 Sync now</button><button class="backBtn" onclick="syncDisconnect()">Disconnect</button></div>`
+? `<div class="pcSub">This device is synced. Enter this family code on her other devices to keep stars &amp; progress together:</div><div class="chip" style="font-size:17px;letter-spacing:2px;margin-top:10px;display:inline-block;user-select:text;-webkit-user-select:text">${esc(syncCode)}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="speakBtn" style="margin-top:0" onclick="syncNow()">🔄 Sync now</button><button class="backBtn" onclick="syncDisconnect()">Disconnect</button></div>`
 : `<div class="pcSub">Keep her stars &amp; progress in sync across iPad, phone, etc.</div><button class="speakBtn" style="margin-top:12px" onclick="syncCreate()">✨ Create sync code</button><div style="margin-top:14px;font-size:13px;opacity:.7;font-weight:700">Already have a code from another device?</div><div style="display:flex;gap:8px;margin-top:8px"><input id="syncInput" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="enter code" style="flex:1;min-width:0;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font-weight:700;user-select:text;-webkit-user-select:text" /><button class="speakBtn" style="margin-top:0" onclick="syncJoin()">Join</button></div>`;
 return `<div class="pcard"><div class="pcTitle">Pronunciation speed</div><div class="setRow"><button class="setBtn ${state.speed<.75?'on':''}" onclick="setSpeed(0.6)">🐢 Slow</button><button class="setBtn ${state.speed>=.75&&state.speed<=1?'on':''}" onclick="setSpeed(0.85)">🚶 Normal</button><button class="setBtn ${state.speed>1?'on':''}" onclick="setSpeed(1.1)">🐇 Fast</button></div>
+<div class="pcTitle" style="margin-top:16px">Voice volume</div><div class="setRow"><button class="setBtn ${state.volume<=0.5?'on':''}" onclick="setVolume(0.5)">🔈 Soft</button><button class="setBtn ${state.volume>0.5&&state.volume<1?'on':''}" onclick="setVolume(0.8)">🔉 Medium</button><button class="setBtn ${state.volume>=1?'on':''}" onclick="setVolume(1)">🔊 Full</button></div>
 <div class="pcTitle" style="margin-top:16px">Script help</div><div class="setRow"><button class="setBtn ${state.scriptMode==='both'?'on':''}" onclick="setScript('both')">अ + romanized</button><button class="setBtn ${state.scriptMode==='deva'?'on':''}" onclick="setScript('deva')">अ Devanagari only</button></div><div style="font-size:11.5px;opacity:.65;font-weight:700;margin-top:8px">“Devanagari only” hides the romanized spelling once she's ready to read the script itself.</div></div>
 <div class="pcard"><div class="pcTitle">Device Sync ✨</div>${sync}</div>
 <div class="pcard"><div class="pcTitle" style="color:var(--bad)">Danger zone</div><div class="pcSub">This erases all of Aria's stars and progress on this device.</div><button class="footerBtn" onclick="if(confirm('Reset all of Aria\\'s progress and stars?')){localStorage.removeItem(SAVE_KEY);state=loadState();goHome();}" style="margin-top:10px;background:linear-gradient(92deg,#a13a5a,#7a2d4a);box-shadow:0 6px 18px rgba(0,0,0,.4)">Reset progress</button></div>`;
@@ -1950,7 +1959,23 @@ const a = new Uint8Array(8); (crypto||window.crypto).getRandomValues(a);
 return Array.from(a, b=>b.toString(16).padStart(2,"0")).join("");
 }
 // merge two progress objects so nothing is ever lost
+// Treat remote data as untrusted: anyone with the family code can write it. Coerce
+// every field to its expected type so a malformed/tampered blob can't corrupt local state.
+function sanitizeRemote(r){
+if(!r || typeof r!=="object" || Array.isArray(r)) return null;
+const obj=v=>(v && typeof v==="object" && !Array.isArray(v)) ? v : {};
+const num=v=>(typeof v==="number" && isFinite(v)) ? v : 0;
+return {
+  stars:num(r.stars),
+  seen:obj(r.seen), mastered:obj(r.mastered), done:obj(r.done), log:obj(r.log),
+  wordLevel:obj(r.wordLevel), seenDate:obj(r.seenDate), missed:obj(r.missed),
+  srs:obj(r.srs), achievements:obj(r.achievements), pathDone:obj(r.pathDone),
+  cultureSeen:obj(r.cultureSeen),
+  quizzes:Array.isArray(r.quizzes)?r.quizzes.filter(q=>q && typeof q==="object"):[]
+};
+}
 function mergeState(local, remote){
+remote = sanitizeRemote(remote);
 if(!remote || typeof remote!=="object") return local;
 const out = local;
 out.stars = Math.max(local.stars||0, remote.stars||0);
@@ -2054,8 +2079,9 @@ function syncNow(){ syncPull().then(()=>{ syncPush(); toast("Synced ✨"); rende
 function syncDisconnect(){ syncCode=""; try{ localStorage.removeItem(SYNC_CODE_KEY); }catch(e){} toast("Sync off"); parentRefresh(); }
 
 /* ============ SETTINGS ============ */
-function applySettings(){ document.body.classList.toggle('deva-only', state.scriptMode==='deva'); }
+function applySettings(){ document.body.classList.toggle('deva-only', state.scriptMode==='deva'); muted = !!(state&&state.muted); const mb=$("muteBtn"); if(mb) mb.textContent = muted?"🔇":"🔊"; }
 function setSpeed(v){ state.speed=v; saveState(); applySettings(); speak("नमस्ते"); parentRefresh(); }
+function setVolume(v){ state.volume=v; if(state.muted){ state.muted=false; muted=false; } saveState(); applySettings(); speak("नमस्ते"); parentRefresh(); }
 function setScript(m){ state.scriptMode=m; saveState(); applySettings(); toast(m==='deva'?"Devanagari only ✍️":"Romanized help on"); parentRefresh(); }
 function explainProgress(){
 const ov=document.createElement("div"); ov.className="overlay";
@@ -2075,7 +2101,7 @@ document.body.appendChild(ov);
 /* progress explainer is reachable from the parent dashboard / hub help affordance */
 
 /* ============ MUTE ============ */
-$("muteBtn").onclick=()=>{ muted=!muted; $("muteBtn").textContent=muted?"🔇":"🔊"; if(muted) speechSynthesis.cancel(); else toast("Sound on 🔊"); };
+$("muteBtn").onclick=()=>{ muted=!muted; state.muted=muted; saveState(); $("muteBtn").textContent=muted?"🔇":"🔊"; if(muted){ if('speechSynthesis' in window) speechSynthesis.cancel(); } else toast("Sound on 🔊"); };
 
 /* ============ CHARACTER ART INPUT ============ */
 $("avatarInput").onchange=function(e){ const f=e.target.files&&e.target.files[0]; if(f) setAvatarFromFile(f); e.target.value=""; };
