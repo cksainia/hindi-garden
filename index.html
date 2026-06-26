@@ -514,6 +514,13 @@ if(!s.pathDone || typeof s.pathDone!=="object") s.pathDone = {};
 if(!s.achievements || typeof s.achievements!=="object") s.achievements = {};
 // which Culture Corner bites she's opened
 if(!s.cultureSeen || typeof s.cultureSeen!=="object") s.cultureSeen = {};
+// Migration: Level-2 romanization keys were normalized to lowercase. Re-key any
+// legacy capitalized word keys so existing progress is preserved, not orphaned.
+// Idempotent (lowercase keys are left untouched). Only word-keyed maps are touched.
+for(const map of [s.seen, s.mastered, s.missed, s.wordLevel, s.seenDate, s.srs]){
+  if(!map || typeof map!=="object") continue;
+  for(const k of Object.keys(map)){ const lk=k.toLowerCase(); if(lk!==k){ if(!(lk in map)) map[lk]=map[k]; delete map[k]; } }
+}
 // Backfill SRS for already-learned words, spacing them by how well she knows them
 for(const ro in s.seen){ if(!s.srs[ro]){ const lvl=(s.wordLevel&&s.wordLevel[ro])||1; const step=Math.max(0,Math.min(SRS_STEPS.length-1, lvl-1)); const base=(s.seenDate&&s.seenDate[ro])||todayKey(); s.srs[ro]={step, due:addDaysKey(base, SRS_STEPS[step]), reps:0, lapses:0}; } }
 // backfill seenDate for already-learned words (so review has something to work with)
@@ -1289,11 +1296,19 @@ html+=`<div class="sline" onclick="speak('${l.hi.replace(/'/g,"\\'")}')"><span c
 html+=`<button class="footerBtn" style="position:static;margin-top:16px" onclick="startStoryQuestion('${id}')">📖 I read it — question time! ❓</button>`;
 const ms=$("menuScreen"); ms.innerHTML=html; show("menuScreen"); ms.scrollTop=0;
 }
-function startStoryQuestion(id){ storyState={id, answered:false, pick:-1, firstTry:true}; renderStoryQuestion(); }
+function startStoryQuestion(id){
+const s=(typeof STORIES!=="undefined"?STORIES:[]).find(x=>x.id===id);
+const n=(s&&s.question&&s.question.opts&&s.question.opts.length)||4;
+// shuffle which screen position each option appears in, so the answer isn't always first
+const order=shuffle(Array.from({length:n},(_,i)=>i));
+storyState={id, answered:false, pick:-1, firstTry:true, order};
+renderStoryQuestion();
+}
 function renderStoryQuestion(){
 const s=(typeof STORIES!=="undefined"?STORIES:[]).find(x=>x.id===storyState.id); if(!s) return;
 const q=s.question;
-const opts=q.opts.map((o,i)=>{ let cls="qopt"; if(storyState.answered){ if(i===q.ans) cls+=" correct"; else if(i===storyState.pick) cls+=" wrong"; } return `<button class="${cls}" onclick="answerStory(${i})">${o}</button>`; }).join("");
+const order=(storyState.order && storyState.order.length===q.opts.length) ? storyState.order : q.opts.map((_,i)=>i);
+const opts=order.map(oi=>{ const o=q.opts[oi]; let cls="qopt"; if(storyState.answered){ if(oi===q.ans) cls+=" correct"; else if(oi===storyState.pick) cls+=" wrong"; } return `<button class="${cls}" onclick="answerStory(${oi})">${o}</button>`; }).join("");
 let enc=""; if(storyState.answered){ enc = (storyState.pick===q.ans)?`<div class="encourage">${CONGRATS[Math.floor(Math.random()*CONGRATS.length)]}</div>`:`<div class="encourage" style="color:var(--bad)">Not quite — peek back at the story for a clue 🌟</div>`; }
 const ms=$("menuScreen");
 ms.innerHTML=`<div class="navRow"><button class="backBtn" onclick="openStory('${s.id}')">⬅️ Back to story</button><button class="backBtn" onclick="goHome()">🏠 Home</button></div>
@@ -2031,7 +2046,7 @@ syncPush().then(()=>{ toast("Sync on ✨"); parentRefresh(); });
 }
 function syncJoin(){
 const el=$("syncInput"); const v=((el&&el.value)||"").trim().toLowerCase().replace(/\s+/g,"");
-if(v.length<6){ toast("Enter a valid code"); return; }
+if(!/^[a-z0-9]{6,}$/.test(v)){ toast("Enter a valid code"); return; }
 syncCode = v; try{ localStorage.setItem(SYNC_CODE_KEY, syncCode); }catch(e){}
 syncPull().then(()=>{ syncPush(); toast("Synced ✨"); renderTop(); parentRefresh(); });
 }
