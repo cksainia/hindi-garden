@@ -1306,17 +1306,21 @@ lesson.cardMissed=false;
 const pool=shuffle(lesson.words.filter(x=>x.en!==w.en)).slice(0,3);
 const opts=shuffle([w,...pool]);
 $("actBody").innerHTML=`
-<div class="prompt">Tap the word you hear 👂</div>
-<div class="card" style="padding:14px;">
-<button class="speakBtn" onclick="speak('${w.hi.replace(/'/g,"\\'")}')">🔊 Play sound</button>
-<button class="speakBtn" style="background:linear-gradient(135deg,#36e6ff,#9b3cff);margin-left:8px" onclick="speakSlow('${w.hi.replace(/'/g,"\\'")}')">🐢 Slower</button>
+<div class="prompt">What does this mean?</div>
+<div class="card">
+<div class="hindi" lang="hi">${w.hi}</div>
+<div class="roman" aria-hidden="true">${w.ro}</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+<button class="speakBtn" style="margin-top:0" onclick="speak('${w.hi.replace(/'/g,"\\'")}')">🔊 Hear it</button>
+<button class="speakBtn" style="margin-top:0;background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="speakSlow('${w.hi.replace(/'/g,"\\'")}')">🐢 Slower</button>
 </div>
-<div class="options" id="opts"></div>
+</div>
+<div class="qopts" id="opts"></div>
 <div class="encourage" id="enc"></div>`;
 const o=$("opts");
 opts.forEach(op=>{
-const b=document.createElement("button"); b.className="opt";
-b.innerHTML=`<span class="optHi" lang="hi">${op.hi}</span><span class="wro">${esc(op.ro)}</span>`;
+const b=document.createElement("button"); b.className="qopt";
+b.textContent=op.en;
 b.onclick=()=>checkListen(b,op,w);
 o.appendChild(b);
 });
