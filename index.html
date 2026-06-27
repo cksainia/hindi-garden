@@ -114,6 +114,8 @@ background:linear-gradient(145deg,rgba(255,45,149,.25),rgba(155,60,255,.30));fle
 .card{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:1px solid var(--line);border-radius:20px;
 padding:26px 22px;box-shadow:0 8px 26px var(--shadowS), 0 0 22px rgba(155,60,255,.10) inset;text-align:center;margin-bottom:16px;}
 .bigEmoji{font-size:80px;line-height:1.1;margin:4px 0;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5));}
+.bigEmoji .wthumb{width:108px;height:108px;object-fit:contain;display:inline-block;vertical-align:middle;}
+.wic .wthumb{width:42px;height:42px;object-fit:contain;display:inline-block;vertical-align:middle;}
 .hindi{font-size:37px;font-weight:900;margin:4px 0;letter-spacing:-.5px;color:#fff;text-shadow:0 0 18px rgba(155,60,255,.35);}
 .roman{font-size:21px;color:var(--magenta);font-weight:800;}
 .english{font-size:17px;color:var(--muted);margin-top:6px;font-weight:700;}
@@ -547,6 +549,8 @@ return s;
 function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} if(typeof syncPushSoon==="function") syncPushSoon(); }
 // HTML-escape helper for any value interpolated into innerHTML (global, reusable).
 const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+// Word thumbnail: custom art from img/ when available (WORD_IMG maps ro -> file), else the emoji.
+function wordIc(w){ const f=(w&&typeof WORD_IMG!=="undefined"&&WORD_IMG)?WORD_IMG[w.ro]:null; return f?`<img class="wthumb" src="img/${f}" alt="" loading="lazy">`:((w&&w.ic)||""); }
 
 /* ===== Devanagari → readable romanization (for game/sentence-builder tiles) ===== */
 // Grammar games store options in Devanagari only. `roma()` shows English-script transliteration
@@ -1134,7 +1138,7 @@ $("hubWrap").innerHTML=`
 const ep=Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/86400000);
 const w=WOTD_WORDS[ep%WOTD_WORDS.length];
 const wotd=$("hubWotd");
-wotd.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div><div class="row"><span class="wic">${w.ic}</span><span><span class="whi" lang="hi">${w.hi}</span><br><span class="wro" aria-hidden="true">${w.ro}</span> — <span class="wen">${w.en}</span></span><span class="hear">🔊</span></div>`;
+wotd.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div><div class="row"><span class="wic">${wordIc(w)}</span><span><span class="whi" lang="hi">${w.hi}</span><br><span class="wro" aria-hidden="true">${w.ro}</span> — <span class="wen">${w.en}</span></span><span class="hear">🔊</span></div>`;
 wotd.onclick=()=>speak(w.hi);
 const ctas=$("hubCtas");
 const doneP=pathDoneToday();
@@ -1212,7 +1216,7 @@ const w = ALL_WORDS[epochDay % ALL_WORDS.length];
 const el=$("wotd");
 el.innerHTML=`<div class="tag">🌟 WORD OF THE DAY</div>
 <div class="row">
-<span class="wic">${w.ic}</span>
+<span class="wic">${wordIc(w)}</span>
 <span><span class="whi" lang="hi">${w.hi}</span><br><span class="wro" aria-hidden="true">${w.ro}</span> — <span class="wen">${w.en}</span></span>
 <span class="hear">🔊</span>
 </div>`;
@@ -1287,7 +1291,7 @@ function renderLearn(){
 const w=lesson.words[lesson.idx];
 $("actBody").innerHTML=`
 <div class="card">
-<div class="bigEmoji">${w.ic}</div>
+<div class="bigEmoji">${wordIc(w)}</div>
 <div class="hindi" lang="hi">${w.hi}</div>
 <div class="roman" aria-hidden="true">${w.ro}</div>
 <div class="english">${w.en}</div>
@@ -1351,7 +1355,7 @@ const w=lesson.words[lesson.idx];
 $("actBody").innerHTML=`
 <div class="prompt">Hear it, then say it out loud! 🎤</div>
 <div class="card">
-<div class="bigEmoji">${w.ic}</div>
+<div class="bigEmoji">${wordIc(w)}</div>
 <div class="hindi" lang="hi">${w.hi}</div>
 <div class="roman" aria-hidden="true">${w.ro}</div>
 <div class="english">${w.en}</div>
