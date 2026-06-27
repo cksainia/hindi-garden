@@ -65,6 +65,11 @@ Vanilla HTML/CSS/JS. **No build step, no framework, no bundler.** Edit files dir
 - **Levels:** `STARS_PER_LEVEL=12`; `levelInfo()` derives level/name/badge from stars.
 - **Skills:** `skillScores()` returns 8 derived 0–100 scores for the parent dashboard.
 - `speakSlow()` = the turtle button — 1/10th of normal TTS rate (`base*0.1`, floored 0.1).
+- **Romanization for game tiles:** grammar games store options in Devanagari only. `roma(hi)`
+  shows English-script transliteration (prefers curated `ro` from `RO_INDEX`, else algorithmic
+  `translit()`); `hiro(hi)` renders Devanagari + a `.wro` roman line (hidden in Devanagari-only mode).
+- **Quiz / Listen & Find intentionally omit the answer's emoji** (it was a giveaway, esp. for numbers).
+  Quiz shows a neutral 💭; rely on Hindi text + audio.
 
 ## Cross-device sync + tracker feed
 - `index.html` syncs state to a **Cloudflare Worker**:

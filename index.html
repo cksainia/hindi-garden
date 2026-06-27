@@ -403,6 +403,9 @@ h1.heroTitle{font-size:58px;text-align:left;line-height:1.02;margin:16px 0 0;let
 .choiceArea{min-width:0;}
 .choiceGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
 .hubCtas{display:grid;gap:12px;margin-bottom:14px;}
+/* Romanization helper under Devanagari tiles in the grammar games (hidden in Devanagari-only mode) */
+.wro{display:block;font-size:11.5px;font-weight:800;letter-spacing:.2px;margin-top:3px;color:#bfe9ff;}
+.auraBtn .wro,.stanceBtn .wro{color:rgba(255,255,255,.92);}
 /* Respect the OS "reduce motion" setting: calm animations/transitions for sensory comfort */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
@@ -543,6 +546,52 @@ return s;
 function saveState(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){} if(typeof syncPushSoon==="function") syncPushSoon(); }
 // HTML-escape helper for any value interpolated into innerHTML (global, reusable).
 const esc = s => String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* ===== Devanagari → readable romanization (for game/sentence-builder tiles) ===== */
+// Grammar games store options in Devanagari only. `roma()` shows English-script transliteration
+// so a non-script-reader can tell which Hindi word a tile is. It prefers the app's CURATED
+// romanization (from vocabulary + grammar builds, where Devanagari↔ro align word-for-word) and
+// falls back to an algorithmic transliteration for anything not in that index.
+const _DV_V={'अ':'a','आ':'aa','इ':'i','ई':'ee','उ':'u','ऊ':'oo','ऋ':'ri','ए':'e','ऐ':'ai','ओ':'o','औ':'au','ऍ':'e','ऑ':'o','ॲ':'a'};
+const _DV_C={'क':'k','ख':'kh','ग':'g','घ':'gh','ङ':'ng','च':'ch','छ':'chh','ज':'j','झ':'jh','ञ':'ny','ट':'t','ठ':'th','ड':'d','ढ':'dh','ण':'n','त':'t','थ':'th','द':'d','ध':'dh','न':'n','प':'p','फ':'ph','ब':'b','भ':'bh','म':'m','य':'y','र':'r','ल':'l','व':'v','श':'sh','ष':'sh','स':'s','ह':'h','ळ':'l'};
+const _DV_M={'ा':'aa','ि':'i','ी':'ee','ु':'u','ू':'oo','ृ':'ri','ॄ':'ri','े':'e','ै':'ai','ो':'o','ौ':'au','ॅ':'e','ॉ':'o'};
+const _DV_NUKTA={'क़':'q','ख़':'kh','ग़':'gh','ज़':'z','ड़':'d','ढ़':'dh','फ़':'f','य़':'y'};
+const _HAL='्', _ANUS='ं', _CHB='ँ', _VIS='ः', _NUK='़';
+function _translitWord(w){
+  const ch=[...String(w).normalize('NFC')]; const u=[];
+  for(let i=0;i<ch.length;i++){ let c=ch[i];
+    if(ch[i+1]===_NUK && _DV_NUKTA[c+_NUK]!==undefined){ u.push({c:_DV_NUKTA[c+_NUK],v:'a',cons:true}); i++; continue; }
+    if(_DV_NUKTA[c]!==undefined){ u.push({c:_DV_NUKTA[c],v:'a',cons:true}); continue; }
+    if(_DV_C[c]!==undefined){ u.push({c:_DV_C[c],v:'a',cons:true}); continue; }
+    if(_DV_V[c]!==undefined){ u.push({c:_DV_V[c],v:'',cons:false}); continue; }
+    if(_DV_M[c]!==undefined){ if(u.length&&u[u.length-1].cons) u[u.length-1].v=_DV_M[c]; else u.push({c:_DV_M[c],v:'',cons:false}); continue; }
+    if(c===_HAL){ if(u.length&&u[u.length-1].cons) u[u.length-1].v=''; continue; }
+    if(c===_ANUS||c===_CHB){ if(u.length) u[u.length-1].nasal=true; continue; }
+    if(c===_VIS){ if(u.length) u[u.length-1].vis=true; continue; }
+    if(c===_NUK) continue;
+    u.push({raw:c});
+  }
+  for(let k=u.length-1;k>=0;k--){ const x=u[k]; if(x.raw!==undefined) continue; if(x.cons&&x.v==='a') x.v=''; break; }
+  return u.map(x=> x.raw!==undefined ? x.raw : x.c+x.v+(x.nasal?'n':'')+(x.vis?'h':'')).join('');
+}
+function translit(s){ return String(s==null?'':s).split(/(\s+)/).map(t=>/^\s*$/.test(t)?t:_translitWord(t)).join(''); }
+const RO_INDEX=(function(){ const idx={};
+  const put=(hi,ro)=>{ if(hi&&ro&&!/\s/.test(hi)){ const k=hi.normalize('NFC'); if(!(k in idx)) idx[k]=ro; } };
+  const zip=(words,ro)=>{ const rs=String(ro||'').trim().split(/\s+/); if(words&&words.length===rs.length) words.forEach((wd,i)=>put(wd,rs[i])); };
+  try{
+    (typeof UNITS!=='undefined'?UNITS:[]).forEach(un=>[].concat(un.words||[],un.words2||[]).forEach(wd=>put(wd.hi,wd.ro)));
+    (typeof GRAMMAR!=='undefined'?GRAMMAR:[]).forEach(g=>{ (g.builds||[]).forEach(b=>zip(b.words,b.ro)); (g.examples||[]).forEach(e=>{ if(e.hi&&e.ro) zip(e.hi.trim().split(/\s+/), e.ro); }); });
+  }catch(e){}
+  return idx;
+})();
+// Romanize a (possibly multi-word) Devanagari string: curated per-token where known, else transliterate.
+function roma(hi){ return String(hi==null?'':hi).split(/(\s+)/).map(tok=>{
+  if(/^\s*$/.test(tok)) return tok;
+  const k=tok.normalize('NFC'); if(RO_INDEX[k]!==undefined) return RO_INDEX[k];
+  return /[ऀ-ॿ]/.test(tok) ? translit(tok) : tok;
+}).join(''); }
+// Render helper: Devanagari + its romanization (romanization auto-hidden in Devanagari-only mode).
+function hiro(hi){ return `<span lang="hi">${hi}</span><span class="wro">${esc(roma(hi))}</span>`; }
 
 /* ============ HINDI SLAYER PLUS (Level 2+ entitlement) ============ */
 // Free tier = everything in Level 1. Level 2 and beyond require Plus.
@@ -1266,7 +1315,7 @@ $("actBody").innerHTML=`
 const o=$("opts");
 opts.forEach(op=>{
 const b=document.createElement("button"); b.className="opt";
-b.innerHTML=`${op.ic}<span class="lab">${op.en}</span>`;
+b.innerHTML=`<span class="lab">${op.en}</span>`;
 b.onclick=()=>checkListen(b,op,w);
 o.appendChild(b);
 });
@@ -1471,8 +1520,8 @@ showReward(earned, res.leveledUp, res.newLevel, 0);
 function renderBuild(){
 const b=gb.builds[gb.idx];
 const dots=gb.builds.map((_,i)=>`<div class="dot${i<gb.idx?' done':i===gb.idx?' now':''}"></div>`).join("");
-const trayTiles=gb.tray.map(id=>`<button class="wtile" lang="hi" onclick="buildTap(${id})">${gb.tiles.find(t=>t.id===id).w}</button>`).join("");
-const bankTiles=gb.tiles.filter(t=>gb.tray.indexOf(t.id)<0).map(t=>`<button class="wtile" lang="hi" onclick="buildTap(${t.id})">${t.w}</button>`).join("");
+const trayTiles=gb.tray.map(id=>`<button class="wtile" onclick="buildTap(${id})">${hiro(gb.tiles.find(t=>t.id===id).w)}</button>`).join("");
+const bankTiles=gb.tiles.filter(t=>gb.tray.indexOf(t.id)<0).map(t=>`<button class="wtile" onclick="buildTap(${t.id})">${hiro(t.w)}</button>`).join("");
 const trayCls="tray"+(gb.tray.length?"":" empty")+(gb.checked&&gb.ok?" good":"");
 const full=(gb.tray.length===b.words.length);
 let msg="";
@@ -1540,10 +1589,10 @@ function renderAura(){
 const r=game.rounds[game.idx];
 const fb = game.done ? `<div class="encourage">⚡ Aura hit! <span lang="hi">${r.prompt.replace('___', r.ans==='f'?r.optF:r.optM)}</span></div>` : "";
 gameShell(`<div class="prompt">Match the aura to land the hit 🩷🩵</div>
-<div class="card"><div style="font-size:13px;color:var(--muted);font-weight:800">${r.en}</div><div class="hindi" lang="hi" style="margin-top:6px">${r.prompt}</div></div>
+<div class="card"><div style="font-size:13px;color:var(--muted);font-weight:800">${r.en}</div><div class="hindi" lang="hi" style="margin-top:6px">${r.prompt}</div><div class="wro">${esc(roma(r.prompt))}</div></div>
 <div class="auraRow">
-<button class="auraBtn fAura ${game.done&&r.ans==='f'?'hit':''}" ${game.done?'':`onclick="auraPick('f')"`}>🩷 girl form<br><span lang="hi">${r.optF}</span></button>
-<button class="auraBtn mAura ${game.done&&r.ans==='m'?'hit':''}" ${game.done?'':`onclick="auraPick('m')"`}>🩵 boy form<br><span lang="hi">${r.optM}</span></button>
+<button class="auraBtn fAura ${game.done&&r.ans==='f'?'hit':''}" ${game.done?'':`onclick="auraPick('f')"`}>🩷 girl form<br>${hiro(r.optF)}</button>
+<button class="auraBtn mAura ${game.done&&r.ans==='m'?'hit':''}" ${game.done?'':`onclick="auraPick('m')"`}>🩵 boy form<br>${hiro(r.optM)}</button>
 </div>${fb}`);
 }
 function auraPick(g){
@@ -1556,8 +1605,8 @@ function renderCombo(){
 const r=game.rounds[game.idx];
 if(!game.tiles){ game.tiles=shuffle([{hi:r.s,role:'S'},{hi:r.o,role:'O'},{hi:r.v,role:'V'}]); game.slots=[]; }
 const labels=["🥷 Fighter (who)","🎯 Target (what)","⚔️ Attack (verb!)"];
-const slotsHtml=labels.map((lab,i)=>{ const f=game.slots[i]; return `<div class="comboSlot ${f?'filled':''}" ${f?`onclick="comboUnplace(${i})"`:''}><div class="csLab">${lab}</div><div class="csVal" lang="hi">${f?f.hi:'—'}</div></div>`; }).join("");
-const bankHtml=game.tiles.map((t,i)=> game.slots.indexOf(t)>=0?"":`<button class="wtile" lang="hi" onclick="comboPlace(${i})">${t.hi}</button>`).join("");
+const slotsHtml=labels.map((lab,i)=>{ const f=game.slots[i]; return `<div class="comboSlot ${f?'filled':''}" ${f?`onclick="comboUnplace(${i})"`:''}><div class="csLab">${lab}</div><div class="csVal">${f?hiro(f.hi):'—'}</div></div>`; }).join("");
+const bankHtml=game.tiles.map((t,i)=> game.slots.indexOf(t)>=0?"":`<button class="wtile" onclick="comboPlace(${i})">${hiro(t.hi)}</button>`).join("");
 const full=game.slots.length===3;
 let fb="";
 if(game.done) fb=`<div class="encourage">💥 Critical Hit! <span lang="hi">${r.s} ${r.o} ${r.v}</span></div>`;
@@ -1591,11 +1640,11 @@ function renderRespect(){
 const r=game.rounds[game.idx];
 const correct=r.who==='elder'?'aap':'tum';
 const order = Math.random()<0.5;
-const aapBtn=`<button class="stanceBtn aapBtn ${game.done?'won':''}" ${game.done?'':`onclick="respectPick('aap')"`}>🛡️ Aap (polite)<br><span class="stanceHi" lang="hi">${r.aap}</span></button>`;
-const tumBtn=`<button class="stanceBtn tumBtn ${game.done?'won':''}" ${game.done?'':`onclick="respectPick('tum')"`}>⚔️ Tum (casual)<br><span class="stanceHi" lang="hi">${r.tum}</span></button>`;
+const aapBtn=`<button class="stanceBtn aapBtn ${game.done?'won':''}" ${game.done?'':`onclick="respectPick('aap')"`}>🛡️ Aap (polite)<br><span class="stanceHi" lang="hi">${r.aap}</span><span class="wro">${esc(roma(r.aap))}</span></button>`;
+const tumBtn=`<button class="stanceBtn tumBtn ${game.done?'won':''}" ${game.done?'':`onclick="respectPick('tum')"`}>⚔️ Tum (casual)<br><span class="stanceHi" lang="hi">${r.tum}</span><span class="wro">${esc(roma(r.tum))}</span></button>`;
 const fb = game.done ? `<div class="encourage">${correct==='aap'?'🛡️ Perfect block! Aap shows respect to elders.':'⚔️ Nice hit! Tum is right for friends.'}</div>` : "";
 gameShell(`<div class="prompt">Pick the right stance</div>
-<div class="card"><div class="hindi" style="font-size:26px">${r.scenario}</div></div>
+<div class="card"><div class="hindi" lang="hi" style="font-size:26px">${r.scenario}</div><div class="wro">${esc(roma(r.scenario))}</div></div>
 <div class="qopts">${order?aapBtn+tumBtn:tumBtn+aapBtn}</div>${fb}`);
 }
 function respectPick(kind){
@@ -1609,9 +1658,9 @@ const r=game.rounds[game.idx];
 const askKey={now:'present',past:'past',future:'future'}[r.ask];
 const askLabel={now:'⚡ NOW (happening)',past:'🌑 DONE (past)',future:'✨ LATER (future)'}[r.ask];
 const forms=shuffle([{k:'present',hi:r.present},{k:'past',hi:r.past},{k:'future',hi:r.future}]);
-const btns=forms.map(f=>`<button class="qopt ${game.done&&f.k===askKey?'correct':''}" lang="hi" ${game.done?'':`onclick="runePick('${f.k}')"`}>${f.hi}</button>`).join("");
+const btns=forms.map(f=>`<button class="qopt ${game.done&&f.k===askKey?'correct':''}" ${game.done?'':`onclick="runePick('${f.k}')"`}>${hiro(f.hi)}</button>`).join("");
 const fb = game.done ? `<div class="encourage">${askLabel.split(' ')[0]} Rune snapped! <span lang="hi">${r[askKey]}</span></div>` : "";
-gameShell(`<div class="prompt">Snap the ${askLabel} rune onto “${r.verb}”</div>
+gameShell(`<div class="prompt">Snap the ${askLabel} rune onto “${r.verb}” (${esc(roma(r.verb))})</div>
 <div class="qopts">${btns}</div>${fb}`);
 }
 function runePick(k){
@@ -1627,11 +1676,11 @@ toast(`The ${askLabel} form of “${r.verb}” is ${r[askKey]}`);
 function renderPotion(){
 const r=game.rounds[game.idx];
 const opts=game.potOpts||(game.potOpts=shuffle(r.opts));
-const btns=opts.map(p=>`<button class="qopt ${game.done&&p===r.post?'correct':''}" lang="hi" ${game.done?'':`onclick="potionPick('${p}')"`}>${p}</button>`).join("");
+const btns=opts.map(p=>`<button class="qopt ${game.done&&p===r.post?'correct':''}" ${game.done?'':`onclick="potionPick('${p}')"`}>${hiro(p)}</button>`).join("");
 const brew = game.done ? r.noun+" "+r.post : r.noun+" + ?";
 const fb = game.done ? `<div class="encourage">⚗️ Brewed! <span lang="hi">${r.noun} ${r.post}</span> = ${r.en}</div>` : "";
 gameShell(`<div class="prompt">Add the catalyst after the noun · “${r.en}”</div>
-<div class="card"><div style="font-size:46px">⚗️</div><div class="hindi" lang="hi" style="margin-top:6px">${brew}</div></div>
+<div class="card"><div style="font-size:46px">⚗️</div><div class="hindi" lang="hi" style="margin-top:6px">${brew}</div><div class="wro">${esc(roma(brew))}</div></div>
 <div class="qopts">${btns}</div>${fb}`);
 }
 function potionPick(p){
@@ -1678,7 +1727,7 @@ if(quiz.answered){ enc = (quiz.pick===Q.ans) ? `<div class="encourage">${CONGRAT
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave the quiz? This score won\\'t be saved.')) goHome();">⬅️ Quit</button>
 <div class="prompt" style="margin-top:14px">🎯 Question ${quiz.idx+1} of ${quiz.qs.length} · Score ${quiz.score}</div>
-<div class="card"><div class="bigEmoji" style="font-size:58px">${Q.ic||"❓"}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman" aria-hidden="true">${Q.sub}</div>`:""}${audioBtn}</div>
+<div class="card"><div class="bigEmoji" style="font-size:46px">💭</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman" aria-hidden="true">${Q.sub}</div>`:""}${audioBtn}</div>
 <div class="qopts">${opts}</div>
 ${enc}`;
 show("menuScreen"); ms.scrollTop=0;

@@ -110,6 +110,16 @@ setTimeout(() => {
     }
   }
 
+  // --- Grammar games show English-script transliteration, not Devanagari-only ---
+  if (typeof w.startGame === "function") {
+    w.startGame("combo");
+    check("grammar games render a romanization helper (.wro)",
+      /class="wro"/.test(w.document.getElementById("menuScreen").innerHTML));
+  }
+  if (typeof w.roma === "function") {
+    check("roma() transliterates Devanagari to latin", /^[a-z ]+$/i.test(w.roma("मैं सेब खाती हूँ")));
+  }
+
   // --- External tracker contract ---
   check("buildSummary() runs", typeof w.buildSummary === "function" && !!w.buildSummary());
 
