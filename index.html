@@ -122,9 +122,10 @@ margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;bo
 .speakBtn:active{transform:scale(.97);}
 
 .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
-.opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:20px 12px;font-size:18px;min-height:64px;display:flex;align-items:center;justify-content:center;
+.opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:16px 12px;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;
 box-shadow:0 4px 14px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;color:var(--ink);}
-.opt .lab{display:block;font-size:18px;font-weight:800;color:var(--ink);margin-top:0;}
+.opt .optHi{font-size:24px;font-weight:800;line-height:1.2;color:var(--ink);}
+.opt .wro{font-size:13px;margin-top:4px;}
 .opt:active{transform:translateY(2px);}
 .opt.correct{border-color:var(--good);box-shadow:0 0 20px rgba(63,227,160,.45);}
 .opt.wrong{border-color:var(--bad);opacity:.7;}
@@ -1315,7 +1316,7 @@ $("actBody").innerHTML=`
 const o=$("opts");
 opts.forEach(op=>{
 const b=document.createElement("button"); b.className="opt";
-b.innerHTML=`<span class="lab">${op.en}</span>`;
+b.innerHTML=`<span class="optHi" lang="hi">${op.hi}</span><span class="wro">${esc(op.ro)}</span>`;
 b.onclick=()=>checkListen(b,op,w);
 o.appendChild(b);
 });
