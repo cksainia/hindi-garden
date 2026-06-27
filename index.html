@@ -122,9 +122,9 @@ margin-top:16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;bo
 .speakBtn:active{transform:scale(.97);}
 
 .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
-.opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:18px 10px;font-size:38px;
+.opt{background:linear-gradient(155deg, var(--cardGlass), rgba(16,10,32,.78));border:2px solid var(--line);border-radius:16px;padding:20px 12px;font-size:18px;min-height:64px;display:flex;align-items:center;justify-content:center;
 box-shadow:0 4px 14px var(--shadowS);cursor:pointer;transition:transform .12s,border-color .15s,box-shadow .15s;color:var(--ink);}
-.opt .lab{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-top:6px;}
+.opt .lab{display:block;font-size:18px;font-weight:800;color:var(--ink);margin-top:0;}
 .opt:active{transform:translateY(2px);}
 .opt.correct{border-color:var(--good);box-shadow:0 0 20px rgba(63,227,160,.45);}
 .opt.wrong{border-color:var(--bad);opacity:.7;}
@@ -1727,7 +1727,7 @@ if(quiz.answered){ enc = (quiz.pick===Q.ans) ? `<div class="encourage">${CONGRAT
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave the quiz? This score won\\'t be saved.')) goHome();">⬅️ Quit</button>
 <div class="prompt" style="margin-top:14px">🎯 Question ${quiz.idx+1} of ${quiz.qs.length} · Score ${quiz.score}</div>
-<div class="card"><div class="bigEmoji" style="font-size:46px">💭</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman" aria-hidden="true">${Q.sub}</div>`:""}${audioBtn}</div>
+<div class="card"><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">${Q.prompt}</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div>${Q.sub?`<div class="roman" aria-hidden="true">${Q.sub}</div>`:""}${audioBtn}</div>
 <div class="qopts">${opts}</div>
 ${enc}`;
 show("menuScreen"); ms.scrollTop=0;
@@ -1808,7 +1808,7 @@ const title=review.mode==="missed"?"⚔️ Win-Back Arena":"🔁 Spaced Review";
 const ms=$("menuScreen");
 ms.innerHTML=`<button class="backBtn" onclick="if(confirm('Leave review? Progress is saved as you go.')) goHome();">⬅️ Quit</button>
 <div class="prompt" style="margin-top:14px">${title} · ${review.idx+1} of ${review.qs.length} · Score ${review.score}</div>
-<div class="card"><div class="bigEmoji" style="font-size:58px">${Q.ic||"❓"}</div><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">What does this mean?</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div><div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap"><button class="speakBtn" style="margin-top:0" onclick="speak('${Q.q.replace(/'/g,"\\'")}')">🔊 Hear it</button><button class="speakBtn" style="margin-top:0;background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="speakSlow('${Q.q.replace(/'/g,"\\'")}')">🐢 Slower</button></div></div>
+<div class="card"><div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px">What does this mean?</div><div class="hindi" lang="hi" style="margin-top:6px">${Q.q}</div><div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap"><button class="speakBtn" style="margin-top:0" onclick="speak('${Q.q.replace(/'/g,"\\'")}')">🔊 Hear it</button><button class="speakBtn" style="margin-top:0;background:linear-gradient(135deg,#36e6ff,#9b3cff)" onclick="speakSlow('${Q.q.replace(/'/g,"\\'")}')">🐢 Slower</button></div></div>
 <div class="qopts">${opts}</div>${enc}`;
 show("menuScreen"); ms.scrollTop=0; speak(Q.q);
 }
