@@ -948,23 +948,77 @@ pool.filter(c=>!state.done["convo_"+c.id]).forEach(push);
 shuffle(pool.slice()).forEach(push);
 return ordered.slice(0, n);
 }
+// pick up to n distinct level-1 stories: unread first, then any
+function pickPathStories(n){
+const pool=STORIES.filter(s=>(s.lv||1)===1);
+const ordered=[]; const seen={};
+const push=s=>{ if(s && !seen[s.id]){ seen[s.id]=true; ordered.push(s); } };
+pool.filter(s=>!state.done["story_"+s.id]).forEach(push);
+shuffle(pool.slice()).forEach(push);
+return ordered.slice(0, n);
+}
+// pick up to n distinct level-1 grammar lessons (that have build sentences): unplayed first, then any
+function pickPathGrammar(n){
+const pool=GRAMMAR.filter(g=>(g.lv||1)===1 && g.builds && g.builds.length);
+const ordered=[]; const seen={};
+const push=g=>{ if(g && !seen[g.id]){ seen[g.id]=true; ordered.push(g); } };
+pool.filter(g=>!state.done["grammar_"+g.id]).forEach(push);
+shuffle(pool.slice()).forEach(push);
+return ordered.slice(0, n);
+}
+// pick up to n distinct culture notes: unseen first, then any
+function pickPathCulture(n){
+const pool=(typeof CULTURE!=="undefined"?CULTURE:[]).slice();
+const ordered=[]; const seen={};
+const push=c=>{ if(c && !seen[c.id]){ seen[c.id]=true; ordered.push(c); } };
+pool.filter(c=>!(state.cultureSeen||{})[c.id]).forEach(push);
+shuffle(pool.slice()).forEach(push);
+return ordered.slice(0, n);
+}
+// Culture note as a path step: show one note, then Continue advances the path.
+function pathCulture(id){
+const c=(typeof CULTURE!=="undefined"?CULTURE:[]).find(x=>x.id===id);
+if(!c){ if(path&&path.active) pathStepDone(0); return; }
+state.cultureSeen=state.cultureSeen||{}; state.cultureSeen[c.id]=1; saveState();
+const hiPart=c.hi?`<div class="cbHi" style="margin-top:10px"><span lang="hi">${c.hi}</span> <span class="ro" aria-hidden="true">${c.ro||''}</span>${c.en?' — '+c.en:''}</div>`:"";
+const hear=c.hi?`<button class="speakBtn" style="margin-top:10px" onclick="speak('${c.hi.replace(/'/g,"\\'")}')">🔊 Hear it</button>`:"";
+const ms=$("menuScreen");
+ms.innerHTML=`<div class="prompt" style="margin-top:14px">🪔 Culture Corner</div>
+<div class="card" style="text-align:left"><div style="font-size:34px">${c.emoji}</div><div style="font-weight:900;font-size:18px;margin:4px 0">${c.title}</div><div style="font-size:14px;color:var(--ink);line-height:1.6">${c.body}</div>${hiPart}${hear}</div>
+<button class="footerBtn" style="margin-top:14px" onclick="if(path&&path.active){pathStepDone(1)}else{goHome()}">Continue ▶</button>`;
+show("menuScreen"); ms.scrollTop=0;
+if(c.hi) speak(c.hi);
+}
+// Comprehensive ~20–30 min guided session across all learning categories, ending with the Daily Quiz.
 function startDailyPath(){
 const steps=[];
-// 1) warm up with a review (due words, else missed) — skipped gracefully if none
+const topics=pickLearnTopics(2), games=pickPathGames(2), convos=pickPathConvos(2);
+const stories=pickPathStories(1), grammar=pickPathGrammar(1), culture=pickPathCulture(1);
+// warm-up review (due words, else missed) — skipped gracefully if none
 const reviewMode = srsDuePool().length?'due':(Object.keys(state.missed||{}).length?'missed':null);
 if(reviewMode) steps.push({label:"Warm-up review", ico:"🔁", run:function(){ startReview(reviewMode,5); }});
-// 2) + 4) learn new words from two different topics
-const topics = pickLearnTopics(2);
-steps.push({label:"Learn 3 new words", ico:"📖", run:function(){ startActivity(topics[0].id,"learn",3); }});
-// 3) + 5) two grammar games — weakest, then an unplayed/other one
-const games = pickPathGames(2);
+// words — learn topic A, then reinforce by ear
+if(topics[0]){ steps.push({label:"Learn new words", ico:"📖", run:function(){ startActivity(topics[0].id,"learn",3); }});
+  steps.push({label:"Listen & Find", ico:"👂", run:function(){ startActivity(topics[0].id,"listen",4); }}); }
+// grammar arena
 if(games[0]) steps.push({label:"Grammar game", ico:games[0].emoji, run:function(){ startGame(games[0].id); }});
-if(topics[1]) steps.push({label:"Learn 3 more words", ico:"📚", run:function(){ startActivity(topics[1].id,"learn",3); }});
-if(games[1]) steps.push({label:"Grammar game", ico:games[1].emoji, run:function(){ startGame(games[1].id); }});
-// 6) + 7) finish with two short conversations
-const convos = pickPathConvos(2);
+// sentence builder
+if(grammar[0]) steps.push({label:"Build sentences", ico:"✍️", run:function(){ startBuild(grammar[0].id); }});
+// words — learn topic B, then say them out loud
+if(topics[1]){ steps.push({label:"Learn more words", ico:"📚", run:function(){ startActivity(topics[1].id,"learn",3); }});
+  steps.push({label:"Say it out loud", ico:"🎤", run:function(){ startActivity(topics[1].id,"say",3); }}); }
+// conversation
 if(convos[0]) steps.push({label:"Act out a conversation", ico:"🎭", run:function(){ playConvo(convos[0].id); }});
+// second grammar game
+if(games[1]) steps.push({label:"Grammar game", ico:games[1].emoji, run:function(){ startGame(games[1].id); }});
+// story + comprehension
+if(stories[0]) steps.push({label:"Read a story", ico:"📚", run:function(){ openStory(stories[0].id); }});
+// culture corner
+if(culture[0]) steps.push({label:"Culture corner", ico:"🪔", run:function(){ pathCulture(culture[0].id); }});
+// one more conversation
 if(convos[1]) steps.push({label:"One more conversation", ico:"💬", run:function(){ playConvo(convos[1].id); }});
+// finish with the Daily Quiz (skipped gracefully if too few words learned yet)
+steps.push({label:"Daily Quiz", ico:"🎯", run:function(){ if(learnedWords().length>=4){ startQuiz(12); } else { pathStepDone(0); } }});
 path={active:true, steps, idx:0, earned:0};
 pathRun();
 }
@@ -1000,7 +1054,7 @@ const ov=document.createElement("div"); ov.className="overlay";
 ov.innerHTML=`<div class="rewardCard">
 <div class="grow" style="font-size:64px">🗺️</div>
 <h2>Daily Path complete! ✨</h2>
-<div style="font-size:15px;font-weight:800;color:var(--good);margin:4px 0">Review · Learn · Grammar · Talk — all done today!</div>
+<div style="font-size:15px;font-weight:800;color:var(--good);margin:4px 0">Words · Grammar · Games · Talk · Story · Culture · Quiz — all done today!</div>
 <div class="pill star" style="display:inline-flex;margin:8px auto">⭐ +${earned} stars total</div>
 <br>
 <button class="footerBtn" style="margin-top:14px" onclick="closeReward(this)">Back to Stage ✨</button>
@@ -1143,7 +1197,7 @@ wotd.onclick=()=>speak(w.hi);
 const ctas=$("hubCtas");
 const doneP=pathDoneToday();
 const pc=document.createElement("button"); pc.type="button"; pc.className="pathCard"+(doneP?" done":"");
-pc.innerHTML=`<span class="pathIco">${doneP?'✅':'🗺️'}</span><span class="ctaText"><span class="ctaLab" style="color:var(--cyan)">Daily Path · ~10 min</span><span class="ctaMain">${doneP?"Today's path is done! 🎉":"Start today's guided session"}</span><span class="ctaSub">${doneP?"Come back tomorrow for a fresh path":"Review → Learn → Games → Talk"}</span></span><span class="ctaGo">${doneP?'↻':'▶'}</span>`;
+pc.innerHTML=`<span class="pathIco">${doneP?'✅':'🗺️'}</span><span class="ctaText"><span class="ctaLab" style="color:var(--cyan)">Daily Path · ~20–30 min</span><span class="ctaMain">${doneP?"Today's path is done! 🎉":"Start today's guided session"}</span><span class="ctaSub">${doneP?"Come back tomorrow for a fresh path":"Learn · Listen · Speak · Build · Games · Story · Quiz"}</span></span><span class="ctaGo">${doneP?'↻':'▶'}</span>`;
 pc.onclick=function(){ startDailyPath(); };
 ctas.appendChild(pc);
 const rec=recommendNext();
@@ -1473,6 +1527,7 @@ if(!state.done["story_"+id]) state.done["story_"+id]=1; else state.done["story_"
 logActivity([]);
 const earned=firstTry?4:3;
 const res=addStars(earned);
+if(path&&path.active){ pathStepDone(earned); return; }
 checkAchievements();
 showReward(earned, res.leveledUp, res.newLevel, 0);
 }
@@ -1524,6 +1579,7 @@ state.done["grammar_"+gb.id]=(state.done["grammar_"+gb.id]||0)+1;
 logActivity([]);
 const earned=Math.min(4, Math.max(2, gb.correct));
 const res=addStars(earned);
+if(path&&path.active){ pathStepDone(earned); return; }
 showReward(earned, res.leveledUp, res.newLevel, 0);
 }
 function renderBuild(){
@@ -1701,8 +1757,9 @@ else { gameMiss('potion'); toast("Potion fizzled! Try another catalyst ⚗️");
 /* ============ DAILY QUIZ ============ */
 let quiz=null;
 function learnedWords(){ return ALL_WORDS.filter(w=>state.seen && state.seen[w.ro]); }
-function buildQuiz(){
+function buildQuiz(max){
 const learned = learnedWords();
+const cap = (typeof max==="number" && max>0) ? max : 25;
 const allW = ALL_WORDS; // decoys can come from anywhere
 function distinct(pool,key,exclude,n){
 const seen=new Set([exclude]); const out=[];
@@ -1715,12 +1772,12 @@ const opts=shuffle([w.en,...distinct(allW,"en",w.en,3)]);
 return {prompt:"What does this mean?", q:w.hi, sub:w.ro, ic:w.ic, audio:w.hi, opts, ans:opts.indexOf(w.en), wordRo:w.ro};
 }
 // only words she's already learned, distinct, up to 25
-const chosen = shuffle(learned).slice(0, Math.min(25, learned.length));
+const chosen = shuffle(learned).slice(0, Math.min(cap, learned.length));
 return chosen.map(makeQ);
 }
-function startQuiz(){
-if(learnedWords().length < 4){ toast("Learn a few words first! ✨"); return; }
-quiz={ qs:buildQuiz(), idx:0, score:0, answered:false, pick:-1, demoted:0 };
+function startQuiz(max){
+if(learnedWords().length < 4){ if(path&&path.active){ pathStepDone(0); return; } toast("Learn a few words first! ✨"); return; }
+quiz={ qs:buildQuiz(max), idx:0, score:0, answered:false, pick:-1, demoted:0 };
 renderQuiz();
 }
 function renderQuiz(){
@@ -1771,6 +1828,7 @@ if(state.quizzes.length>50) state.quizzes.shift();
 logActivity([]);
 const earned=Math.min(6, Math.max(2, Math.round(score/4)));
 const res=addStars(earned);
+if(path&&path.active){ pathStepDone(earned); return; }
 showQuizReward(score,total,pct,earned,res);
 }
 function showQuizReward(score,total,pct,earned,res){
