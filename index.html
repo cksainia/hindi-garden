@@ -1018,7 +1018,7 @@ if(culture[0]) steps.push({label:"Culture corner", ico:"🪔", run:function(){ p
 // one more conversation
 if(convos[1]) steps.push({label:"One more conversation", ico:"💬", run:function(){ playConvo(convos[1].id); }});
 // finish with the Daily Quiz (skipped gracefully if too few words learned yet)
-steps.push({label:"Daily Quiz", ico:"🎯", run:function(){ if(learnedWords().length>=4){ startQuiz(12); } else { pathStepDone(0); } }});
+steps.push({label:"Daily Quiz", ico:"🎯", run:function(){ if(learnedWords().length>=4){ startQuiz(); } else { pathStepDone(0); } }});
 path={active:true, steps, idx:0, earned:0};
 pathRun();
 }
@@ -1759,7 +1759,7 @@ let quiz=null;
 function learnedWords(){ return ALL_WORDS.filter(w=>state.seen && state.seen[w.ro]); }
 function buildQuiz(max){
 const learned = learnedWords();
-const cap = (typeof max==="number" && max>0) ? max : 25;
+const cap = (typeof max==="number" && max>0) ? max : 20;
 const allW = ALL_WORDS; // decoys can come from anywhere
 function distinct(pool,key,exclude,n){
 const seen=new Set([exclude]); const out=[];
@@ -1771,7 +1771,7 @@ function makeQ(w){
 const opts=shuffle([w.en,...distinct(allW,"en",w.en,3)]);
 return {prompt:"What does this mean?", q:w.hi, sub:w.ro, ic:w.ic, audio:w.hi, opts, ans:opts.indexOf(w.en), wordRo:w.ro};
 }
-// only words she's already learned, distinct, up to 25
+// only words she's already learned, distinct, up to the cap (default 20)
 const chosen = shuffle(learned).slice(0, Math.min(cap, learned.length));
 return chosen.map(makeQ);
 }

@@ -1,4 +1,4 @@
-const CACHE="hindi-garden-v47";
+const CACHE="hindi-garden-v48";
 const ASSETS=["./","index.html","data.js","privacy.html","manifest.webmanifest","icon-192.png","icon-512.png","icon-180.png"];
 // Pre-cache fresh copies (bypass HTTP cache) so the first offline load is current.
 self.addEventListener("install",e=>{
